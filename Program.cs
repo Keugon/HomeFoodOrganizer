@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 namespace Essensausgleich
 {
     internal static class Program
@@ -12,6 +14,9 @@ namespace Essensausgleich
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
+
         }
+
     }
+
 }
