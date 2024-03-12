@@ -4,41 +4,47 @@ namespace Essensausgleich
 {
     public partial class Form1 : Form
     {
-        private Bewohner bewohner1 = new("");
-        private Bewohner bewohner2 = new("");
-        
+        private Bewohner bewohner1 = new(null);
+        private Bewohner bewohner2 = new(null);
+
         public Form1()
         {
             InitializeComponent();
-            LblStatus.Text = "";
+            LblToolStrip.Text = "";
         }
-        
+
         public void WriteLineS(string s)
         {
             System.Diagnostics.Debug.WriteLine(s);
         }
         private void btnCalc_Click(object sender, EventArgs e)
         {
-            //int FD = Convert.ToInt32(txtBoxAusgabeFD.Text);
-            //int MW = Convert.ToInt32(txtBoxAusgabeMW.Text);
-            //int Endwert = 0;
-            //string zBezahlender;
-            //Endwert = (FD + MW) / 2;
-            //if (FD > MW)
-            //{
-            //    Endwert = FD - Endwert;
-            //    zBezahlender = "MW";
-            //}
-            //else
-            //{
-            //    Endwert = MW - Endwert;
-            //    zBezahlender = "FD";
-            //}
-
-            //LblBill.Text = Convert.ToString(Endwert);
-            //LblZuBezahlender.Text = zBezahlender;
+            decimal Endwert = 0;
+            string? zBezahlender;
+            if (bewohner1.name != null && bewohner2.name != null)
+            {
+                Endwert = (bewohner1.Ausgaben + bewohner2.Ausgaben) / 2;
+                if (bewohner1.Ausgaben > 0 || bewohner2.Ausgaben > 0)
+                {
+                    if (bewohner1.Ausgaben > bewohner2.Ausgaben)
+                    {
+                        Endwert = bewohner1.Ausgaben - Endwert;
+                        zBezahlender = bewohner2.name;
+                        LblBill.Text = Convert.ToString(Endwert);
+                        LblZuBezahlender.Text = zBezahlender;
+                    }
+                    else
+                    {
+                        Endwert = bewohner2.Ausgaben - Endwert;
+                        zBezahlender = bewohner1.name;
+                        LblBill.Text = Convert.ToString(Endwert);
+                        LblZuBezahlender.Text = zBezahlender;
+                    }
+                }
+                else LblToolStrip.Text = $"Mindestens eine Partei muss Ausgaben hinterlegen";
+            }
+            else LblToolStrip.Text = $"Es wurden nicht mindestens 2 User Angelegt";
         }
-
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -50,67 +56,60 @@ namespace Essensausgleich
         }
         private void AddUser()
         {
-            if (bewohner1.name == "" || bewohner2.name == "")
+
+            if (txtBoxAddUser.Text != "")
             {
-                cBoxUser.Items.Add(txtBoxAddUser.Text);
-                cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
-                if (bewohner1.name == "")
+                if (bewohner1.name == null || bewohner2.name == null)
                 {
-                    bewohner1.name = txtBoxAddUser.Text;
-                    LblBewohner1.Text = bewohner1.name;
-                    LblStatus.Text = $"Bewohner {bewohner1.name} wurde angelegt\n{LblStatus.Text}";
+                    if (bewohner1.name == null)
+                    {
+                        bewohner1.name = txtBoxAddUser.Text;
+                        LblBewohner1.Text = bewohner1.name;
+                        cBoxUser.Items.Add(txtBoxAddUser.Text);
+                        cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
+                        LblToolStrip.Text = $"Bewohner {bewohner1.name} wurde angelegt";
+                    }
+                    else if (bewohner2.name == null && txtBoxAddUser.Text != bewohner1.name)
+                    {
+                        bewohner2.name = txtBoxAddUser.Text;
+                        LblBewohner2.Text = bewohner2.name;
+                        cBoxUser.Items.Add(txtBoxAddUser.Text);
+                        cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
+                        LblToolStrip.Text = $"Bewohner {bewohner2.name} wurde angelegt";
+                    }
+                    else LblToolStrip.Text = $"Name gleich wie User1 bitte anderen waehlen";
                 }
-                else
-                {
-                    bewohner2.name = txtBoxAddUser.Text;
-                    LblBewohner2.Text = bewohner2.name;
-                    LblStatus.Text = $"Bewohner {bewohner2.name} wurde angelegt\n{LblStatus.Text}";
-                }
+                else LblToolStrip.Text = $"Maximale User anzahl bereits Angelegt";
             }
-            else
-            {
-                WriteLineS("User bereits angelegt");
-            }
+            else LblToolStrip.Text = $"Kein User Name eingegeben";
 
         }
-        // List<Rechnung> Lbills = new List<Rechnung>();
-
+        
         private void BtnAddBill_Click(object sender, EventArgs e)
         {
             if (cBoxUser.Text != "")
             {
                 decimal bill = 0;
-                try
+
+                bill = Convert.ToDecimal(txtBoxAddBill.Text);
+                if (bewohner1.name == cBoxUser.Text && cBoxUser.Text != "")
                 {
-                    bill = Convert.ToDecimal(txtBoxAddBill.Text);
-                    if (bewohner1.name == cBoxUser.Text && cBoxUser.Text != "")
-                    {
-                        bewohner1.AddBetrag(txtBoxCategorie.Text,bill);
-                        LblTotalAmountBew1.Text = Convert.ToString(bewohner1.Ausgaben);
-                        LblStatus.Text = $"Betrag {bill} der Kategorie {txtBoxCategorie.Text} hinzugefuegt\n{LblStatus.Text}";
-
-                    }
-                    else if (bewohner2.name == cBoxUser.Text && cBoxUser.Text != "")
-                    {
-                        bewohner2.AddBetrag(txtBoxCategorie.Text, bill);
-                        LblTotalAmountBew2.Text = Convert.ToString(bewohner2.Ausgaben);
-                        LblStatus.Text = $"Betrag {bill} der Kategorie {txtBoxCategorie.Text} hinzugefuegt\n{LblStatus.Text}";
-                    }
-                    else
-                    {
-                        WriteLineS("Error keine Bewohner wurde mit der im Dropdown ausgewaehlten User identifiziert");
-                    }
-
+                    bewohner1.AddBetrag(txtBoxCategorie.Text, bill);
+                    LblTotalAmountBew1.Text = Convert.ToString(bewohner1.Ausgaben);
+                    LblToolStrip.Text = $"Betrag {bill} der Kategorie {txtBoxCategorie.Text} hinzugefuegt";
                 }
-                catch (Exception ex)
+                else if (bewohner2.name == cBoxUser.Text && cBoxUser.Text != "")
                 {
-                    WriteLineS(ex.Message);
-
+                    bewohner2.AddBetrag(txtBoxCategorie.Text, bill);
+                    LblTotalAmountBew2.Text = Convert.ToString(bewohner2.Ausgaben);
+                    LblToolStrip.Text = $"Betrag {bill} der Kategorie {txtBoxCategorie.Text} hinzugefuegt";
+                }
+                else
+                {
+                    LblToolStrip.Text = $"Error keine Bewohner wurde mit der im Dropdown ausgewaehlten User identifiziert";
                 }
             }
-            else WriteLineS("Missing Username");
-
-
+            else LblToolStrip.Text = $"Missing Username";
         }
 
         private void BtnAuflisten_Click(object sender, EventArgs e)
@@ -118,21 +117,22 @@ namespace Essensausgleich
             if (cBoxUser.Text != "")
             {
 
-                if (bewohner1.name == cBoxUser.Text && cBoxUser.Text != "")
+                if (bewohner1.name == cBoxUser.Text)
                 {
-                    bewohner1.EinzelbetraegeAusgeben();
+                    LblToolStrip.Text = $"{bewohner1.EinzelbetraegeAusgeben()}";
 
                 }
-                else if (bewohner2.name == cBoxUser.Text && cBoxUser.Text != "")
-                {
-                    bewohner2.EinzelbetraegeAusgeben();
+                else if (bewohner2.name == cBoxUser.Text)
+                {                    
+                    LblToolStrip.Text = $"{bewohner2.EinzelbetraegeAusgeben()}";
                 }
                 else
                 {
-                    WriteLineS("Error keine Bewohner wurde mit der im Dropdown ausgewaehlten User identifiziert");
+                    LblToolStrip.Text = $"Error keine Bewohner wurde mit der im Dropdown ausgewaehlten User identifiziert";                    
                 }
             }
-            else WriteLineS("Missing Username");
+            else LblToolStrip.Text = $"Kein User Vorhanden bzw Ausgewaehlt";
         }
+        
     }
 }

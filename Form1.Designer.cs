@@ -46,12 +46,14 @@
             LblTotalAmountBew2 = new Label();
             BtnAuflisten = new Button();
             txtBoxCategorie = new TextBox();
-            LblStatus = new Label();
+            statusStrip1 = new StatusStrip();
+            LblToolStrip = new ToolStripStatusLabel();
+            statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // btnCalc
             // 
-            btnCalc.Location = new Point(82, 177);
+            btnCalc.Location = new Point(59, 105);
             btnCalc.Name = "btnCalc";
             btnCalc.Size = new Size(75, 23);
             btnCalc.TabIndex = 4;
@@ -63,7 +65,7 @@
             // LblBill
             // 
             LblBill.AutoSize = true;
-            LblBill.Location = new Point(103, 227);
+            LblBill.Location = new Point(93, 131);
             LblBill.Name = "LblBill";
             LblBill.Size = new Size(53, 15);
             LblBill.TabIndex = 5;
@@ -72,7 +74,7 @@
             // LblZuBezahlender
             // 
             LblZuBezahlender.AutoSize = true;
-            LblZuBezahlender.Location = new Point(12, 227);
+            LblZuBezahlender.Location = new Point(0, 131);
             LblZuBezahlender.Name = "LblZuBezahlender";
             LblZuBezahlender.Size = new Size(85, 15);
             LblZuBezahlender.TabIndex = 6;
@@ -80,7 +82,7 @@
             // 
             // label3
             // 
-            label3.Location = new Point(706, 242);
+            label3.Location = new Point(557, 87);
             label3.Name = "label3";
             label3.Size = new Size(72, 107);
             label3.TabIndex = 7;
@@ -106,16 +108,17 @@
             // 
             // txtBoxAddUser
             // 
-            txtBoxAddUser.Location = new Point(593, 31);
+            txtBoxAddUser.Location = new Point(451, 28);
             txtBoxAddUser.Name = "txtBoxAddUser";
             txtBoxAddUser.PlaceholderText = "Name Eingeben";
             txtBoxAddUser.Size = new Size(100, 23);
             txtBoxAddUser.TabIndex = 10;
             txtBoxAddUser.TabStop = false;
+            
             // 
             // BtnAddUser
             // 
-            BtnAddUser.Location = new Point(706, 30);
+            BtnAddUser.Location = new Point(557, 27);
             BtnAddUser.Name = "BtnAddUser";
             BtnAddUser.Size = new Size(75, 23);
             BtnAddUser.TabIndex = 11;
@@ -126,7 +129,7 @@
             // 
             // lVbills
             // 
-            lVbills.Location = new Point(493, 87);
+            lVbills.Location = new Point(430, 72);
             lVbills.MultiSelect = false;
             lVbills.Name = "lVbills";
             lVbills.Size = new Size(121, 97);
@@ -136,7 +139,7 @@
             // 
             // txtBoxAddBill
             // 
-            txtBoxAddBill.Location = new Point(313, 29);
+            txtBoxAddBill.Location = new Point(264, 29);
             txtBoxAddBill.Name = "txtBoxAddBill";
             txtBoxAddBill.PlaceholderText = "Betrag Eingeben";
             txtBoxAddBill.Size = new Size(100, 23);
@@ -144,7 +147,7 @@
             // 
             // BtnAddBill
             // 
-            BtnAddBill.Location = new Point(429, 29);
+            BtnAddBill.Location = new Point(370, 28);
             BtnAddBill.Name = "BtnAddBill";
             BtnAddBill.Size = new Size(75, 23);
             BtnAddBill.TabIndex = 14;
@@ -202,26 +205,33 @@
             // 
             // txtBoxCategorie
             // 
-            txtBoxCategorie.Location = new Point(207, 30);
+            txtBoxCategorie.Location = new Point(153, 29);
             txtBoxCategorie.Name = "txtBoxCategorie";
             txtBoxCategorie.PlaceholderText = "Kategorie";
             txtBoxCategorie.Size = new Size(100, 23);
             txtBoxCategorie.TabIndex = 1;
             // 
-            // LblStatus
+            // statusStrip1
             // 
-            LblStatus.Location = new Point(36, 286);
-            LblStatus.Name = "LblStatus";
-            LblStatus.Size = new Size(578, 63);
-            LblStatus.TabIndex = 20;
-            LblStatus.Text = "Status";
+            statusStrip1.Items.AddRange(new ToolStripItem[] { LblToolStrip });
+            statusStrip1.Location = new Point(0, 248);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(643, 22);
+            statusStrip1.TabIndex = 21;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // LblToolStrip
+            // 
+            LblToolStrip.Name = "LblToolStrip";
+            LblToolStrip.Size = new Size(118, 17);
+            LblToolStrip.Text = "toolStripStatusLabel1";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(814, 358);
-            Controls.Add(LblStatus);
+            ClientSize = new Size(643, 270);
+            Controls.Add(statusStrip1);
             Controls.Add(txtBoxCategorie);
             Controls.Add(BtnAuflisten);
             Controls.Add(LblTotalAmountBew2);
@@ -243,6 +253,8 @@
             Name = "Form1";
             Text = "Essensausgleich";
             Load += Form1_Load;
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -265,6 +277,7 @@
         private Label LblTotalAmountBew2;
         private Button BtnAuflisten;
         private TextBox txtBoxCategorie;
-        private Label LblStatus;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel LblToolStrip;
     }
 }

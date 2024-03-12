@@ -23,7 +23,7 @@ namespace Essensausgleich
                 ausgaben = value < 0 ? 0 : value;
             }
         }
-        public Bewohner(string n)
+        public Bewohner(string? n)
         {
             name = n;
         }
@@ -54,7 +54,7 @@ namespace Essensausgleich
             }
         }
         
-        public void EinzelbetraegeAusgeben()
+        public string EinzelbetraegeAusgeben()
         {
             String aus = "Einzelbetraege:\n";
             foreach (Betrag b in Einzelbetraege) 
@@ -62,7 +62,8 @@ namespace Essensausgleich
                 aus += $"{b.wert}€ -- '{b.kategorie}'\n";
                 
             }
-            System.Diagnostics.Debug.WriteLine(aus);
+            return aus;
+            
         }
     }
 }
