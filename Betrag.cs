@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Essensausgleich
 {
-    struct Betrag
+     public struct Betrag
     {
 
         public string kategorie;

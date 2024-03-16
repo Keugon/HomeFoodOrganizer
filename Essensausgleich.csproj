@@ -13,4 +13,8 @@
     <Content Include="burger_hamburger_fast_food_meal_icon_179355.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="System.Xml" />
+  </ItemGroup>
+
 </Project>
