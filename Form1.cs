@@ -2,23 +2,27 @@ using Microsoft.VisualBasic;
 
 namespace Essensausgleich
 {
+    //Why does it say "Form1" - give it a speaking name. (e.g. of your "MainForm" or your application name. )
     public partial class Form1 : Form
     {
+        //language englisch
+
+        //why passing a "null" object to the constructor of "Bewohner"? 
         private Bewohner bewohner1 = new(null);
         private Bewohner bewohner2 = new(null);
         public Form1()
         {
             InitializeComponent();
             LblToolStrip.Text = "";
-        }
-        public void WriteLineS(string s)
+        }// Try to have a empty line between methods. And add method descriptions - especially for public methods.
+        public void WriteLineS(string s) //Why was this extracted?  It's a single line. There is no benefit in doing so. 
         {
             System.Diagnostics.Debug.WriteLine(s);
         }
         private void btnCalc_Click(object sender, EventArgs e)
         {
             decimal Endwert = 0;
-            string? zBezahlender;
+            string? zBezahlender; // this is a followup error on the null of the constructor of the Bewohner class
             if (bewohner1.name != null && bewohner2.name != null)
             {
                 Endwert = (bewohner1.Ausgaben + bewohner2.Ausgaben) / 2;
@@ -49,13 +53,18 @@ namespace Essensausgleich
         }
         private void BtnAddUser_Click(object sender, EventArgs e)
         {
-            AddUser();
+            AddUser(); // why abstract it? it's just a click handler calling one single method. 
         }
         private void AddUser()
         {
-            if (txtBoxAddUser.Text != "")
+            if (txtBoxAddUser.Text != "") // there is a better method to do this. This is called escape clauses - the clauses in which you don't want the method to do anything
             {
-                if (bewohner1.name == null || bewohner2.name == null)
+
+                // if txtBoxAddUser.Text == "") { 
+                    //return; 
+                // }
+                if (bewohner1.name == null || bewohner2.name == null) // there should be a better way to distinguish which user to take. 
+                // you could also argue, that you don't want to be limited to 2 users? 
                 {
                     if (bewohner1.name == null)
                     {
@@ -73,7 +82,7 @@ namespace Essensausgleich
                         cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
                         LblToolStrip.Text = $"Bewohner {bewohner2.name} wurde angelegt";
                     }
-                    else LblToolStrip.Text = $"Name gleich wie User1 bitte anderen waehlen";
+                    else LblToolStrip.Text = $"Name gleich wie User1 bitte anderen waehlen"; // if using else always use { } - because otherwise the else branch can be overseen easily. Also folding of code is improved. 
                 }
                 else LblToolStrip.Text = $"Maximale User anzahl bereits Angelegt";
             }
@@ -86,7 +95,10 @@ namespace Essensausgleich
                 decimal bill = 0;
                 try
                 {
-                    bill = Convert.ToDecimal(txtBoxAddBill.Text);
+
+                    bill = Convert.ToDecimal(txtBoxAddBill.Text); // you could use Decimal.tryParse
+                   
+                   // you could just bind the cBoxUser to a "bewohner" object - which will make your life easier
                     if (bewohner1.name == cBoxUser.Text && cBoxUser.Text != "")
                     {
                         bewohner1.AddBetrag(txtBoxCategorie.Text, bill);
@@ -140,7 +152,12 @@ namespace Essensausgleich
             settingsForm settingsForm = new();
             settingsForm.ShowDialog();
         }
-        private void SaveFileXML_Click(object sender, EventArgs e)
+        private void SaveFileXML_Click(object sender, EventArgs e) // data operations should not be within the main class. 
+        // create a seperate File e.g. XMLPersistence.cs
+        /**
+            XMLPersisence xmlPersistence = new XMLPersistence();
+            xmlPersistence.save(.....);
+        **/
         {
             try
             {
@@ -181,19 +198,19 @@ namespace Essensausgleich
             }
 
         }
-        private void OfdXML_Click(object sender, EventArgs e)
+        private void OfdXML_Click(object sender, EventArgs e) // should also be extracted to the XMLPersistence.cs file and just return List<Bewohner> which you just need to bind here
         {
-            if (!File.Exists("abrechnung.xml"))
+            if (!File.Exists("abrechnung.xml")) // "Magic numbers" - you could use a constant on top. 
             {
                 LblToolStrip.Text = "File not found";
                 return;
             }
             try
             {
-                XmlReaderSettings settings = new XmlReaderSettings();
+                XmlReaderSettings settings = new XmlReaderSettings(); 
                 settings.Async = true;
 
-                XmlReader reader = XmlReader.Create("abrechnung.xml", settings);
+                XmlReader reader = XmlReader.Create("abrechnung.xml", settings); // repeated constant here
                 List<Betrag> LoadListB1 = new List<Betrag>();
                 List<Betrag> LoadListB2 = new List<Betrag>();
                 string b1Name = "";
@@ -277,7 +294,7 @@ namespace Essensausgleich
             }
 
         }
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        private void newToolStripMenuItem_Click(object sender, EventArgs e) // what is "newToolStripMenuItem"? 
         {
             bewohner1.ResetBewohnerData();
             bewohner2.ResetBewohnerData();

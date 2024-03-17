@@ -23,7 +23,8 @@ namespace Essensausgleich
             dGridVbeitraege.Columns.Add("KategorieD", "Kategorie");
             dGridVbeitraege.Columns.Add("BetragD", "Betrag");
             foreach (var Betrag in betragsListe)
-            {
+            { // you could use dGridVbeitraege.DataSource = and bind it
+
                 dGridVbeitraege.Rows.Add(Betrag.kategorie.ToString(), Betrag.wert.ToString());
             }
             this.Size = dGridVbeitraege.Size;
