@@ -1,6 +1,6 @@
 ﻿namespace Essensausgleich
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             btnCalc = new Button();
             LblBill = new Label();
             LblZuBezahlender = new Label();
@@ -273,7 +273,7 @@
             newToolStripMenuItem.Text = "New";
             newToolStripMenuItem.Click += newToolStripMenuItem_Click;
             // 
-            // Form1
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -298,9 +298,8 @@
             Controls.Add(btnCalc);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = mStripMain;
-            Name = "Form1";
+            Name = "MainForm";
             Text = "Essensausgleich";
-            Load += Form1_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             mStripMain.ResumeLayout(false);

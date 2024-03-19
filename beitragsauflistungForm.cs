@@ -10,13 +10,14 @@ using System.Windows.Forms;
 
 namespace Essensausgleich
 {
+    /// <summary>
+    /// Form to Display the Single Items of the List component of Bewohner
+    /// </summary>
     public partial class beitragsauflistungForm : Form
     {
-        public beitragsauflistungForm(Form1 mainForm)
+        public beitragsauflistungForm(MainForm mainForm)
         {
             InitializeComponent();
-
-
         }
         public void FillDataGrid(List<Betrag> betragsListe)
         {

@@ -7,12 +7,21 @@ using System.Threading.Tasks;
 
 namespace Essensausgleich
 {
-    class Bewohner
+    /// <summary>
+    /// Class for the Userobject Bewohner 
+    /// </summary>
+   public class Bewohner
     {
         private decimal ausgaben;
-        public string? name;
-        private List<Betrag> Einzelbetraege = new List<Betrag>();
+        public string name = "";
+        public List<Betrag> Einzelbetraege = new List<Betrag>();
+        /// <summary>
+        /// creates and obj of Bewohner
+        /// </summary>
+        public Bewohner()
+        {
 
+        }       
         public decimal Ausgaben
         {
             get
@@ -23,82 +32,56 @@ namespace Essensausgleich
             {
                 ausgaben = value < 0 ? 0 : value;
             }
-        }
-        public Bewohner(string? n)
+        }     
+        /// <summary>
+        /// Method to Add new Entries in the <c>ListBetrag</c>
+        /// </summary>
+        /// <param name="kategorie"></param>
+        /// <param name="betrag"></param>
+        public void AddBetrag(string kategorie, decimal betrag)
         {
-            name = n;
-        }
-        public string GetBewohnerName()
-        {
-            if (name != null)
+            if (kategorie != "")
             {
-                return name;
+                Einzelbetraege.Add(new Betrag(kategorie, betrag));
+                ausgaben += betrag;
             }
             else
             {
-                return "NotNamed";
-            }
-
-        }
-        public void AddBetrag(string k, decimal b)
-        {
-            if (k != "")
-            {
-                Einzelbetraege.Add(new Betrag(k, b));
-                ausgaben += b;
-
-            }
-            else
-            {
-                Einzelbetraege.Add(new Betrag("unkategorisiert", b));
-                ausgaben += b;
+                Einzelbetraege.Add(new Betrag("unkategorisiert", betrag));
+                ausgaben += betrag;
             }
         }
+        /// <summary>
+        /// Adds the all Items of List to the Ausgaben variable
+        /// </summary>
         public void RefreshBetrag()
         {
             foreach (var Betrag in Einzelbetraege)
             {
                 ausgaben += Betrag.wert;
             }
+        }           
+        /// <summary>
+        /// Resets Name, List and Ausgabe to Zero
+        /// </summary>
+        public void ResetBewohnerData()
+        {
+            name = "";
+            Einzelbetraege.Clear();
+            ausgaben = 0;
         }
-
-        public string EinzelbetraegeAusgeben()
+        /// <summary>
+        /// Outputs All Items in List of Betrag to String
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
         {
             String aus = "Einzelbetraege:\n";
             foreach (Betrag b in Einzelbetraege)
             {
                 aus += $"{b.wert}€ -- '{b.kategorie}'\n";
-
             }
             return aus;
-
         }
-        public List<Betrag> BewohnerAusgabenListe()
-        {
-            List<Betrag> BewohnerAusgabenListe = new List<Betrag>();
-            BewohnerAusgabenListe = Einzelbetraege;
-            return BewohnerAusgabenListe;
-        }
-        public string BewohnerName()
-        {
-            if (name != null)
-            {
-                return name;
-            }
-            return "NoNmae";
-
-        }
-        public void LoadBewohnerDataXML(string LoadName, List<Betrag> AusgabenListe)
-        {
-            name = LoadName;
-            Einzelbetraege = AusgabenListe;
-        }
-        public void ResetBewohnerData()
-        {
-            name = null;
-            Einzelbetraege.Clear();
-            ausgaben = 0;
-        }
-
     }
 }
