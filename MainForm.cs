@@ -6,9 +6,12 @@ namespace Essensausgleich
     {
         public Bewohner bewohner1 = new();
         public Bewohner bewohner2 = new();
+        private XMLPersistence _XMLPersistance;
+        
         public MainForm()
         {
             InitializeComponent();
+            _XMLPersistance = FilesSystemManager.GetXMLPersistance();
             LblToolStrip.Text = "";
         }
         private void btnCalc_Click(object sender, EventArgs e)
@@ -43,8 +46,8 @@ namespace Essensausgleich
             else
             {
                 LblToolStrip.Text = $"Es wurden nicht mindestens 2 User Angelegt";
-            }            
-        }       
+            }
+        }
         private void BtnAddUser_Click(object sender, EventArgs e)
         {
             if (txtBoxAddUser.Text == "")
@@ -140,14 +143,12 @@ namespace Essensausgleich
         }
         public void SaveFileXML_Click(object sender, EventArgs e)
         {
-            XMLPersistence xMLPersistence = new XMLPersistence();
-            xMLPersistence.Save(bewohner1, bewohner2);
+            _XMLPersistance.Save(bewohner1, bewohner2);
         }
         private void OfdXML_Click(object sender, EventArgs e)
         {
-            XMLPersistence xmlPersistence = new XMLPersistence();
-            xmlPersistence.Reset(bewohner1, bewohner2);
-            xmlPersistence.Load(bewohner1, bewohner2);
+            _XMLPersistance.Reset(bewohner1, bewohner2);
+            _XMLPersistance.Load(bewohner1, bewohner2);
             LblBewohner1.Text = bewohner1.name;
             LblBewohner2.Text = bewohner2.name;
             LblTotalAmountBew1.Text = bewohner1.Ausgaben.ToString();
@@ -158,8 +159,7 @@ namespace Essensausgleich
         }
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            XMLPersistence newXMLPersistence = new XMLPersistence();
-            newXMLPersistence.Reset(bewohner1,bewohner2);
+            _XMLPersistance.Reset(bewohner1, bewohner2);
             LblBewohner1.Text = "Bew1";
             LblBewohner2.Text = "Bew2";
             LblBill.Text = "0";
@@ -167,6 +167,7 @@ namespace Essensausgleich
             LblTotalAmountBew2.Text = "0";
             cBoxUser.Items.Clear();
             cBoxUser.Text = "";
-        }
+        }       
     }
 }
+

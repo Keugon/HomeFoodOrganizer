@@ -7,19 +7,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Log = System.Diagnostics.Debug;
 
 namespace Essensausgleich
 {
     public partial class settingsForm : Form
     {
+        private XMLPersistence _XMLPersistance;
         public settingsForm()
         {
             InitializeComponent();
+            _XMLPersistance = FilesSystemManager.GetXMLPersistance();
         }
 
         private void settingsForm_Load(object sender, EventArgs e)
         {
+            RbtnFileSave.Select();
+            txtBoxFileNameXML.Text = _XMLPersistance.XMLFileName;
 
+        }
+
+        private void BtnApplyFilesystemChange_Click(object sender, EventArgs e)
+        {
+           _XMLPersistance.ChangePath(txtBoxFileNameXML.Text);
+            Log.WriteLine(txtBoxFileNameXML.Text);
+            this.Close();
         }
     }
 }
