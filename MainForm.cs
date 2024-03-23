@@ -4,10 +4,18 @@ namespace Essensausgleich
 {
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// First Bewohner object
+        /// </summary>
         public Bewohner bewohner1 = new();
+        /// <summary>
+        /// Second Bewohner Obeject
+        /// </summary>
         public Bewohner bewohner2 = new();
         private XMLPersistence _XMLPersistance;
-        
+        /// <summary>
+        /// MainForm for UI Interactions
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
@@ -113,6 +121,11 @@ namespace Essensausgleich
             }
             else LblToolStrip.Text = $"Missing Username";
         }
+        /// <summary>
+        /// Shows the Single Entry in the Corresboding Entry of the Selected Bewohner Object
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void BtnAuflisten_Click(object sender, EventArgs e)
         {
             if (cBoxUser.Text != "")
@@ -141,6 +154,11 @@ namespace Essensausgleich
             settingsForm settingsForm = new();
             settingsForm.ShowDialog();
         }
+        /// <summary>
+        /// Saves the Current Bewohner Obects to XML
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void SaveFileXML_Click(object sender, EventArgs e)
         {
             _XMLPersistance.Save(bewohner1, bewohner2);

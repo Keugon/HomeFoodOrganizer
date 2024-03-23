@@ -14,6 +14,9 @@ namespace Essensausgleich
     {
         //Temporer path
         private string _XMLFileName = "abrechnung.xml";
+        /// <summary>
+        /// Gets the XMLFilename in String
+        /// </summary>
         public string XMLFileName
         {
             get
@@ -162,6 +165,10 @@ namespace Essensausgleich
             bewohner1.ResetBewohnerData();
             bewohner2.ResetBewohnerData();
         }
+        /// <summary>
+        /// Method that changes the XMLFileName (Path) in the XMLPersistance Obj
+        /// </summary>
+        /// <param name="path"></param>
         public void ChangePath(string path)
         {
             if (!string.IsNullOrEmpty(path))
