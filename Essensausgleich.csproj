@@ -10,6 +10,12 @@
     <Title>Essensausgleich</Title>
     <Copyright>@Florian Draxler 2024</Copyright>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <UseWPF>True</UseWPF>
+    <Authors>Florian Draxler</Authors>
+    <Product>HomeFoodOrganizer</Product>
+    <Company>Keugon</Company>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Keugon/HomeFoodOrganizer</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -25,7 +31,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="System.IO" />
     <Using Include="System.Xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

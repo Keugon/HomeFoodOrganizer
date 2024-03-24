@@ -11,9 +11,15 @@ using Log = System.Diagnostics.Debug;
 
 namespace Essensausgleich
 {
+    /// <summary>
+    /// settingsForm
+    /// </summary>
     public partial class settingsForm : Form
     {
         private XMLPersistence _XMLPersistance;
+        /// <summary>
+        /// initofSettingsform
+        /// </summary>
         public settingsForm()
         {
             InitializeComponent();

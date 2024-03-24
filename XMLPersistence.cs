@@ -71,8 +71,9 @@ namespace Essensausgleich
         /// <param name="bewohner2"></param>
         public void Load(Bewohner bewohner1, Bewohner bewohner2)
         {
-            if (!File.Exists("abrechnung.xml"))
+            if (!File.Exists(_XMLFileName))
             {
+                Log.WriteLine("FilenotFound");
                 return;
             }
             try

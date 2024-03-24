@@ -13,7 +13,13 @@ namespace Essensausgleich
    public class Bewohner
     {
         private decimal ausgaben;
+        /// <summary>
+        /// inits the Name of the Bewohner to ""
+        /// </summary>
         public string name = "";
+        /// <summary>
+        /// List of Entrys for the bewohner
+        /// </summary>
         public List<Betrag> Einzelbetraege = new List<Betrag>();
         /// <summary>
         /// creates and obj of Bewohner
@@ -22,6 +28,9 @@ namespace Essensausgleich
         {
 
         }       
+        /// <summary>
+        /// Access to Ausgaben decimal prevents input of negativ numbers
+        /// </summary>
         public decimal Ausgaben
         {
             get

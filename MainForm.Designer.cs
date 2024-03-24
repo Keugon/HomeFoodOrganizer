@@ -1,5 +1,7 @@
 ﻿namespace Essensausgleich
-{
+{/// <summary>
+/// mainForm
+/// </summary>
     partial class MainForm
     {
         /// <summary>
