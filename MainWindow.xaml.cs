@@ -148,26 +148,26 @@ namespace Essensausgleich
 
         private void BtnAuflisten_Click(object sender, RoutedEventArgs e)
         {
-            //if (cBoxUser.Text != "")
-            //{
-            //    if (bewohner1.name == cBoxUser.Text)
-            //    {
-            //        beitragsauflistungForm beitragsauflistung = new(this);
-            //        beitragsauflistung.FillDataGrid(bewohner1.Einzelbetraege);
-            //        beitragsauflistung.ShowDialog();
-            //    }//LblToolStrip.Content
-            //    else if (bewohner2.name == cBoxUser.Text)
-            //    {
-            //        beitragsauflistungForm beitragsauflistung = new(this);
-            //        beitragsauflistung.FillDataGrid(bewohner2.Einzelbetraege);
-            //        beitragsauflistung.ShowDialog();
-            //    }
-            //    else
-            //    {
-            //        LblToolStrip.Content = $"Error keine Bewohner wurde mit der im Dropdown ausgewaehlten User identifiziert";
-            //    }
-            //}
-            //else LblToolStrip.Content = $"Kein User Vorhanden bzw Ausgewaehlt";
+            if (cBoxUser.Text != "")
+            {
+                if (bewohner1.name == cBoxUser.Text)
+                {
+                    contributionWindow contributionWindow = new();
+                    contributionWindow.FillDataGrid(bewohner1.Einzelbetraege);
+                    contributionWindow.ShowDialog();
+                }//LblToolStrip.Content
+                else if (bewohner2.name == cBoxUser.Text)
+                {
+                    contributionWindow contributionWindow = new();
+                    contributionWindow.FillDataGrid(bewohner2.Einzelbetraege);
+                    contributionWindow.ShowDialog();
+                }
+                else
+                {
+                    LblToolStrip.Content = $"Error keine Bewohner wurde mit der im Dropdown ausgewaehlten User identifiziert";
+                }
+            }
+            else LblToolStrip.Content = $"Kein User Vorhanden bzw Ausgewaehlt";
         }
 
         private void MenuWPFLoad_Click(object sender, RoutedEventArgs e)
@@ -200,7 +200,8 @@ namespace Essensausgleich
         }
         private void MenuWPFSettings_Click(object sender, RoutedEventArgs e)
         {
-
+settingsWindow settingsWindow = new settingsWindow();
+            settingsWindow.Show();
         }
 
     }

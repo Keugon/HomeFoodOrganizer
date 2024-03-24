@@ -7,13 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="280" Width="500" MinHeight="250" MinWidth="480">
     <Grid Margin="0,0,0,0">
-        <Menu x:Name="MenuWPFMain"  HorizontalAlignment="Left" VerticalAlignment="Top" Height="18" Width="98">
+        <Menu x:Name="MenuWPFMain"  HorizontalAlignment="Left" VerticalAlignment="Top" >
             <MenuItem Header="Datei">
                 <MenuItem x:Name="MenuWPFLoad" Header="Load" Click="MenuWPFLoad_Click"/>
                 <MenuItem x:Name="MenuWPFSave" Header="Save" Click="MenuWPFSave_Click"/>
                 <MenuItem x:Name="MenuWPFNew" Header="New" Click="MenuWPFNew_Click" />
             </MenuItem>
-            <MenuItem x:Name="MenuWPFSettings" Header="Settings" Click="MenuWPFSettings_Click"/>
+            <MenuItem  Header="Settings" Click="MenuWPFSettings_Click"/>
         </Menu>
         <ComboBox x:Name="cBoxUser" Height="20" Width="115" Margin="20,33,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"  />
         <Label x:Name="LblBewohner1" Content="Bewohner1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="20,68,0,0" Width="69"/>
@@ -25,9 +25,9 @@
         <Label x:Name="LblBill" Content="BewohnerToPay" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="126,159,0,0" Width="93"/>
         <Button x:Name="BtnAddUser" Content="AddUserButton" Height="20" Width="58" Margin="398,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnAddUser_Click"/>
         <TextBox x:Name="txtBoxAddUser" TextWrapping="Wrap" Text="UserNameInput" Height="20" Width="94" Margin="299,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button x:Name="BtnAddBill" Content="AddBillToUser" Height="20" Width="80" Margin="214,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnAddBill_Click" />
-        <TextBox x:Name="txtBoxAddBill" TextWrapping="Wrap" Text="UserBillInput" Height="20" Width="94" Margin="115,33,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="txtBoxCategorie" TextWrapping="Wrap" Text="UserBillCategorieInput" Height="20" Width="94" Margin="16,33,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1"/>
+        <Button x:Name="BtnAddBill" Content="Add Bill" Height="20" Width="44" Margin="250,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnAddBill_Click" />
+        <TextBox x:Name="txtBoxAddBill" TextWrapping="Wrap" Text="UserBillInput" Height="20" Width="37" Margin="208,33,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtBoxCategorie" TextWrapping="Wrap" Text="Categorie" Height="20" Width="62" Margin="142,33,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button x:Name="BtnAuflisten" Content="ShowEntrys" HorizontalAlignment="Left" Height="20" Margin="214,68,0,0" VerticalAlignment="Top" Width="80" Click="BtnAuflisten_Click"/>
         <StatusBar  HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="22" Width="79">
             <StatusBarItem x:Name="LblToolStrip" Content="StatusBarItem"  HorizontalAlignment="Left" VerticalAlignment="Bottom"/>

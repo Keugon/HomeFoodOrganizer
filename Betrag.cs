@@ -14,11 +14,11 @@ namespace Essensausgleich
         /// <summary>
         /// Categorie string of Betrag
         /// </summary>
-        public string kategorie;
+        public string kategorie {  get; set; }
         /// <summary>
         /// Amount in decimal of Betrag
         /// </summary>
-        public decimal wert;
+        public decimal wert {  get; set; }
         /// <summary>
         /// constructor for the Betrag Struct
         /// </summary>
