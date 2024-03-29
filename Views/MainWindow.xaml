@@ -1,0 +1,40 @@
+﻿<Window x:Class="Essensausgleich.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Essensausgleich"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="280" Width="500" MinHeight="250" MinWidth="480" Loaded="Window_Loaded">
+    <Grid Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="81*"/>
+            <ColumnDefinition Width="419*"/>
+        </Grid.ColumnDefinitions>
+        <Menu x:Name="MenuWPFMain"  HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2" >
+            <MenuItem Header="Datei">
+                <MenuItem x:Name="MenuWPFLoad" Header="Load" Click="MenuWPFLoad_Click"/>
+                <MenuItem x:Name="MenuWPFSave" Header="Save" Click="MenuWPFSave_Click"/>
+                <MenuItem x:Name="MenuWPFNew" Header="New" Click="MenuWPFNew_Click" />
+            </MenuItem>
+            <MenuItem  Header="Settings" Click="MenuWPFSettings_Click"/>
+        </Menu>
+        <ComboBox x:Name="cBoxUser" Height="20" Width="115" Margin="20,33,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2"  />
+        <Label x:Name="LblBewohner1"  Content="{Binding bewohner1Name}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="20,68,0,0" Width="69" Grid.ColumnSpan="2" />
+        <Label x:Name="LblTotalAmountBew1" Content="Bewohner1TotalBill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="8,68,0,0" Width="110" Grid.Column="1"/>
+        <Label x:Name="LblBewohner2" Content="Bewohner2" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="20,89,0,0" Width="69" Grid.ColumnSpan="2"/>
+        <Label x:Name="LblTotalAmountBew2" Content="Bewohner2TotalBill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="13,89,0,0" Width="110" Grid.Column="1"/>
+        <Button x:Name="btnCalc" Content="CalcBill" Height="20"  Margin="23,134,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnCalc_Click" Width="40"/>
+        <Label x:Name="LblZuBezahlender" Content="Paying Bewohner" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="20,159,0,0" Width="101" Grid.ColumnSpan="2"/>
+        <Label x:Name="LblBill" Content="BewohnerToPay" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="45,159,0,0" Width="93" Grid.Column="1"/>
+        <Button x:Name="BtnAddUser" Content="AddUserButton" Height="20" Width="58" Margin="317,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnAddUser_Click" Grid.Column="1"/>
+        <TextBox x:Name="txtBoxAddUser" TextWrapping="Wrap" Text="UserNameInput" Height="20" Width="94" Margin="218,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1"/>
+        <Button x:Name="BtnAddBill" Content="Add Bill" Height="20" Width="44" Margin="169,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnAddBill_Click" Grid.Column="1" />
+        <TextBox x:Name="txtBoxAddBill" TextWrapping="Wrap" Text="UserBillInput" Height="20" Width="37" Margin="127,33,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="txtBoxCategorie" TextWrapping="Wrap" Text="Categorie" Height="20" Width="62" Margin="61,33,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1"/>
+        <Button x:Name="BtnAuflisten" Content="ShowEntrys" HorizontalAlignment="Left" Height="20" Margin="133,68,0,0" VerticalAlignment="Top" Width="80" Click="BtnAuflisten_Click" Grid.Column="1"/>
+        <StatusBar  HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="22" Width="79">
+            <StatusBarItem x:Name="LblToolStrip" Content="StatusBarItem"  HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+        </StatusBar>
+    </Grid>
+</Window>

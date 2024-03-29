@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Essensausgleich.Infra;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -10,13 +12,13 @@ namespace Essensausgleich
     /// <summary>
     /// Class for the Userobject Bewohner 
     /// </summary>
-   public class Bewohner
+   public class Bewohner : AppObjekt
     {
         private decimal ausgaben;
         /// <summary>
         /// inits the Name of the Bewohner to ""
         /// </summary>
-        public string name = "";
+        public string name {  get; set; } = string.Empty;
         /// <summary>
         /// List of Entrys for the bewohner
         /// </summary>
@@ -26,7 +28,7 @@ namespace Essensausgleich
         /// </summary>
         public Bewohner()
         {
-
+            
         }       
         /// <summary>
         /// Access to Ausgaben decimal prevents input of negativ numbers
@@ -42,6 +44,7 @@ namespace Essensausgleich
                 ausgaben = value < 0 ? 0 : value;
             }
         }     
+
         /// <summary>
         /// Method to Add new Entries in the <c>ListBetrag</c>
         /// </summary>
@@ -75,7 +78,7 @@ namespace Essensausgleich
         /// </summary>
         public void ResetBewohnerData()
         {
-            name = "";
+            name = string.Empty;
             Einzelbetraege.Clear();
             ausgaben = 0;
         }

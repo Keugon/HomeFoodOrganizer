@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic.Logging;
+﻿using Essensausgleich.Controller;
+using Essensausgleich.Infra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,23 +23,27 @@ namespace Essensausgleich
     public partial class settingsWindow : Window
     {
         private XMLPersistence _XMLPersistance;
+        public Infrastruktur Kontext { get; set; } = null!;
         /// <summary>
         /// settingsWindow to handle user interactions regarding the Variants of Filemanagement
         /// </summary>
         public settingsWindow()
         {
             InitializeComponent();
-            _XMLPersistance = FilesSystemManager.GetXMLPersistance();
+           
+           
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            _XMLPersistance = Kontext.FilesSystemManagerService.GetXMLPersistance();
             RbtnFileSave.IsChecked = true;
             txtBoxFileNameXML.Text = _XMLPersistance.XMLFileName;
         }
 
         private void BtnApplyFilesystemChange_Click(object sender, RoutedEventArgs e)
         {
+            
             _XMLPersistance.ChangePath(txtBoxFileNameXML.Text);
             Log.WriteLine(txtBoxFileNameXML.Text);
             this.Close();

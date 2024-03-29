@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Essensausgleich.Controller;
 
 namespace Essensausgleich
 {
@@ -24,6 +25,7 @@ namespace Essensausgleich
         /// </summary>
         public contributionWindow()
         {
+            
             InitializeComponent();
         }
         /// <summary>
@@ -32,11 +34,7 @@ namespace Essensausgleich
         /// <param name="betragsListe"></param>
         public void FillDataGrid(List<Betrag> betragsListe)
         {
-            dGridVbeitraege.ItemsSource = betragsListe;
-            
-            
-           
-            
+            dGridVbeitraege.ItemsSource = betragsListe;                                           
         }
     }
 }

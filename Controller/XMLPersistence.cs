@@ -1,16 +1,19 @@
-﻿using Microsoft.VisualBasic.Logging;
+﻿
+using Essensausgleich.Infra;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Log = System.Diagnostics.Debug;
-namespace Essensausgleich
+namespace Essensausgleich.Controller
 {
     /// <summary>
     /// Class for Save,Load and Reset of the UserData
     /// </summary>
-    public class XMLPersistence : Persistence
+    public class XMLPersistence : AppObjekt, Ipersistence
     {
         //Temporer path
         private string _XMLFileName = "abrechnung.xml";
@@ -22,8 +25,8 @@ namespace Essensausgleich
             get
             {
                 return _XMLFileName;
-            }            
-        }
+            }
+        }     
         /// <summary>
         /// Methode to Save data from the User Object bewohner to an XML File
         /// </summary>
@@ -153,7 +156,7 @@ namespace Essensausgleich
             catch (Exception exceptionRead)
             {
                 Log.WriteLine(exceptionRead.Message);
-                
+
             }
         }
         /// <summary>

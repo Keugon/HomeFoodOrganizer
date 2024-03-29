@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Printing;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +13,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Essensausgleich.Controller;
+using Essensausgleich.Infra;
+using Essensausgleich.ViewModel;
 using Log = System.Diagnostics.Debug;
 
 namespace Essensausgleich
@@ -18,7 +23,7 @@ namespace Essensausgleich
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IAppObjekt
     {
         /// <summary>
         /// First Bewohner object
@@ -28,7 +33,14 @@ namespace Essensausgleich
         /// Second Bewohner Obeject
         /// </summary>
         public Bewohner bewohner2 = new();
+        //Todo Mvvm
         private XMLPersistence _XMLPersistance;
+        /// <summary>
+        /// Gets or Sets the Infrastructur obj for the MainWindow
+        /// </summary>
+        public Infrastruktur Kontext { get; set; } = null!;
+
+
         /// <summary>
         /// MainForm for UI Interactions
         /// </summary>
@@ -38,12 +50,13 @@ namespace Essensausgleich
         public MainWindow()
         {
             InitializeComponent();
-            _XMLPersistance = FilesSystemManager.GetXMLPersistance();
-            LblToolStrip.Content = "";
+
+            //LblToolStrip.Content = "";          
         }
-
-
-
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _XMLPersistance = Kontext.FilesSystemManagerService.GetXMLPersistance();
+        }
         private void btnCalc_Click(object sender, RoutedEventArgs e)
         {
             decimal Endwert = 0;
@@ -92,7 +105,7 @@ namespace Essensausgleich
                 {
                     //replaceToMehtod
                     bewohner1.name = txtBoxAddUser.Text;
-                    LblBewohner1.Content = bewohner1.name;
+                    //LblBewohner1.Content = bewohner1.name;
                     cBoxUser.Items.Add(txtBoxAddUser.Text);
                     cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
                     LblToolStrip.Content = $"Bewohner {bewohner1.name} wurde angelegt";
@@ -114,6 +127,7 @@ namespace Essensausgleich
             {
                 LblToolStrip.Content = $"Maximale User anzahl bereits Angelegt";
             }
+            //DataContext = customerViewModel;
         }
 
         private void BtnAddBill_Click(object sender, RoutedEventArgs e)
@@ -155,7 +169,7 @@ namespace Essensausgleich
                     contributionWindow contributionWindow = new();
                     contributionWindow.FillDataGrid(bewohner1.Einzelbetraege);
                     contributionWindow.ShowDialog();
-                }//LblToolStrip.Content
+                }
                 else if (bewohner2.name == cBoxUser.Text)
                 {
                     contributionWindow contributionWindow = new();
@@ -172,9 +186,10 @@ namespace Essensausgleich
 
         private void MenuWPFLoad_Click(object sender, RoutedEventArgs e)
         {
+            
             _XMLPersistance.Reset(bewohner1, bewohner2);
             _XMLPersistance.Load(bewohner1, bewohner2);
-            LblBewohner1.Content = bewohner1.name;
+            //LblBewohner1.Content = bewohner1.name;
             LblBewohner2.Content = bewohner2.name;
             LblTotalAmountBew1.Content = bewohner1.Ausgaben.ToString();
             LblTotalAmountBew2.Content = bewohner2.Ausgaben.ToString();
@@ -185,12 +200,12 @@ namespace Essensausgleich
 
         private void MenuWPFSave_Click(object sender, RoutedEventArgs e)
         {
-            _XMLPersistance.Save(bewohner1, bewohner2);
+            Kontext.FilesSystemManagerService.GetXMLPersistance().Save(bewohner1, bewohner2);
         }
         private void MenuWPFNew_Click(object sender, RoutedEventArgs e)
         {
             _XMLPersistance.Reset(bewohner1, bewohner2);
-            LblBewohner1.Content = "Bew1";
+            //LblBewohner1.Content = "Bew1";
             LblBewohner2.Content = "Bew2";
             LblBill.Content = "0";
             LblTotalAmountBew1.Content = "0";
@@ -200,9 +215,19 @@ namespace Essensausgleich
         }
         private void MenuWPFSettings_Click(object sender, RoutedEventArgs e)
         {
-settingsWindow settingsWindow = new settingsWindow();
-            settingsWindow.Show();
+            //Das View Model Initialisieren
+            var vm = this.Kontext.Produziere<ViewModel.Anwendung>();
+            //Die Hauptfenster View als Oberfläche benutzen
+            vm.Anzeigen<settingsWindow>();
+
+
+            //Anwendung settingswindow = new Anwendung();
+            //settingswindow.Anzeigen<settingsWindow>();
+
+            //settingsWindow settingsWindow = new settingsWindow();
+            //settingsWindow.Show();
         }
 
+        
     }
 }

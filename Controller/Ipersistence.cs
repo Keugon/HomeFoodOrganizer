@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Essensausgleich
+namespace Essensausgleich.Controller
 {
     /// <summary>
     /// interface for multiplay variants of Persistence eg XML, SQL, no persistance
     /// </summary>
-    internal interface Persistence
+    internal interface Ipersistence
     {
         void Save(Bewohner bewohner1, Bewohner bewohner2);
         void Load(Bewohner bewohner1, Bewohner bewohner2);

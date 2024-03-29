@@ -4,42 +4,9 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>burger_hamburger_fast_food_meal_icon_179355.ico</ApplicationIcon>
-    <Title>Essensausgleich</Title>
-    <Copyright>@Florian Draxler 2024</Copyright>
+    <UseWPF>true</UseWPF>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <UseWPF>True</UseWPF>
-    <Authors>Florian Draxler</Authors>
-    <Product>HomeFoodOrganizer</Product>
-    <Company>Keugon</Company>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/Keugon/HomeFoodOrganizer</RepositoryUrl>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Content Include="burger_hamburger_fast_food_meal_icon_179355.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="System.IO" />
-    <Using Include="System.Xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
 
 </Project>
