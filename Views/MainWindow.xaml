@@ -20,7 +20,7 @@
             <MenuItem  Header="Settings" Click="MenuWPFSettings_Click"/>
         </Menu>
         <ComboBox x:Name="cBoxUser" Height="20" Width="115" Margin="20,33,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2"  />
-        <Label x:Name="LblBewohner1"  Content="{Binding bewohner1Name}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="20,68,0,0" Width="69" Grid.ColumnSpan="2" />
+        <Label x:Name="LblBewohner1"  Content="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="20,68,0,0" Width="69" Grid.ColumnSpan="2" />
         <Label x:Name="LblTotalAmountBew1" Content="Bewohner1TotalBill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="8,68,0,0" Width="110" Grid.Column="1"/>
         <Label x:Name="LblBewohner2" Content="Bewohner2" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="20,89,0,0" Width="69" Grid.ColumnSpan="2"/>
         <Label x:Name="LblTotalAmountBew2" Content="Bewohner2TotalBill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="13,89,0,0" Width="110" Grid.Column="1"/>

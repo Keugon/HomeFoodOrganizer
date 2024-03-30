@@ -20,9 +20,12 @@ namespace Essensausgleich
     /// <summary>
     /// Interaktionslogik für settingsWindow.xaml
     /// </summary>
-    public partial class settingsWindow : Window
+    public partial class settingsWindow : Window , IAppObjekt
     {
-        private XMLPersistence _XMLPersistance;
+        private XMLPersistence _XMLPersistance = null!;
+        /// <summary>
+        /// Get or Sets the Kontext
+        /// </summary>
         public Infrastruktur Kontext { get; set; } = null!;
         /// <summary>
         /// settingsWindow to handle user interactions regarding the Variants of Filemanagement

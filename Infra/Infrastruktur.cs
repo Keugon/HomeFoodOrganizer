@@ -22,7 +22,43 @@ namespace Essensausgleich.Infra;
 /// bekannt ist.</remarks>
 public class Infrastruktur : System.Object
 {
-    
+
+    #region Bewohner
+
+    private Bewohner _Bewohner1 = null!;
+    /// <summary>
+    /// Gets the object Bewohner1
+    /// </summary>
+    public Bewohner bewohner1
+    {
+        get
+        {
+            if (this._Bewohner1 == null)
+            {
+                this._Bewohner1 = this.Produziere<Bewohner>();
+            }
+            return this._Bewohner1;
+        }
+    }
+
+    private Bewohner _Bewohner2 = null!;
+    /// <summary>
+    /// Gets the object Bewohner2
+    /// </summary>
+    public Bewohner bewohner2
+    {
+        get
+        {
+            if(this._Bewohner2 == null)
+            {
+                this._Bewohner2 = this.Produziere<Bewohner>();
+            }
+            return this._Bewohner2;
+        }
+    }
+    #endregion
+
+
     #region FilesystemManagaer    
     /// <summary>
     /// Ruft den Dienst zum Verwalten des XML Dienstes ab
@@ -60,7 +96,7 @@ public class Infrastruktur : System.Object
         // Die Infrastruktur an 
         // das neue Objekt übergeben
         NeuesObjekt.Kontext = this;
-        
+
         //Nur für die Entwickler
         //einen Protokolleintrag für VisualStudio
         //dass ein Objekt prouziert wurde und einen Fehlerbehandler

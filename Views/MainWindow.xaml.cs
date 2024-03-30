@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.TextFormatting;
 using System.Windows.Shapes;
 using Essensausgleich.Controller;
 using Essensausgleich.Infra;
@@ -25,16 +26,13 @@ namespace Essensausgleich
     /// </summary>
     public partial class MainWindow : Window, IAppObjekt
     {
-        /// <summary>
-        /// First Bewohner object
-        /// </summary>
-        public Bewohner bewohner1 = new();
-        /// <summary>
-        /// Second Bewohner Obeject
-        /// </summary>
-        public Bewohner bewohner2 = new();
+
+
+        private Bewohner bewohner1 = null!;
+        private Bewohner bewohner2 = null!;
+
         //Todo Mvvm
-        private XMLPersistence _XMLPersistance;
+        private XMLPersistence _XMLPersistance = null!;
         /// <summary>
         /// Gets or Sets the Infrastructur obj for the MainWindow
         /// </summary>
@@ -56,12 +54,18 @@ namespace Essensausgleich
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _XMLPersistance = Kontext.FilesSystemManagerService.GetXMLPersistance();
+
+            bewohner1 = this.Kontext.bewohner1;
+            bewohner2 = this.Kontext.bewohner2;
+            this.DataContext = bewohner1;
+            //Todo impl Viewmodel to house every value that will be changed 
+            //this.DataContext = bewohner2;
         }
         private void btnCalc_Click(object sender, RoutedEventArgs e)
         {
             decimal Endwert = 0;
             string zBezahlender;
-            if (bewohner1.name != "" && bewohner2.name != "")
+            if (bewohner1.Name != "" && bewohner2.Name != "")
             {
                 Endwert = (bewohner1.Ausgaben + bewohner2.Ausgaben) / 2;
                 if (bewohner1.Ausgaben > 0 || bewohner2.Ausgaben > 0)
@@ -69,14 +73,14 @@ namespace Essensausgleich
                     if (bewohner1.Ausgaben > bewohner2.Ausgaben)
                     {
                         Endwert = bewohner1.Ausgaben - Endwert;
-                        zBezahlender = bewohner2.name;
+                        zBezahlender = bewohner2.Name;
                         LblBill.Content = Convert.ToString(Endwert);
                         LblZuBezahlender.Content = zBezahlender;
                     }
                     else
                     {
                         Endwert = bewohner2.Ausgaben - Endwert;
-                        zBezahlender = bewohner1.name;
+                        zBezahlender = bewohner1.Name;
                         LblBill.Content = Convert.ToString(Endwert);
                         LblZuBezahlender.Content = zBezahlender;
                     }
@@ -99,24 +103,24 @@ namespace Essensausgleich
                 LblToolStrip.Content = $"Kein User Name eingegeben";
                 return;
             }
-            if (bewohner1.name == "" || bewohner2.name == "")
+            if (bewohner1.Name == "" || bewohner2.Name == "")
             {
-                if (bewohner1.name == "")
+                if (bewohner1.Name == "")
                 {
                     //replaceToMehtod
-                    bewohner1.name = txtBoxAddUser.Text;
+                    bewohner1.Name = txtBoxAddUser.Text;
                     //LblBewohner1.Content = bewohner1.name;
                     cBoxUser.Items.Add(txtBoxAddUser.Text);
                     cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
-                    LblToolStrip.Content = $"Bewohner {bewohner1.name} wurde angelegt";
+                    LblToolStrip.Content = $"Bewohner {bewohner1.Name} wurde angelegt";
                 }
-                else if (bewohner2.name == "" && txtBoxAddUser.Text != bewohner1.name)
+                else if (bewohner2.Name == "" && txtBoxAddUser.Text != bewohner1.Name)
                 {
-                    bewohner2.name = txtBoxAddUser.Text;
-                    LblBewohner2.Content = bewohner2.name;
+                    bewohner2.Name = txtBoxAddUser.Text;
+                    LblBewohner2.Content = bewohner2.Name;
                     cBoxUser.Items.Add(txtBoxAddUser.Text);
                     cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
-                    LblToolStrip.Content = $"Bewohner {bewohner2.name} wurde angelegt";
+                    LblToolStrip.Content = $"Bewohner {bewohner2.Name} wurde angelegt";
                 }
                 else
                 {
@@ -140,13 +144,13 @@ namespace Essensausgleich
                     LblToolStrip.Content = $"Not a valid Numver";
                     return;
                 }
-                if (bewohner1.name == cBoxUser.Text && cBoxUser.Text != "")
+                if (bewohner1.Name == cBoxUser.Text && cBoxUser.Text != "")
                 {
                     bewohner1.AddBetrag(txtBoxCategorie.Text, bill);
                     LblTotalAmountBew1.Content = Convert.ToString(bewohner1.Ausgaben);
                     LblToolStrip.Content = $"Betrag {bill} der Kategorie {txtBoxCategorie.Text} hinzugefuegt";
                 }
-                else if (bewohner2.name == cBoxUser.Text && cBoxUser.Text != "")
+                else if (bewohner2.Name == cBoxUser.Text && cBoxUser.Text != "")
                 {
                     bewohner2.AddBetrag(txtBoxCategorie.Text, bill);
                     LblTotalAmountBew2.Content = Convert.ToString(bewohner2.Ausgaben);
@@ -164,13 +168,13 @@ namespace Essensausgleich
         {
             if (cBoxUser.Text != "")
             {
-                if (bewohner1.name == cBoxUser.Text)
+                if (bewohner1.Name == cBoxUser.Text)
                 {
                     contributionWindow contributionWindow = new();
                     contributionWindow.FillDataGrid(bewohner1.Einzelbetraege);
                     contributionWindow.ShowDialog();
                 }
-                else if (bewohner2.name == cBoxUser.Text)
+                else if (bewohner2.Name == cBoxUser.Text)
                 {
                     contributionWindow contributionWindow = new();
                     contributionWindow.FillDataGrid(bewohner2.Einzelbetraege);
@@ -186,15 +190,15 @@ namespace Essensausgleich
 
         private void MenuWPFLoad_Click(object sender, RoutedEventArgs e)
         {
-            
+
             _XMLPersistance.Reset(bewohner1, bewohner2);
             _XMLPersistance.Load(bewohner1, bewohner2);
             //LblBewohner1.Content = bewohner1.name;
-            LblBewohner2.Content = bewohner2.name;
+            LblBewohner2.Content = bewohner2.Name;
             LblTotalAmountBew1.Content = bewohner1.Ausgaben.ToString();
             LblTotalAmountBew2.Content = bewohner2.Ausgaben.ToString();
-            cBoxUser.Items.Add(bewohner1.name);
-            cBoxUser.Items.Add(bewohner2.name);
+            cBoxUser.Items.Add(bewohner1.Name);
+            cBoxUser.Items.Add(bewohner2.Name);
             cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
         }
 
@@ -215,6 +219,7 @@ namespace Essensausgleich
         }
         private void MenuWPFSettings_Click(object sender, RoutedEventArgs e)
         {
+
             //Das View Model Initialisieren
             var vm = this.Kontext.Produziere<ViewModel.Anwendung>();
             //Die Hauptfenster View als Oberfläche benutzen
@@ -228,6 +233,6 @@ namespace Essensausgleich
             //settingsWindow.Show();
         }
 
-        
+
     }
 }

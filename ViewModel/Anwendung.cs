@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         /// <typeparam name="T">Ein WPF Fenster das als 
         /// Hauptfenster der Anwendung benutzt werden soll</typeparam>       
-        public void Anzeigen<T>() where T : System.Windows.Window, new()
+        public void Anzeigen<T>() where T : System.Windows.Window, IAppObjekt, new()
         {
 
 
@@ -25,27 +26,20 @@ namespace Essensausgleich.ViewModel
             Essensausgleich.App.Current.MainWindow = f;
 
             //View und Viewmodel verbinden
-            f.DataContext = this;
-            // Die Infrastruktur an 
-            // das neue Objekt übergeben
-
-            if (f is MainWindow mainWindow)
-            {
-                System.Diagnostics.Debug.WriteLine("f is MainWindow");
-
-                mainWindow.Kontext = this.Kontext;
-
-            }
-            else if (f is settingsWindow settingsWindow)
-            {
-                settingsWindow.Kontext = this.Kontext;
-                System.Diagnostics.Debug.WriteLine("f is settingswindow");
-            }
+            //f.DataContext = this;
+            //Attach Kontext to the new Window
+            f.Kontext = this.Kontext;
 
             f.Show();
+
+
 
         }
 
         #endregion
+
+       
+        
+        
     }
 }

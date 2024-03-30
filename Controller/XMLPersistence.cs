@@ -46,7 +46,7 @@ namespace Essensausgleich.Controller
                 foreach (var Betrag in bewohner1.Einzelbetraege)
                 {
                     writer.WriteStartElement("a");
-                    writer.WriteAttributeString("BewohnerName", bewohner1.name);
+                    writer.WriteAttributeString("BewohnerName", bewohner1.Name);
                     writer.WriteAttributeString("kategorie", Betrag.kategorie);
                     writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
                     writer.WriteEndElement();
@@ -54,7 +54,7 @@ namespace Essensausgleich.Controller
                 foreach (var Betrag in bewohner2.Einzelbetraege)
                 {
                     writer.WriteStartElement("b");
-                    writer.WriteAttributeString("BewohnerName", bewohner2.name);
+                    writer.WriteAttributeString("BewohnerName", bewohner2.Name);
                     writer.WriteAttributeString("kategorie", Betrag.kategorie);
                     writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
                     writer.WriteEndElement();
@@ -116,7 +116,7 @@ namespace Essensausgleich.Controller
                                                     break;
                                             }
                                     }
-                                    bewohner1.name = b1Name;
+                                    bewohner1.Name = b1Name;
                                     bewohner1.Einzelbetraege.Add(new Betrag(kat1, b1betrag));
                                 }
                             }
@@ -140,7 +140,7 @@ namespace Essensausgleich.Controller
                                                     break;
                                             }
                                     }
-                                    bewohner2.name = b2Name;
+                                    bewohner2.Name = b2Name;
                                     bewohner2.Einzelbetraege.Add(new Betrag(kat2, b2betrag));
 
                                 }

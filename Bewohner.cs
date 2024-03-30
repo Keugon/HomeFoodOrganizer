@@ -12,13 +12,28 @@ namespace Essensausgleich
     /// <summary>
     /// Class for the Userobject Bewohner 
     /// </summary>
-   public class Bewohner : AppObjekt
+   public class Bewohner : AppObjekt, INotifyPropertyChanged
     {
         private decimal ausgaben;
         /// <summary>
         /// inits the Name of the Bewohner to ""
         /// </summary>
-        public string name {  get; set; } = string.Empty;
+        private string _Name = string.Empty;
+        /// <summary>
+        /// Gets or Sets the Name propertie of Bewohner
+        /// </summary>
+        public string Name 
+        {
+            get 
+            {
+                return _Name; 
+            }
+            set 
+            {
+                _Name = value;
+                OnPropertyChanged();
+            }
+        }      
         /// <summary>
         /// List of Entrys for the bewohner
         /// </summary>
@@ -78,7 +93,7 @@ namespace Essensausgleich
         /// </summary>
         public void ResetBewohnerData()
         {
-            name = string.Empty;
+            Name = string.Empty;
             Einzelbetraege.Clear();
             ausgaben = 0;
         }
@@ -88,12 +103,45 @@ namespace Essensausgleich
         /// <returns></returns>
         public override string ToString()
         {
-            String aus = "Einzelbetraege:\n";
-            foreach (Betrag b in Einzelbetraege)
-            {
-                aus += $"{b.wert}€ -- '{b.kategorie}'\n";
-            }
-            return aus;
+            return base.ToString()!;
         }
+
+
+        #region WPF über Änderungen Informieren
+        /// <summary>
+        /// Wird ausgelöst, wenn sich der Inhalt
+        /// einer Eigenschaft geändert hat
+        /// </summary>
+        public event PropertyChangedEventHandler?
+            PropertyChanged = null!;
+
+        /// <summary>
+        /// Löst das Ereignis PropertyChanged aus
+        /// </summary>
+        /// <param name="e">Ereginisdaten mit
+        /// dem Namen der geänderten Eigenschaft</param>
+        protected virtual void OnPropertyChanged(
+            System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var BehandlerKopie = this.PropertyChanged;
+            if (BehandlerKopie != null)
+            {
+                BehandlerKopie(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Löst das Ereignis PropertyChanged aus
+        /// </summary>
+        /// <param name="nameEigenschaft">optional: Die Bezeichnung
+        /// der Eigenschaft, deren Inhalt geändert wurde</param>
+        /// <remarks>Fehlt der Name der Eigenschaft,
+        /// wird der Name vom Aufrufer eingesetzt</remarks>
+        protected virtual void OnPropertyChanged(
+            [System.Runtime.CompilerServices.CallerMemberName] string nameEigenschaft = null!)
+        {
+            this.OnPropertyChanged(new PropertyChangedEventArgs(nameEigenschaft));
+        }
+        #endregion WPF über Änderungen Informieren
     }
 }
