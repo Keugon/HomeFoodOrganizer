@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Essensausgleich.Infra
     /// ein MVVM ViewModel bereit
     /// </summary>
     public abstract class ViewModel        : Essensausgleich.Infra.AppObjekt,
-        System.ComponentModel.INotifyPropertyChanged
+        System.ComponentModel.INotifyPropertyChanged, INotifyCollectionChanged
     {
         #region WPF über Änderungen Informieren
         /// <summary>
@@ -21,6 +22,11 @@ namespace Essensausgleich.Infra
         /// </summary>
         public event PropertyChangedEventHandler?
             PropertyChanged = null!;
+        /// <summary>
+        /// Wird ausgelöst, wenn sich der Inhalt
+        /// einer Obsverablecollegtion geändert hat
+        /// </summary>
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         /// <summary>
         /// Löst das Ereignis PropertyChanged aus
@@ -48,7 +54,24 @@ namespace Essensausgleich.Infra
             [System.Runtime.CompilerServices.CallerMemberName] string nameEigenschaft = null!)
         {
             this.OnPropertyChanged(new PropertyChangedEventArgs(nameEigenschaft));
+            System.Diagnostics.Debug.WriteLine($"OnPropertyChanged ausgelöst bei:{nameEigenschaft}");
         }
         #endregion WPF über Änderungen Informieren
+        /// <summary>
+        /// Löst das Ereignis PropertyChanged aus
+        /// </summary>
+        /// <param name="e">Ereginisdaten mit
+        /// dem Namen der geänderten Eigenschaft</param>
+        protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            var BehandlerKopie = this.CollectionChanged;
+            if (BehandlerKopie != null)
+            {
+                BehandlerKopie(this, e);
+            }
+            System.Diagnostics.Debug.WriteLine($"OnCollectionChanged ausgelöst bei:{e.ToString}");
+        }
+
+        
     }
 }

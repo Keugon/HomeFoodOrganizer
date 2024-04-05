@@ -1,4 +1,5 @@
 ﻿
+using Essensausgleich.Data;
 using Essensausgleich.Infra;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Essensausgleich.Controller
             {
                 return _XMLFileName;
             }
-        }     
+        }
         /// <summary>
         /// Methode to Save data from the User Object bewohner to an XML File
         /// </summary>
@@ -140,7 +141,7 @@ namespace Essensausgleich.Controller
                                                     break;
                                             }
                                     }
-                                    bewohner2.Name = b2Name;
+                                    bewohner2.Name = b2Name;                                  
                                     bewohner2.Einzelbetraege.Add(new Betrag(kat2, b2betrag));
 
                                 }
@@ -149,7 +150,9 @@ namespace Essensausgleich.Controller
                     }
                 }
                 reader.Close();
-                //Formular refresh            
+                //Formular refresh
+                this.Kontext.InhabitantsManager.InhabitantsController.AddInhabitant(bewohner1.Name);
+                this.Kontext.InhabitantsManager.InhabitantsController.AddInhabitant(bewohner2.Name);
                 bewohner1.RefreshBetrag();
                 bewohner2.RefreshBetrag();
             }
@@ -168,6 +171,9 @@ namespace Essensausgleich.Controller
         {
             bewohner1.ResetBewohnerData();
             bewohner2.ResetBewohnerData();
+            Log.WriteLine("ResetBewData1,2");
+            this.Kontext.InhabitantsManager.InhabitantsController.ClearInhabitants();
+            Log.WriteLine("ClearInhabsMehtod aftr");
         }
         /// <summary>
         /// Method that changes the XMLFileName (Path) in the XMLPersistance Obj

@@ -3,16 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Essensausgleich"
+        xmlns:local="clr-namespace:Essensausgleich.ViewModel"
         mc:Ignorable="d"
-        Title="contributionWindow" Height="235" Width="382" >
+        Title="contributionWindow" Height="235" Width="382" Loaded="Window_Loaded" >
     <Grid>
-        <DataGrid x:Name="dGridVbeitraege" AutoGenerateColumns="False" HorizontalAlignment="Stretch" Height="NaN" VerticalAlignment="Stretch" Width="NaN">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding kategorie}" Header="Categorie"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding wert}" Header="Wert"></DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-
+        <DataGrid
+            Name="DataGridContribution"
+            ItemsSource="{Binding BeitragsListe}"
+            AutoGenerateColumns="True" 
+            />
     </Grid>
 </Window>

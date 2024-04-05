@@ -9,16 +9,16 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Essensausgleich.Infra.FehlerAufgetretenEventArgs">
-    <Position X="7.5" Y="1.5" Width="1.5" />
+    <Position X="12.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAgAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Infra\FehlerAufgetreten.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Essensausgleich.Infra.Infrastruktur">
-    <Position X="5.25" Y="1.5" Width="1.5" />
+    <Position X="0.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <HashCode>QAAAAAAAAAAAYAAAAAAAAAAEAAAAgAAAAQAAAAAAAAA=</HashCode>
       <FileName>Infra\Infrastruktur.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -33,15 +33,8 @@
   <Class Name="Essensausgleich.ViewModel.Anwendung">
     <Position X="2.75" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAUAgAgAAAwAgAQAIIAAAAAAAgAAgAAAAAAAAAAU=</HashCode>
       <FileName>ViewModel\Anwendung.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Essensausgleich.Bewohner">
-    <Position X="0.5" Y="4.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAIAAAACAAAEAigAAIAAAAAEAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Bewohner.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Essensausgleich.FilesSystemManager">
@@ -52,38 +45,53 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Essensausgleich.MainWindow" BaseTypeListCollapsed="true">
-    <Position X="11" Y="1.5" Width="1.5" />
+    <Position X="7.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEgAAEAAIAAAAAAAAAAAgAAEAAgCEAAARAAAAAAAQ=</HashCode>
       <FileName>Views\MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Essensausgleich.App">
-    <Position X="0.5" Y="1.5" Width="1.5" />
+  <Class Name="Essensausgleich.App" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>IAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
       <FileName>App.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Essensausgleich.settingsWindow">
-    <Position X="12.75" Y="1.5" Width="1.5" />
+  <Class Name="Essensausgleich.settingsWindow" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAIAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAEQ=</HashCode>
       <FileName>Views\settingsWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="Essensausgleich.Data.Inhabitants">
+    <Position X="0.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Bewohner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Essensausgleich.Data.Bewohner">
+    <Position X="0.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAACAAAEIigAIIQAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Bewohner.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
   <Struct Name="Essensausgleich.Betrag">
-    <Position X="7.5" Y="3.75" Width="1.5" />
+    <Position X="14.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Betrag.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Delegate Name="Essensausgleich.Infra.FehlerAufgetretenEventHandler">
-    <Position X="9.25" Y="1.5" Width="1.5" />
+    <Position X="12.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAABAAAA=</HashCode>
       <FileName>Infra\FehlerAufgetreten.cs</FileName>

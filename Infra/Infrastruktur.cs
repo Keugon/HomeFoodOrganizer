@@ -1,4 +1,5 @@
 ﻿using Essensausgleich.Controller;
+using Essensausgleich.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Essensausgleich.Infra;
 public class Infrastruktur : System.Object
 {
 
-    #region Bewohner
+    #region Bewohner und BewohnerListe
 
     private Bewohner _Bewohner1 = null!;
     /// <summary>
@@ -56,9 +57,27 @@ public class Infrastruktur : System.Object
             return this._Bewohner2;
         }
     }
+
+
     #endregion
 
-
+    #region InhabitantsManager
+    private InhabitantsManager _InhabitantsManager = null!;
+     /// <summary>
+     /// Gets the Service for Controlling the Inhabitants
+     /// </summary>
+    public InhabitantsManager InhabitantsManager
+    {
+        get
+        {
+            if(_InhabitantsManager == null)
+            {
+                this._InhabitantsManager = this.Produziere<InhabitantsManager>();
+            }
+            return this._InhabitantsManager;
+        }
+    }
+    #endregion
     #region FilesystemManagaer    
     /// <summary>
     /// Ruft den Dienst zum Verwalten des XML Dienstes ab

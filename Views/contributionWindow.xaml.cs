@@ -12,29 +12,33 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Essensausgleich.Controller;
+using Essensausgleich.Infra;
+using Essensausgleich.ViewModel;
 
 namespace Essensausgleich
 {
     /// <summary>
     /// Interaktionslogik für contributionWindow.xaml
     /// </summary>
-    public partial class contributionWindow : Window
+    public partial class contributionWindow : Window, IAppObjekt
     {
+        /// <summary>
+        /// Get or Sets the Kontext
+        /// </summary>
+        public Infrastruktur Kontext { get; set; } = null!;
         /// <summary>
         /// init contributionWindow
         /// </summary>
         public contributionWindow()
+        {           
+            InitializeComponent();
+            //DataContext = this.DataContext;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             
-            InitializeComponent();
-        }
-        /// <summary>
-        /// Fills the DataGrid with information coresponding to the selected User
-        /// </summary>
-        /// <param name="betragsListe"></param>
-        public void FillDataGrid(List<Betrag> betragsListe)
-        {
-            dGridVbeitraege.ItemsSource = betragsListe;                                           
+            
         }
     }
 }

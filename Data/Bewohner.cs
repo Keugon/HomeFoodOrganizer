@@ -7,12 +7,13 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Essensausgleich
+namespace Essensausgleich.Data
 {
+    
     /// <summary>
     /// Class for the Userobject Bewohner 
     /// </summary>
-   public class Bewohner : AppObjekt, INotifyPropertyChanged
+    public class Bewohner : AppObjekt, INotifyPropertyChanged
     {
         private decimal ausgaben;
         /// <summary>
@@ -22,18 +23,18 @@ namespace Essensausgleich
         /// <summary>
         /// Gets or Sets the Name propertie of Bewohner
         /// </summary>
-        public string Name 
+        public string Name
         {
-            get 
+            get
             {
-                return _Name; 
+                return _Name;
             }
-            set 
+            set
             {
                 _Name = value;
-                OnPropertyChanged();
+                //OnPropertyChanged();
             }
-        }      
+        }
         /// <summary>
         /// List of Entrys for the bewohner
         /// </summary>
@@ -43,8 +44,8 @@ namespace Essensausgleich
         /// </summary>
         public Bewohner()
         {
-            
-        }       
+
+        }
         /// <summary>
         /// Access to Ausgaben decimal prevents input of negativ numbers
         /// </summary>
@@ -52,13 +53,15 @@ namespace Essensausgleich
         {
             get
             {
+                
                 return ausgaben;
             }
             set
             {
                 ausgaben = value < 0 ? 0 : value;
+                //OnPropertyChanged();
             }
-        }     
+        }
 
         /// <summary>
         /// Method to Add new Entries in the <c>ListBetrag</c>
@@ -67,6 +70,7 @@ namespace Essensausgleich
         /// <param name="betrag"></param>
         public void AddBetrag(string kategorie, decimal betrag)
         {
+            
             if (kategorie != "")
             {
                 Einzelbetraege.Add(new Betrag(kategorie, betrag));
@@ -87,15 +91,16 @@ namespace Essensausgleich
             {
                 ausgaben += Betrag.wert;
             }
-        }           
+        }
         /// <summary>
         /// Resets Name, List and Ausgabe to Zero
         /// </summary>
         public void ResetBewohnerData()
         {
-            Name = string.Empty;
+            _Name = string.Empty;
             Einzelbetraege.Clear();
             ausgaben = 0;
+            //OnPropertyChanged();
         }
         /// <summary>
         /// Outputs All Items in List of Betrag to String
@@ -121,9 +126,9 @@ namespace Essensausgleich
         /// <param name="e">Ereginisdaten mit
         /// dem Namen der geänderten Eigenschaft</param>
         protected virtual void OnPropertyChanged(
-            System.ComponentModel.PropertyChangedEventArgs e)
+            PropertyChangedEventArgs e)
         {
-            var BehandlerKopie = this.PropertyChanged;
+            var BehandlerKopie = PropertyChanged;
             if (BehandlerKopie != null)
             {
                 BehandlerKopie(this, e);
@@ -140,7 +145,7 @@ namespace Essensausgleich
         protected virtual void OnPropertyChanged(
             [System.Runtime.CompilerServices.CallerMemberName] string nameEigenschaft = null!)
         {
-            this.OnPropertyChanged(new PropertyChangedEventArgs(nameEigenschaft));
+            OnPropertyChanged(new PropertyChangedEventArgs(nameEigenschaft));
         }
         #endregion WPF über Änderungen Informieren
     }

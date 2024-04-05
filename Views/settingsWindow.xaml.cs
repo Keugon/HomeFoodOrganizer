@@ -22,7 +22,7 @@ namespace Essensausgleich
     /// </summary>
     public partial class settingsWindow : Window , IAppObjekt
     {
-        private XMLPersistence _XMLPersistance = null!;
+        
         /// <summary>
         /// Get or Sets the Kontext
         /// </summary>
@@ -33,22 +33,10 @@ namespace Essensausgleich
         public settingsWindow()
         {
             InitializeComponent();
-           
-           
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            _XMLPersistance = Kontext.FilesSystemManagerService.GetXMLPersistance();
-            RbtnFileSave.IsChecked = true;
-            txtBoxFileNameXML.Text = _XMLPersistance.XMLFileName;
-        }
-
-        private void BtnApplyFilesystemChange_Click(object sender, RoutedEventArgs e)
-        {
             
-            _XMLPersistance.ChangePath(txtBoxFileNameXML.Text);
-            Log.WriteLine(txtBoxFileNameXML.Text);
+        }      
+        private void BtnApplyFilesystemChange_Click(object sender, RoutedEventArgs e)
+        {                                  
             this.Close();
         }
     }

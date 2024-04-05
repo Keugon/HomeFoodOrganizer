@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Essensausgleich"
         mc:Ignorable="d"
-        Title="settingsWindow" Height="129" Width="417" Loaded="Window_Loaded">
+        Title="settingsWindow" Height="129" Width="417">
     <Grid>
         <RadioButton Content="No File Management" IsEnabled="False" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="RbtnFileSave" Content="XML File Management" HorizontalAlignment="Left" Margin="10,24,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="RbtnFileSave" Content="XML File Management" HorizontalAlignment="Left" Margin="10,24,0,0" VerticalAlignment="Top" IsChecked="True"/>
         <RadioButton Content="SQL File Management" IsEnabled="False" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top"/>
         <Button x:Name="BtnApplyFilesystemChange" Content="Apply" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Click="BtnApplyFilesystemChange_Click"/>
-        <TextBox x:Name="txtBoxFileNameXML" HorizontalAlignment="Left" Margin="262,14,0,0" TextWrapping="Wrap" Text="Abrechnung.xml" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtBoxFileNameXML" HorizontalAlignment="Left" Margin="262,14,0,0" TextWrapping="Wrap" Text="{Binding FileName}" VerticalAlignment="Top" Width="120"/>
         <Label Content="FileName" HorizontalAlignment="Left" Margin="197,10,0,0" VerticalAlignment="Top"/>
 
     </Grid>

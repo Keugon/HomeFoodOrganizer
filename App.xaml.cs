@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using Essensausgleich.ViewModel;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 using Log = System.Diagnostics.Debug;
@@ -10,6 +11,10 @@ namespace Essensausgleich
     /// </summary>
     public partial class App : Application, IAppObjekt
     {
+        /// <summary>
+        /// ViewModel
+        /// </summary>
+        public static Anwendung ViewModelAnwendung { get; set; } = null!;
         /// <summary>
         /// Stellt den Kontext für die APPobjekte bereit glaub ich
         /// </summary>
@@ -26,11 +31,12 @@ namespace Essensausgleich
             this.Kontext = new Essensausgleich.Infra.Infrastruktur();
             
             //Das View Model Initialisieren
-            var vm = this.Kontext.Produziere<ViewModel.Anwendung>();
+             ViewModelAnwendung = this.Kontext.Produziere<ViewModel.Anwendung>();
+            ViewModelAnwendung.Initialize();
             //Die Hauptfenster View als Oberfläche benutzen
-            vm.Anzeigen<MainWindow>();
+            ViewModelAnwendung.Anzeigen<MainWindow>();
 
-            Log.WriteLine("FilesystemManager Init");
+            //Log.WriteLine("FilesystemManager Init");
         }
     }
 
