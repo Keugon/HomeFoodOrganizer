@@ -5,68 +5,84 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Essensausgleich"
         mc:Ignorable="d"
-        Title="MainWindow" Height="280" Width="500" MinHeight="250" MinWidth="480" Loaded="Window_Loaded">
+        Title="MainWindow" Height="250" Width="400" MinHeight="250" MinWidth="400" Loaded="Window_Loaded"
+        FontFamily="Segoe Ui">
     <Grid Margin="0,0,0,0">
 
 
-        <Menu x:Name="MenuWPFMain"  HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2" >
-            <MenuItem Header="Datei">
+        <Menu x:Name="MenuWPFMain"  
+              HorizontalAlignment="Left" 
+              VerticalAlignment="Top" 
+              Background="#FFCFDBFB">
+            <MenuItem 
+                Header="Datei">
                 <MenuItem x:Name="MenuWPFLoad" Header="Load" Click="MenuWPFLoad_Click"/>
                 <MenuItem x:Name="MenuWPFSave" Header="Save" Click="MenuWPFSave_Click"/>
                 <MenuItem x:Name="MenuWPFNew" Header="New" Click="MenuWPFNew_Click" />
             </MenuItem>
             <MenuItem x:Name="MenuWPFSettings" Header="Settings" Click="MenuWPFSettings_Click"/>
         </Menu>
-        <ComboBox 
-            x:Name="cBoxUser" 
-            Height="20" Width="115" 
-            Margin="20,33,0,0" Text="{Binding CboxUserText}" 
-            SelectedItem="{Binding InhabitantsSelected}" 
-            ItemsSource="{Binding Kontext.InhabitantsManager.InhabitantsController.InhabitantsList}" 
-            HorizontalAlignment="Left" 
-            VerticalAlignment="Top" 
-            Grid.ColumnSpan="2"  />
-        <Label x:Name="LblBewohner1"  
-            Content="{Binding Bewohner1Name}" 
-            HorizontalAlignment="Left" 
-            VerticalAlignment="Top" 
-            Height="28" Margin="20,68,0,0" 
-            Width="69" 
-            Grid.ColumnSpan="2" />
-        <Label x:Name="LblTotalAmountBew1" 
-            Content="{Binding AusgabenBewohner1}" 
-            HorizontalAlignment="Left" 
-            VerticalAlignment="Top" 
-            Height="28" 
-            Margin="94,68,0,0" Width="34"/>
-        <Label x:Name="LblBewohner2" 
-               Content="{Binding Bewohner2Name}" 
-               HorizontalAlignment="Left" 
-               VerticalAlignment="Top" 
-               Height="28" 
-               Margin="20,89,0,0" 
-               Width="69" 
-               Grid.ColumnSpan="2"/>
-        <Label 
-            x:Name="LblTotalAmountBew2" 
-            Content="{Binding AusgabenBewohner2}" 
-            HorizontalAlignment="Left" 
-            VerticalAlignment="Top" 
-            Height="28" 
-            Margin="100,89,0,0" 
-            Width="28"/>
-        <Button x:Name="btnCalc" Content="CalcBill" Height="20"  Margin="23,134,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnCalc_Click" Width="40"/>
-        <Label x:Name="LblZuBezahlender" Content="{Binding LblZuBezahlenderContent}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="20,159,0,0" Width="101" Grid.ColumnSpan="2"/>
-        <Label x:Name="LblBill" Content="{Binding LblBillContent}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Margin="45,159,0,0" Width="93" Grid.Column="1"/>
-        <Button x:Name="BtnAddUser" Content="AddUserButton" Height="20" Width="58" Margin="418,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnAddUser_Click"/>
-        <TextBox x:Name="txtBoxAddUser"   TextWrapping="Wrap" Text="{Binding txtBoxAddUserContent}" Height="20" Width="94" Margin="319,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button x:Name="BtnAddBill" Content="Add Bill" Height="20" Width="44" Margin="262,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnAddBill_Click" />
-        <TextBox x:Name="txtBoxAddBill" TextWrapping="Wrap" Text="{Binding TxtBoxAddBillText}" Height="20" Width="37" Margin="220,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtBoxCategorie" TextWrapping="Wrap" Text="{Binding TxtBoxCategorieText}" Height="20" Width="62" Margin="153,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button x:Name="BtnAuflisten" Content="ShowEntrys" HorizontalAlignment="Left" Height="20" Margin="133,68,0,0" VerticalAlignment="Top" Width="80" Click="BtnContributionWindow" Grid.Column="1"/>
 
+
+
+
+
+        <Button x:Name="BtnAuflisten" Content="ShowEntrys" HorizontalAlignment="Left" Height="20" Margin="270,80,0,0" VerticalAlignment="Top" Width="80" Click="BtnContributionWindow" Grid.Column="1"/>
+
+        <!--Stackpanel Inhabitants Expenses-->
+        <StackPanel            
+             Orientation="Vertical"
+              HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="20,60">
+            <!--Stackpanel Inhabitant1-->
+            <StackPanel
+            Background="Gray"
+            Orientation="Horizontal">
+                <Label x:Name="LblBewohner1"  Content="{Binding Bewohner1Name}" Width="50" Height="25"/>
+                <Label x:Name="LblTotalAmountBew1" Content="{Binding AusgabenBewohner1}" ContentStringFormat="{}{0}€" Width="50" Height="25"/>
+            </StackPanel>
+            <!--Stackpanel Inhabitant2-->
+            <StackPanel
+                Background="Bisque"
+            Orientation="Horizontal">
+                <Label x:Name="LblBewohner2" Content="{Binding Bewohner2Name}" Width="50" Height="25" />
+                <Label x:Name="LblTotalAmountBew2" Content="{Binding AusgabenBewohner2}" ContentStringFormat="{}{0}€" Width="50" Height="25"/>
+            </StackPanel>
+            <!--Stackpanel Bezahlen-->
+            <StackPanel
+                Background="#FF8A6328"
+                Orientation="Horizontal">
+                <Label x:Name="LblZuBezahlender" Content="{Binding LblZuBezahlenderContent}" ContentStringFormat="{}{0} zahlt" Width="50" Height="25"/>
+                <Label x:Name="LblBill" Content="{Binding LblBillContent}" ContentStringFormat="{}{0}€" Width="50" Height="25"/>
+            </StackPanel>
+        </StackPanel>
+        <!--Stackpanel Bill and User-->
+        <StackPanel
+            Margin="0,20"
+            Orientation="Horizontal"
+            VerticalAlignment="Top"
+            >
+            <ComboBox x:Name="cBoxUser" Width="115" Text="{Binding CboxUserText}" SelectedItem="{Binding InhabitantsSelected}" ItemsSource="{Binding Kontext.InhabitantsManager.InhabitantsController.InhabitantsList}" HorizontalAlignment="Left"/>
+            <!--Stack Pannel Add Bill-->
+            <StackPanel
+            Orientation="Horizontal"
+                HorizontalAlignment="Right">
+                <TextBox x:Name="txtBoxCategorie" TextWrapping="Wrap" Text="{Binding TxtBoxCategorieText}" Width="50"/>
+                <TextBox x:Name="txtBoxAddBill" TextWrapping="Wrap" Text="{Binding TxtBoxAddBillText}" Width="50"/>
+                <Button x:Name="BtnAddBill" Content="Add Bill"  Click="BtnAddBill_Click"/>
+
+            </StackPanel>
+            <!--Stackpanel AddUser-->
+            <StackPanel
+            Orientation="Horizontal"
+                HorizontalAlignment="Right">
+                <TextBox x:Name="txtBoxAddUser"   TextWrapping="Wrap" Text="{Binding txtBoxAddUserContent}" Width="50" />
+                <Button x:Name="BtnAddUser" Content="Add User" Click="BtnAddUser_Click"/>
+            </StackPanel>
+        </StackPanel>
         <StatusBar  HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="22" Width="300">
-            <StatusBarItem x:Name="LblToolStrip" Content="{Binding LblToolStripContent}" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+            <StatusBarItem x:Name="LblToolStrip" Content="{Binding LblToolStripContent}"/>
         </StatusBar>
     </Grid>
 </Window>

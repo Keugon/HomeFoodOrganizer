@@ -143,6 +143,7 @@ namespace Essensausgleich.ViewModel
             {
                 bewohner1.Ausgaben = value;
                 OnPropertyChanged();
+                CalcOutcome();
             }
         }
         //private decimal _AusgabenBewohner1;
@@ -154,6 +155,7 @@ namespace Essensausgleich.ViewModel
             {
                 bewohner2.Ausgaben = value;
                 OnPropertyChanged();
+                CalcOutcome();
             }
         }
         //private decimal _AusgabenBewohner2;
@@ -400,10 +402,9 @@ Log.WriteLine("ButtonAuflistung Clicked");
         }
         public void OpenSettingsWindow()
         {
-            //Das View Model Initialisieren
-            var vm = this.Kontext.Produziere<ViewModel.Anwendung>();
-            //Die Hauptfenster View als Oberfläche benutzen
-            vm.Anzeigen<settingsWindow>();
+            var settingsWindow = new settingsWindow();
+            settingsWindow.DataContext = this;
+            settingsWindow.Show();
         }
 #pragma warning restore 1591
         #endregion

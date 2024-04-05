@@ -35,10 +35,6 @@ namespace Essensausgleich
             //DataContext = this.DataContext;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            
-            
-        }
+        
     }
 }

@@ -52,7 +52,7 @@ namespace Essensausgleich
             var viewModel = App.ViewModelAnwendung;
             if (viewModel != null)
             {
-                btnCalc.Click += (sender, e) => viewModel.CalcOutcome();
+                //btnCalc.Click += (sender, e) => viewModel.CalcOutcome();
                 BtnAddUser.Click += (sender, e) => viewModel.AddUser();
                 BtnAddBill.Click += (sender, e) => viewModel.AddBill();
                 BtnAuflisten.Click += (sender, e) => viewModel.OpenContributioWindow();
