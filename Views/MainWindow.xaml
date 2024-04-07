@@ -69,7 +69,7 @@
             Orientation="Horizontal"
                 HorizontalAlignment="Right">
                 <TextBox x:Name="txtBoxCategorie" TextWrapping="Wrap" Text="{Binding TxtBoxCategorieText}" Width="50"/>
-                <TextBox x:Name="txtBoxAddBill" TextWrapping="Wrap" Text="{Binding TxtBoxAddBillText}" Width="50"/>
+                <TextBox x:Name="txtBoxAddBill" TextWrapping="Wrap" Text="{Binding TxtBoxAddBillText}" Width="50" KeyDown="txtBoxAddBill_KeyDown"/>
                 <Button x:Name="BtnAddBill" Content="Add Bill"  Click="BtnAddBill_Click"/>
 
             </StackPanel>

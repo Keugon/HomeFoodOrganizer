@@ -1,13 +1,17 @@
 ﻿
 using Essensausgleich.Data;
 using Essensausgleich.Infra;
+using Essensausgleich.Tools;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml;
+
 using Log = System.Diagnostics.Debug;
 namespace Essensausgleich.Controller
 {
@@ -16,8 +20,10 @@ namespace Essensausgleich.Controller
     /// </summary>
     public class XMLPersistence : AppObjekt, Ipersistence
     {
-        //Temporer path
-        private string _XMLFileName = "abrechnung.xml";
+        /// <summary>
+        /// Intern cache for filename
+        /// </summary>
+        private string _XMLFileName = $"abrechnung_{General.GetCurrentDate()}.xml";
         /// <summary>
         /// Gets the XMLFilename in String
         /// </summary>
@@ -27,7 +33,10 @@ namespace Essensausgleich.Controller
             {
                 return _XMLFileName;
             }
+            
         }
+
+        
         /// <summary>
         /// Methode to Save data from the User Object bewohner to an XML File
         /// </summary>
@@ -35,37 +44,96 @@ namespace Essensausgleich.Controller
         /// <param name="bewohner2"></param>
         public void Save(Bewohner bewohner1, Bewohner bewohner2)
         {
-            try
+            if (bewohner1.Ausgaben > 0 && bewohner2.Ausgaben > 0)
             {
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Async = true;
-                settings.ConformanceLevel = ConformanceLevel.Auto;
-                XmlWriter writer = XmlWriter.Create(_XMLFileName, settings);
-                writer.WriteStartDocument();
-                writer.WriteStartElement("Abrechnung");
+                if (!Path.Exists(XMLFileName))
+                {
+                    {
+                        try
+                        {
+                            XmlWriterSettings settings = new XmlWriterSettings();
+                            settings.Async = true;
+                            settings.ConformanceLevel = ConformanceLevel.Auto;
+                            XmlWriter writer = XmlWriter.Create(XMLFileName, settings);
+                            writer.WriteStartDocument();
+                            writer.WriteStartElement("Abrechnung");
 
-                foreach (var Betrag in bewohner1.Einzelbetraege)
-                {
-                    writer.WriteStartElement("a");
-                    writer.WriteAttributeString("BewohnerName", bewohner1.Name);
-                    writer.WriteAttributeString("kategorie", Betrag.kategorie);
-                    writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
-                    writer.WriteEndElement();
+                            foreach (var Betrag in bewohner1.Einzelbetraege)
+                            {
+                                writer.WriteStartElement("a");
+                                writer.WriteAttributeString("BewohnerName", bewohner1.Name);
+                                writer.WriteAttributeString("kategorie", Betrag.kategorie);
+                                writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
+                                writer.WriteEndElement();
+                            }
+                            foreach (var Betrag in bewohner2.Einzelbetraege)
+                            {
+                                writer.WriteStartElement("b");
+                                writer.WriteAttributeString("BewohnerName", bewohner2.Name);
+                                writer.WriteAttributeString("kategorie", Betrag.kategorie);
+                                writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
+                                writer.WriteEndElement();
+                            }
+                            writer.WriteEndElement();
+                            writer.Close();
+                            Log.WriteLine($"{XMLFileName} saved");
+                        }
+                        catch (Exception writerException)
+                        {
+                            Log.WriteLine(writerException.Message);
+                        }
+                    }
                 }
-                foreach (var Betrag in bewohner2.Einzelbetraege)
+                else
                 {
-                    writer.WriteStartElement("b");
-                    writer.WriteAttributeString("BewohnerName", bewohner2.Name);
-                    writer.WriteAttributeString("kategorie", Betrag.kategorie);
-                    writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
-                    writer.WriteEndElement();
+                    Log.WriteLine("FileExits!!");
+                    MessageBoxResult mr = MessageBox.Show("File Exists, Overwrite?", "File Name Exits", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (mr == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+                            XmlWriterSettings settings = new XmlWriterSettings();
+                            settings.Async = true;
+                            settings.ConformanceLevel = ConformanceLevel.Auto;
+                            XmlWriter writer = XmlWriter.Create(XMLFileName, settings);
+                            writer.WriteStartDocument();
+                            writer.WriteStartElement("Abrechnung");
+
+                            foreach (var Betrag in bewohner1.Einzelbetraege)
+                            {
+                                writer.WriteStartElement("a");
+                                writer.WriteAttributeString("BewohnerName", bewohner1.Name);
+                                writer.WriteAttributeString("kategorie", Betrag.kategorie);
+                                writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
+                                writer.WriteEndElement();
+                            }
+                            foreach (var Betrag in bewohner2.Einzelbetraege)
+                            {
+                                writer.WriteStartElement("b");
+                                writer.WriteAttributeString("BewohnerName", bewohner2.Name);
+                                writer.WriteAttributeString("kategorie", Betrag.kategorie);
+                                writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
+                                writer.WriteEndElement();
+                            }
+                            writer.WriteEndElement();
+                            writer.Close();
+                            Log.WriteLine($"{XMLFileName} saved");
+                        }
+                        catch (Exception writerException)
+                        {
+                            Log.WriteLine(writerException.Message);
+                        }
+                    }
+                    else
+                    {
+                        Log.WriteLine("Not Saved");
+                    }
+                    
                 }
-                writer.WriteEndElement();
-                writer.Close();
             }
-            catch (Exception writerException)
+            else
             {
-                Log.WriteLine(writerException.Message);
+                Log.WriteLine("Both User needs Intput");
             }
         }
         /// <summary>
@@ -73,18 +141,29 @@ namespace Essensausgleich.Controller
         /// </summary>
         /// <param name="bewohner1"></param>
         /// <param name="bewohner2"></param>
-        public void Load(Bewohner bewohner1, Bewohner bewohner2)
+        public bool Load(Bewohner bewohner1, Bewohner bewohner2)
         {
-            if (!File.Exists(_XMLFileName))
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "Xml Files|*.xml";
+            bool? dialogResult = dialog.ShowDialog();
+
+            if (dialogResult == true)
             {
-                Log.WriteLine("FilenotFound");
-                return;
+                _XMLFileName = dialog.SafeFileName;
+            }
+
+            
+            
+            if (!File.Exists(XMLFileName))
+            {
+                Log.WriteLine($"{XMLFileName} not Found");
+                return false;
             }
             try
             {
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.Async = true;
-                XmlReader reader = XmlReader.Create(_XMLFileName, settings);
+                XmlReader reader = XmlReader.Create(XMLFileName, settings);
                 string b1Name = "";
                 string b2Name = "";
                 decimal b1betrag = 0;
@@ -141,7 +220,7 @@ namespace Essensausgleich.Controller
                                                     break;
                                             }
                                     }
-                                    bewohner2.Name = b2Name;                                  
+                                    bewohner2.Name = b2Name;
                                     bewohner2.Einzelbetraege.Add(new Betrag(kat2, b2betrag));
 
                                 }
@@ -161,6 +240,7 @@ namespace Essensausgleich.Controller
                 Log.WriteLine(exceptionRead.Message);
 
             }
+            return true;
         }
         /// <summary>
         /// Calls itself the Reset Method of Bewohner for both Users

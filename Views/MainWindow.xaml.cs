@@ -60,7 +60,6 @@ namespace Essensausgleich
                 MenuWPFSave.Click += (sender, e) => viewModel.MenueSave();
                 MenuWPFNew.Click += (sender, e) => viewModel.MenueNew();
                 MenuWPFSettings.Click += (sender, e) => viewModel.OpenSettingsWindow();
-
             }
 
 
@@ -102,7 +101,6 @@ namespace Essensausgleich
         {
             //Todo MenueWPFSave
             Log.WriteLine("MenueWPFSave Clicked");
-            Kontext.FilesSystemManagerService.GetXMLPersistance().Save(bewohner1, bewohner2);
         }
         private void MenuWPFNew_Click(object sender, RoutedEventArgs e)
         {
@@ -123,5 +121,14 @@ namespace Essensausgleich
         {
 
         }
+
+        private void txtBoxAddBill_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                
+            }
+        }
+       
     }
 }

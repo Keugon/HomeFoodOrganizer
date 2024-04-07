@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Log = System.Diagnostics.Debug;
 
@@ -54,21 +55,21 @@ namespace Essensausgleich.ViewModel
         #region PropertieBinding
 
 #pragma warning disable 1591
-       
+
         public ObservableCollection<Betrag> BeitragsListe
         {
             get => this._BeitragsListe;
             set
             {
                 this._BeitragsListe = value;
-                OnPropertyChanged(nameof(BeitragsListe));               
+                OnPropertyChanged(nameof(BeitragsListe));
                 Log.WriteLine($"{BeitragsListe.GetType().Name} has changed");
             }
         }
 
         private ObservableCollection<Betrag> _BeitragsListe = new ObservableCollection<Betrag>();
 
-       
+
         public string InhabitantsSelected
         {
             get => _InhabitansSelected;
@@ -253,14 +254,14 @@ namespace Essensausgleich.ViewModel
         }
         public void AddUser()
         {
-            if (_txtBoxAddUserContent == "")
+            if (_txtBoxAddUserContent == string.Empty)
             {
                 LblToolStripContent = $"Kein User Name eingegeben";
                 return;
             }
-            if (Bewohner1Name == "" || Bewohner2Name == "")
+            if (Bewohner1Name == string.Empty || Bewohner2Name == string.Empty)
             {
-                if (Bewohner1Name == "")
+                if (Bewohner1Name == string.Empty && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
                 {
                     //replaceToMehtod
                     Bewohner1Name = _txtBoxAddUserContent;
@@ -270,7 +271,7 @@ namespace Essensausgleich.ViewModel
                     //cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
                     LblToolStripContent = $"Bewohner {Bewohner1Name} wurde angelegt";
                 }
-                else if (Bewohner2Name == "" && _txtBoxAddUserContent != Bewohner1Name)
+                else if (Bewohner2Name == string.Empty && _txtBoxAddUserContent != Bewohner1Name && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
                 {
                     Bewohner2Name = _txtBoxAddUserContent;
                     _InhabitantsController.AddInhabitant(Bewohner2Name);
@@ -281,13 +282,14 @@ namespace Essensausgleich.ViewModel
                 }
                 else
                 {
-                    LblToolStripContent = $"Name gleich wie User1 bitte anderen waehlen";
+                    LblToolStripContent = $"Invalide Username or Already Exists!";
                 }
             }
             else
             {
                 LblToolStripContent = $"Maximale User anzahl bereits Angelegt";
             }
+            txtBoxAddUserContent = string.Empty;
         }
         public void AddBill()
         {
@@ -314,27 +316,29 @@ namespace Essensausgleich.ViewModel
                 }
             }
             else LblToolStripContent = $"Missing Username";
+            TxtBoxAddBillText = decimal.Zero;
+            TxtBoxCategorieText = string.Empty;
         }
-       /// <summary>
-       /// Opens The window and fills the Datagrid with the Current
-       /// selectedInhabitant to display the total Expenses
-       /// </summary>
+        /// <summary>
+        /// Opens The window and fills the Datagrid with the Current
+        /// selectedInhabitant to display the total Expenses
+        /// </summary>
         public void OpenContributioWindow()
         {
-           var contributionWindow = new contributionWindow();
+            var contributionWindow = new contributionWindow();
             contributionWindow.DataContext = this;
-            contributionWindow.Show(); 
+            contributionWindow.Show();
 
             if (!string.IsNullOrEmpty(InhabitantsSelected))
             {
                 if (InhabitantsSelected == Bewohner1Name)
-                {       
+                {
                     BeitragsListe.Clear();
                     foreach (var item in bewohner1.Einzelbetraege)
                     {
                         BeitragsListe.Add(item);
                     }
-                   
+
                     this.BeitragsListe = new ObservableCollection<Betrag>(bewohner1.Einzelbetraege);
 
                 }
@@ -345,15 +349,15 @@ namespace Essensausgleich.ViewModel
                     {
                         BeitragsListe.Add(item);
                     }
-                   this.BeitragsListe = new ObservableCollection<Betrag>(bewohner2.Einzelbetraege);
+                    this.BeitragsListe = new ObservableCollection<Betrag>(bewohner2.Einzelbetraege);
                 }
                 else
                 {
                     Log.WriteLine($"No Inhabitant selected or not found, Selcted:{InhabitantsSelected}");
                 }
             }
-Log.WriteLine("ButtonAuflistung Clicked");
-            
+            Log.WriteLine("ButtonAuflistung Clicked");
+
             //Hengt datakontext nicht richtig an ak
             /*
             var vm = this.Kontext.Produziere<ViewModel.Anwendung>();
@@ -361,7 +365,7 @@ Log.WriteLine("ButtonAuflistung Clicked");
             OnPropertyChanged("BeitragsListe");
             */
 
-            
+
 
         }
 
@@ -369,12 +373,20 @@ Log.WriteLine("ButtonAuflistung Clicked");
         public void MenueLoad()
         {
             _XMLPersistance.Reset(bewohner1, bewohner2);
-            _XMLPersistance.Load(bewohner1, bewohner2);
-            Bewohner1Name = bewohner1.Name;
-            Bewohner2Name = bewohner2.Name;
-            AusgabenBewohner1 = bewohner1.Ausgaben;
-            AusgabenBewohner2 = bewohner2.Ausgaben;
-            InhabitantsSelected = this.Kontext.InhabitantsManager.InhabitantsController.InhabitantsList[0];
+            if (_XMLPersistance.Load(bewohner1, bewohner2))
+            {
+                Bewohner1Name = bewohner1.Name;
+                Bewohner2Name = bewohner2.Name;
+                AusgabenBewohner1 = bewohner1.Ausgaben;
+                AusgabenBewohner2 = bewohner2.Ausgaben;
+                InhabitantsSelected = this.Kontext.InhabitantsManager.InhabitantsController.InhabitantsList[0];
+            }
+            else
+            {
+                Log.WriteLine($"{_XMLPersistance.XMLFileName}.xml Could Not be loaded");
+            }
+
+
             //foreach (var item in BeitragsListe)
             //{
             //    this.BeitragsListeObs.Add(item);
@@ -391,7 +403,12 @@ Log.WriteLine("ButtonAuflistung Clicked");
             _XMLPersistance.Reset(bewohner1, bewohner2);
             TxtBoxAddBillText = 0;
             TxtBoxCategorieText = string.Empty;
-
+            Bewohner1Name = bewohner1.Name;
+            Bewohner2Name = bewohner2.Name;
+            AusgabenBewohner1 = bewohner1.Ausgaben;
+            AusgabenBewohner2 = bewohner2.Ausgaben;
+            LblZuBezahlenderContent = string.Empty;
+            LblBillContent = string.Empty;
             ////LblBewohner1.Content = "Bew1";
             //LblBewohner2.Content = "Bew2";
             //LblBill.Content = "0";

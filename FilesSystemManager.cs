@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Essensausgleich.Tools;
 using Essensausgleich.Controller;
 using Essensausgleich.Infra;
 
@@ -41,6 +42,7 @@ namespace Essensausgleich
                     this._XMLPersistence = this.Kontext.
                         Produziere<XMLPersistence>();
                 }
+                
                 return this._XMLPersistence;
             }
         }
