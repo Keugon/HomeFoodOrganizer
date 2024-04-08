@@ -5,11 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Essensausgleich.ViewModel"
         mc:Ignorable="d"
-        Title="contributionWindow" Height="200" Width="180" >
+        Title="contributionWindow" Height="200" Width="180" 
+        >
+    
     <Grid>
         <DataGrid
             Name="DataGridContribution"
-            ItemsSource="{Binding BeitragsListe}" AutoGenerateColumns="False">
+            ItemsSource="{Binding BeitragsListe}" AutoGenerateColumns="False"
+            SelectedItem="{Binding SelectedBetrag}"
+                        >
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{Binding DeleteEntry}"
+                        Header="Delete"
+                        />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Kategorie" Width="100" Binding="{Binding kategorie}"/>
                 <DataGridTextColumn Header="Wert" Width="50" Binding="{Binding wert}"/>

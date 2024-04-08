@@ -56,10 +56,11 @@ namespace Essensausgleich.ViewModel
         private InhabitantsController _InhabitantsController = null!;
         private XMLPersistence _XMLPersistance = null!;
         #endregion
+        #region RelayCommand
+        public RelayCommand DeleteEntry => new RelayCommand(execute => DeleteDataGridEntry());
+        #endregion
         #region PropertieBinding
-
 #pragma warning disable 1591
-
         public ObservableCollection<Betrag> BeitragsListe
         {
             get => this._BeitragsListe;
@@ -70,10 +71,18 @@ namespace Essensausgleich.ViewModel
                 Log.WriteLine($"{BeitragsListe.GetType().Name} has changed");
             }
         }
-
         private ObservableCollection<Betrag> _BeitragsListe = new ObservableCollection<Betrag>();
 
-
+        public Betrag SelectedBetrag
+        {
+            get => _selectedBetrag;
+            set
+            {
+                _selectedBetrag = value;
+                OnPropertyChanged();
+            }
+        }
+        private Betrag _selectedBetrag;
         public string InhabitantsSelected
         {
             get => _InhabitansSelected;
@@ -85,7 +94,6 @@ namespace Essensausgleich.ViewModel
             }
         }
         private string _InhabitansSelected = null!;
-
         public string LblBillContent
         {
             get => _lblBillContent;
@@ -96,7 +104,6 @@ namespace Essensausgleich.ViewModel
             }
         }
         private string _lblBillContent = null!;
-
         public string LblZuBezahlenderContent
         {
             get => _lblZuBezahlenderContent;
@@ -107,7 +114,6 @@ namespace Essensausgleich.ViewModel
             }
         }
         private string _lblZuBezahlenderContent = null!;
-
         public string LblToolStripContent
         {
             get => _lblToolStripContent;
@@ -118,7 +124,6 @@ namespace Essensausgleich.ViewModel
             }
         }
         private string _lblToolStripContent = null!;
-
         public string txtBoxAddUserContent
         {
             get => _txtBoxAddUserContent;
@@ -129,7 +134,6 @@ namespace Essensausgleich.ViewModel
             }
         }
         private string _txtBoxAddUserContent = null!;
-
         public string Bewohner1Name
         {
             get => bewohner1.Name;
@@ -140,7 +144,6 @@ namespace Essensausgleich.ViewModel
             }
         }
         //private string _Bewohner1Name = null!;
-
         public decimal AusgabenBewohner1
         {
             get => bewohner1.Ausgaben;
@@ -152,7 +155,6 @@ namespace Essensausgleich.ViewModel
             }
         }
         //private decimal _AusgabenBewohner1;
-
         public decimal AusgabenBewohner2
         {
             get => bewohner2.Ausgaben;
@@ -174,7 +176,6 @@ namespace Essensausgleich.ViewModel
             }
         }
         //private string _Bewohner2Name = null!;
-
         public string TxtBoxAddBillText
         {
             get => _TxtBoxAddBillText;
@@ -216,7 +217,6 @@ namespace Essensausgleich.ViewModel
                 this.Kontext.FilesSystemManagerService.GetXMLPersistance().ChangePath(value);
             }
         }
-
         #endregion
         #region MainWindow
 
@@ -444,28 +444,28 @@ namespace Essensausgleich.ViewModel
         {
             if (bewohner1.Ausgaben > 0 && bewohner2.Ausgaben > 0)
             {
-              var dialog = new SaveFileDialog();
-            dialog.Filter = "Xml Files|*.xml";
-            dialog.AddExtension = true;
-            dialog.DefaultExt = ".xml";
-            bool? dialogResult = dialog.ShowDialog();
+                var dialog = new SaveFileDialog();
+                dialog.Filter = "Xml Files|*.xml";
+                dialog.AddExtension = true;
+                dialog.DefaultExt = ".xml";
+                bool? dialogResult = dialog.ShowDialog();
 
-            if (dialogResult == true)
-            {
+                if (dialogResult == true)
+                {
                     _XMLPersistance.ChangePath(dialog.SafeFileName);
                     MenueSave();
-            }
-            else
-            {
-                Log.WriteLine("OpenFile Dialog cancelt = False");
-                return;
-            } 
+                }
+                else
+                {
+                    Log.WriteLine("OpenFile Dialog cancelt = False");
+                    return;
+                }
             }
             else
             {
                 Log.WriteLine("Both User needs Intput");
             }
-            
+
 
         }
         public void MenueNew()
@@ -499,7 +499,28 @@ namespace Essensausgleich.ViewModel
 
         #endregion
         #region contributionWindow
+        public void DeleteDataGridEntry()
+        {// delet Entry and updates source
+            BeitragsListe.Remove(SelectedBetrag);
+            if (InhabitantsSelected == Bewohner1Name)
+            {
+                bewohner1.Einzelbetraege.Clear();
+                foreach (var item in BeitragsListe)
+                {
 
+                    bewohner1.Einzelbetraege.Add(item);
+                }
+            }
+            else if (InhabitantsSelected == Bewohner2Name)
+            {
+                bewohner2.Einzelbetraege.Clear();
+                foreach (var item in BeitragsListe)
+                {
+
+                    bewohner2.Einzelbetraege.Add(item);
+                }
+            }
+        }
         #endregion
     }
 }
