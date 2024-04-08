@@ -16,9 +16,10 @@
               Background="#FFCFDBFB">
             <MenuItem 
                 Header="Datei">
-                <MenuItem x:Name="MenuWPFLoad" Header="Load" Click="MenuWPFLoad_Click"/>
-                <MenuItem x:Name="MenuWPFSave" Header="Save" Click="MenuWPFSave_Click"/>
                 <MenuItem x:Name="MenuWPFNew" Header="New" Click="MenuWPFNew_Click" />
+                <MenuItem x:Name="MenuWPFLoad" Header="Open" Click="MenuWPFLoad_Click"/>
+                <MenuItem x:Name="MenuWPFSave" Header="Save" Click="MenuWPFSave_Click"/>
+                <MenuItem x:Name="MenuWPFSaveAs" Header="Save as" Click="MenuWPFSaveAs_Click"/>
             </MenuItem>
             <MenuItem x:Name="MenuWPFSettings" Header="Settings" Click="MenuWPFSettings_Click"/>
         </Menu>

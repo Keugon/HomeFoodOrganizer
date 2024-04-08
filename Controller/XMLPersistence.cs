@@ -44,96 +44,38 @@ namespace Essensausgleich.Controller
         /// <param name="bewohner2"></param>
         public void Save(Bewohner bewohner1, Bewohner bewohner2)
         {
-            if (bewohner1.Ausgaben > 0 && bewohner2.Ausgaben > 0)
+            try
             {
-                if (!Path.Exists(XMLFileName))
-                {
-                    {
-                        try
-                        {
-                            XmlWriterSettings settings = new XmlWriterSettings();
-                            settings.Async = true;
-                            settings.ConformanceLevel = ConformanceLevel.Auto;
-                            XmlWriter writer = XmlWriter.Create(XMLFileName, settings);
-                            writer.WriteStartDocument();
-                            writer.WriteStartElement("Abrechnung");
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Async = true;
+                settings.ConformanceLevel = ConformanceLevel.Auto;
+                XmlWriter writer = XmlWriter.Create(XMLFileName, settings);
+                writer.WriteStartDocument();
+                writer.WriteStartElement("Abrechnung");
 
-                            foreach (var Betrag in bewohner1.Einzelbetraege)
-                            {
-                                writer.WriteStartElement("a");
-                                writer.WriteAttributeString("BewohnerName", bewohner1.Name);
-                                writer.WriteAttributeString("kategorie", Betrag.kategorie);
-                                writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
-                                writer.WriteEndElement();
-                            }
-                            foreach (var Betrag in bewohner2.Einzelbetraege)
-                            {
-                                writer.WriteStartElement("b");
-                                writer.WriteAttributeString("BewohnerName", bewohner2.Name);
-                                writer.WriteAttributeString("kategorie", Betrag.kategorie);
-                                writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
-                                writer.WriteEndElement();
-                            }
-                            writer.WriteEndElement();
-                            writer.Close();
-                            Log.WriteLine($"{XMLFileName} saved");
-                        }
-                        catch (Exception writerException)
-                        {
-                            Log.WriteLine(writerException.Message);
-                        }
-                    }
-                }
-                else
+                foreach (var Betrag in bewohner1.Einzelbetraege)
                 {
-                    Log.WriteLine("FileExits!!");
-                    MessageBoxResult mr = MessageBox.Show("File Exists, Overwrite?", "File Name Exits", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (mr == MessageBoxResult.Yes)
-                    {
-                        try
-                        {
-                            XmlWriterSettings settings = new XmlWriterSettings();
-                            settings.Async = true;
-                            settings.ConformanceLevel = ConformanceLevel.Auto;
-                            XmlWriter writer = XmlWriter.Create(XMLFileName, settings);
-                            writer.WriteStartDocument();
-                            writer.WriteStartElement("Abrechnung");
-
-                            foreach (var Betrag in bewohner1.Einzelbetraege)
-                            {
-                                writer.WriteStartElement("a");
-                                writer.WriteAttributeString("BewohnerName", bewohner1.Name);
-                                writer.WriteAttributeString("kategorie", Betrag.kategorie);
-                                writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
-                                writer.WriteEndElement();
-                            }
-                            foreach (var Betrag in bewohner2.Einzelbetraege)
-                            {
-                                writer.WriteStartElement("b");
-                                writer.WriteAttributeString("BewohnerName", bewohner2.Name);
-                                writer.WriteAttributeString("kategorie", Betrag.kategorie);
-                                writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
-                                writer.WriteEndElement();
-                            }
-                            writer.WriteEndElement();
-                            writer.Close();
-                            Log.WriteLine($"{XMLFileName} saved");
-                        }
-                        catch (Exception writerException)
-                        {
-                            Log.WriteLine(writerException.Message);
-                        }
-                    }
-                    else
-                    {
-                        Log.WriteLine("Not Saved");
-                    }
-                    
+                    writer.WriteStartElement("a");
+                    writer.WriteAttributeString("BewohnerName", bewohner1.Name);
+                    writer.WriteAttributeString("kategorie", Betrag.kategorie);
+                    writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
+                    writer.WriteEndElement();
                 }
+                foreach (var Betrag in bewohner2.Einzelbetraege)
+                {
+                    writer.WriteStartElement("b");
+                    writer.WriteAttributeString("BewohnerName", bewohner2.Name);
+                    writer.WriteAttributeString("kategorie", Betrag.kategorie);
+                    writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
+                    writer.WriteEndElement();
+                }
+                writer.WriteEndElement();
+                writer.Close();
+                Log.WriteLine($"{XMLFileName} saved");
             }
-            else
+            catch (Exception writerException)
             {
-                Log.WriteLine("Both User needs Intput");
+                Log.WriteLine(writerException.Message);
             }
         }
         /// <summary>
@@ -141,24 +83,8 @@ namespace Essensausgleich.Controller
         /// </summary>
         /// <param name="bewohner1"></param>
         /// <param name="bewohner2"></param>
-        public bool Load(Bewohner bewohner1, Bewohner bewohner2)
-        {
-            var dialog = new OpenFileDialog();
-            dialog.Filter = "Xml Files|*.xml";
-            bool? dialogResult = dialog.ShowDialog();
-
-            if (dialogResult == true)
-            {
-                _XMLFileName = dialog.SafeFileName;
-            }
-
-            
-            
-            if (!File.Exists(XMLFileName))
-            {
-                Log.WriteLine($"{XMLFileName} not Found");
-                return false;
-            }
+        public void Load(Bewohner bewohner1, Bewohner bewohner2)
+        {          
             try
             {
                 XmlReaderSettings settings = new XmlReaderSettings();
@@ -234,13 +160,14 @@ namespace Essensausgleich.Controller
                 this.Kontext.InhabitantsManager.InhabitantsController.AddInhabitant(bewohner2.Name);
                 bewohner1.RefreshBetrag();
                 bewohner2.RefreshBetrag();
+                Log.WriteLine($"{XMLFileName} Loaded");
             }
             catch (Exception exceptionRead)
             {
                 Log.WriteLine(exceptionRead.Message);
 
             }
-            return true;
+            
         }
         /// <summary>
         /// Calls itself the Reset Method of Bewohner for both Users
@@ -265,7 +192,7 @@ namespace Essensausgleich.Controller
             {
                 _XMLFileName = path;
                 Log.WriteLine("FileName changed");
-                Log.WriteLine($"NewFileName{path}");
+                Log.WriteLine($"NewFileName: {path}");
 
             }
             else

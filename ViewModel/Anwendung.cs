@@ -1,13 +1,17 @@
 ﻿using Essensausgleich.Controller;
 using Essensausgleich.Data;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Xml;
 using Log = System.Diagnostics.Debug;
 
 namespace Essensausgleich.ViewModel
@@ -171,7 +175,7 @@ namespace Essensausgleich.ViewModel
         }
         //private string _Bewohner2Name = null!;
 
-        public decimal TxtBoxAddBillText
+        public string TxtBoxAddBillText
         {
             get => _TxtBoxAddBillText;
             set
@@ -180,7 +184,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private decimal _TxtBoxAddBillText;
+        private string _TxtBoxAddBillText;
         public string TxtBoxCategorieText
         {
             get => _TxtBoxCategorieText;
@@ -293,30 +297,36 @@ namespace Essensausgleich.ViewModel
         }
         public void AddBill()
         {
-            if (CboxUserText != "")
+            if (CboxUserText != string.Empty)
             {
                 decimal bill = 0;
-                bill = _TxtBoxAddBillText;
 
-                if (bewohner1.Name == CboxUserText && CboxUserText != "")
+                if (decimal.TryParse(_TxtBoxAddBillText, out bill) && bill > 0)
                 {
-                    bewohner1.AddBetrag(_TxtBoxCategorieText, bill);
-                    AusgabenBewohner1 = bewohner1.Ausgaben;
-                    LblToolStripContent = $"Betrag {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
-                }
-                else if (bewohner2.Name == CboxUserText && CboxUserText != "")
-                {
-                    bewohner2.AddBetrag(_TxtBoxCategorieText, bill);
-                    AusgabenBewohner2 = bewohner2.Ausgaben;
-                    LblToolStripContent = $"Betrag {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
+                    if (bewohner1.Name == CboxUserText && CboxUserText != string.Empty)
+                    {
+                        bewohner1.AddBetrag(_TxtBoxCategorieText, bill);
+                        AusgabenBewohner1 = bewohner1.Ausgaben;
+                        LblToolStripContent = $"Betrag {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
+                    }
+                    else if (bewohner2.Name == CboxUserText && CboxUserText != string.Empty)
+                    {
+                        bewohner2.AddBetrag(_TxtBoxCategorieText, bill);
+                        AusgabenBewohner2 = bewohner2.Ausgaben;
+                        LblToolStripContent = $"Betrag {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
+                    }
+                    else
+                    {
+                        LblToolStripContent = $"Error keine Bewohner wurde mit der im Dropdown ausgewaehlten User identifiziert";
+                    }
                 }
                 else
                 {
-                    LblToolStripContent = $"Error keine Bewohner wurde mit der im Dropdown ausgewaehlten User identifiziert";
+                    Log.WriteLine("Invalide Value Input");
                 }
             }
             else LblToolStripContent = $"Missing Username";
-            TxtBoxAddBillText = decimal.Zero;
+            TxtBoxAddBillText = string.Empty;
             TxtBoxCategorieText = string.Empty;
         }
         /// <summary>
@@ -372,36 +382,96 @@ namespace Essensausgleich.ViewModel
 
         public void MenueLoad()
         {
-            _XMLPersistance.Reset(bewohner1, bewohner2);
-            if (_XMLPersistance.Load(bewohner1, bewohner2))
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "Xml Files|*.xml";
+            bool? dialogResult = dialog.ShowDialog();
+
+            if (dialogResult == true)
             {
-                Bewohner1Name = bewohner1.Name;
-                Bewohner2Name = bewohner2.Name;
-                AusgabenBewohner1 = bewohner1.Ausgaben;
-                AusgabenBewohner2 = bewohner2.Ausgaben;
-                InhabitantsSelected = this.Kontext.InhabitantsManager.InhabitantsController.InhabitantsList[0];
+                _XMLPersistance.ChangePath(dialog.SafeFileName);
+                if (!File.Exists(_XMLPersistance.XMLFileName))
+                {
+                    Log.WriteLine($"{_XMLPersistance.XMLFileName} not Found");
+                    return;
+                }
+
             }
             else
             {
-                Log.WriteLine($"{_XMLPersistance.XMLFileName}.xml Could Not be loaded");
+                Log.WriteLine("OpenFile Dialog cancelt = False");
+                return;
             }
+            _XMLPersistance.Reset(bewohner1, bewohner2);
+            _XMLPersistance.Load(bewohner1, bewohner2);
 
-
-            //foreach (var item in BeitragsListe)
-            //{
-            //    this.BeitragsListeObs.Add(item);
-            //}
-            //this.BeitragsListe = bewohner1.Einzelbetraege;
+            Bewohner1Name = bewohner1.Name;
+            Bewohner2Name = bewohner2.Name;
+            AusgabenBewohner1 = bewohner1.Ausgaben;
+            AusgabenBewohner2 = bewohner2.Ausgaben;
+            InhabitantsSelected = this.Kontext.InhabitantsManager.InhabitantsController.InhabitantsList[0];
         }
         public void MenueSave()
         {
-            _XMLPersistance.Save(bewohner1, bewohner2);
-            // Kontext.FilesSystemManagerService.GetXMLPersistance().Save(bewohner1, bewohner2);
+            if (bewohner1.Ausgaben > 0 && bewohner2.Ausgaben > 0)
+            {
+                if (!Path.Exists(_XMLPersistance.XMLFileName))
+                {
+                    {
+                        _XMLPersistance.Save(bewohner1, bewohner2);
+                    }
+                }
+                else
+                {
+                    Log.WriteLine("FileExits!!");
+                    MessageBoxResult mr = MessageBox.Show("File Exists, Overwrite?", "File Name Exits", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (mr == MessageBoxResult.Yes)
+                    {
+                        _XMLPersistance.Save(bewohner1, bewohner2);
+                    }
+                    else
+                    {
+                        Log.WriteLine("Not Saved");
+                    }
+
+                }
+            }
+            else
+            {
+                Log.WriteLine("Both User needs Intput");
+            }
+        }
+        public void MenueSaveAs()
+        {
+            if (bewohner1.Ausgaben > 0 && bewohner2.Ausgaben > 0)
+            {
+              var dialog = new SaveFileDialog();
+            dialog.Filter = "Xml Files|*.xml";
+            dialog.AddExtension = true;
+            dialog.DefaultExt = ".xml";
+            bool? dialogResult = dialog.ShowDialog();
+
+            if (dialogResult == true)
+            {
+                    _XMLPersistance.ChangePath(dialog.SafeFileName);
+                    MenueSave();
+            }
+            else
+            {
+                Log.WriteLine("OpenFile Dialog cancelt = False");
+                return;
+            } 
+            }
+            else
+            {
+                Log.WriteLine("Both User needs Intput");
+            }
+            
+
         }
         public void MenueNew()
         {
             _XMLPersistance.Reset(bewohner1, bewohner2);
-            TxtBoxAddBillText = 0;
+            TxtBoxAddBillText = "0";
             TxtBoxCategorieText = string.Empty;
             Bewohner1Name = bewohner1.Name;
             Bewohner2Name = bewohner2.Name;

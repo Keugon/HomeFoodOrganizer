@@ -58,6 +58,7 @@ namespace Essensausgleich
                 BtnAuflisten.Click += (sender, e) => viewModel.OpenContributioWindow();
                 MenuWPFLoad.Click += (sender, e) => viewModel.MenueLoad();
                 MenuWPFSave.Click += (sender, e) => viewModel.MenueSave();
+                MenuWPFSaveAs.Click += (sender, e) => viewModel.MenueSaveAs();
                 MenuWPFNew.Click += (sender, e) => viewModel.MenueNew();
                 MenuWPFSettings.Click += (sender, e) => viewModel.OpenSettingsWindow();
             }
@@ -129,6 +130,10 @@ namespace Essensausgleich
                 
             }
         }
-       
+
+        private void MenuWPFSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
