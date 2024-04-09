@@ -20,12 +20,9 @@ namespace Essensausgleich
     /// <summary>
     /// Interaktionslogik für contributionWindow.xaml
     /// </summary>
-    public partial class contributionWindow : Window, IAppObjekt
+    public partial class contributionWindow : Window
     {
-        /// <summary>
-        /// Get or Sets the Kontext
-        /// </summary>
-        public Infrastruktur Kontext { get; set; } = null!;
+
         /// <summary>
         /// init contributionWindow
         /// </summary>
@@ -33,8 +30,6 @@ namespace Essensausgleich
         {           
             InitializeComponent();
             //DataContext = this.DataContext;
-        }
-
-        
+        }        
     }
 }

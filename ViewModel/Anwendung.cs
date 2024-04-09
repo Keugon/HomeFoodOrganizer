@@ -38,7 +38,7 @@ namespace Essensausgleich.ViewModel
         /// <typeparam name="T">Ein WPF Fenster das als 
         /// Hauptfenster der Anwendung benutzt werden soll</typeparam>       
         /// <remarks>Acepts only Obejects of Type Window with an IAppObjekt Interface without a custom Ctor</remarks>
-        public void Anzeigen<T>() where T : System.Windows.Window, IAppObjekt, new()
+        public void Anzeigen<T>() where T : System.Windows.Window, new()
         {
             var f = new T();
             Essensausgleich.App.Current.MainWindow = f;
@@ -46,7 +46,7 @@ namespace Essensausgleich.ViewModel
             f.DataContext = this;
 
             //Attach Kontext to the new Window (Infrastructur)
-            f.Kontext = this.Kontext;
+            
             f.Show();
         }
         #endregion
@@ -57,7 +57,17 @@ namespace Essensausgleich.ViewModel
         private XMLPersistence _XMLPersistance = null!;
         #endregion
         #region RelayCommand
+#pragma warning disable 1591
         public RelayCommand DeleteEntry => new RelayCommand(execute => DeleteDataGridEntry());
+        public RelayCommand BtnAddUser => new RelayCommand(execute => AddUser());
+        public RelayCommand OnEnterAddUser => new RelayCommand(execute => AddUser());
+        public RelayCommand BtnAddBill => new(execute => AddBill());
+        public RelayCommand MenueWPFNew => new(execute => MenueNew());
+        public RelayCommand MenueWPFLoad => new(execute => MenueLoad());
+        public RelayCommand MenueWPFSave => new(execute => MenueSave());
+        public RelayCommand MenueWPFSaveAs => new(execute => MenueSaveAs());
+        public RelayCommand MenueWPFSettings => new(execute => OpenSettingsWindow());
+#pragma warning restore 1591
         #endregion
         #region PropertieBinding
 #pragma warning disable 1591
@@ -185,7 +195,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private string _TxtBoxAddBillText;
+        private string _TxtBoxAddBillText =null!;
         public string TxtBoxCategorieText
         {
             get => _TxtBoxCategorieText;
@@ -258,11 +268,8 @@ namespace Essensausgleich.ViewModel
         }
         public void AddUser()
         {
-            if (_txtBoxAddUserContent == string.Empty)
+            if (!string.IsNullOrEmpty(_txtBoxAddUserContent))
             {
-                LblToolStripContent = $"Kein User Name eingegeben";
-                return;
-            }
             if (Bewohner1Name == string.Empty || Bewohner2Name == string.Empty)
             {
                 if (Bewohner1Name == string.Empty && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
@@ -293,7 +300,14 @@ namespace Essensausgleich.ViewModel
             {
                 LblToolStripContent = $"Maximale User anzahl bereits Angelegt";
             }
-            txtBoxAddUserContent = string.Empty;
+            txtBoxAddUserContent = string.Empty;   
+            }
+            else
+            {
+ LblToolStripContent = $"Kein User Name eingegeben";
+                return;
+            }
+            
         }
         public void AddBill()
         {
@@ -378,8 +392,6 @@ namespace Essensausgleich.ViewModel
 
 
         }
-
-
         public void MenueLoad()
         {
             var dialog = new OpenFileDialog();
@@ -499,6 +511,10 @@ namespace Essensausgleich.ViewModel
 
         #endregion
         #region contributionWindow
+        /// <summary>
+        /// Delets via Context Menue a DataGrid item 
+        /// and convays the change down to the Inhabitant object 
+        /// </summary>
         public void DeleteDataGridEntry()
         {// delet Entry and updates source
             BeitragsListe.Remove(SelectedBetrag);

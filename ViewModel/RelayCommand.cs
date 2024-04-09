@@ -27,11 +27,12 @@ public class RelayCommand : ICommand
             CommandManager.RequerySuggested -= value;
         }
     }
-    public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
+    public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null!)
     {
         this.execute = execute;
         this.canExecute = canExecute;
     }
+#pragma warning disable CS8604 // Mögliches Nullverweisargument.
     public bool CanExecute(object? parameter)
     {
        return canExecute == null || canExecute(parameter);
@@ -39,7 +40,9 @@ public class RelayCommand : ICommand
 
     public void Execute(object? parameter)
     {
+
         execute(parameter);
+#pragma warning restore CS8604 // Mögliches Nullverweisargument.
     }
 }
 #pragma warning restore 1591

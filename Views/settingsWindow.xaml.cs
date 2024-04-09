@@ -20,20 +20,14 @@ namespace Essensausgleich
     /// <summary>
     /// Interaktionslogik für settingsWindow.xaml
     /// </summary>
-    public partial class settingsWindow : Window , IAppObjekt
+    public partial class settingsWindow : Window
     {
-        
-        /// <summary>
-        /// Get or Sets the Kontext
-        /// </summary>
-        public Infrastruktur Kontext { get; set; } = null!;
         /// <summary>
         /// settingsWindow to handle user interactions regarding the Variants of Filemanagement
         /// </summary>
         public settingsWindow()
         {
-            InitializeComponent();
-            
+            InitializeComponent();            
         }      
         private void BtnApplyFilesystemChange_Click(object sender, RoutedEventArgs e)
         {                                  

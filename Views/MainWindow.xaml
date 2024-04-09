@@ -4,82 +4,115 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Essensausgleich"
+        xmlns:controls="clr-namespace:Essensausgleich.Tools"
+        
         mc:Ignorable="d"
-        Title="MainWindow" Height="250" Width="400" MinHeight="250" MinWidth="400" Loaded="Window_Loaded"
+        Title="MainWindow" Height="250" Width="400" MinHeight="250" MinWidth="400"
         FontFamily="Segoe Ui">
     <Grid Margin="0,0,0,0">
-
-
         <Menu x:Name="MenuWPFMain"  
               HorizontalAlignment="Left" 
               VerticalAlignment="Top" 
               Background="#FFCFDBFB">
             <MenuItem 
                 Header="Datei">
-                <MenuItem x:Name="MenuWPFNew" Header="New" Click="MenuWPFNew_Click" />
-                <MenuItem x:Name="MenuWPFLoad" Header="Open" Click="MenuWPFLoad_Click"/>
-                <MenuItem x:Name="MenuWPFSave" Header="Save" Click="MenuWPFSave_Click"/>
-                <MenuItem x:Name="MenuWPFSaveAs" Header="Save as" Click="MenuWPFSaveAs_Click"/>
+                <MenuItem x:Name="MenuWPFNew" Command="{Binding MenueWPFNew}" Header="New" />
+                <MenuItem x:Name="MenuWPFLoad" Command="{Binding MenueWPFLoad}" Header="Open"/>
+                <MenuItem x:Name="MenuWPFSave" Command="{Binding MenueWPFSave}" Header="Save"/>
+                <MenuItem x:Name="MenuWPFSaveAs" Command="{Binding MenueWPFSaveAs}" Header="Save as"/>
             </MenuItem>
-            <MenuItem x:Name="MenuWPFSettings" Header="Settings" Click="MenuWPFSettings_Click"/>
+            <MenuItem x:Name="MenuWPFSettings" Command="{Binding MenueWPFSettings}" Header="Settings"/>
         </Menu>
-
-
-
-
-
-        <Button x:Name="BtnAuflisten" Content="ShowEntrys" HorizontalAlignment="Left" Height="20" Margin="270,80,0,0" VerticalAlignment="Top" Width="80" Click="BtnContributionWindow" Grid.Column="1"/>
-
+        <Button x:Name="BtnAuflisten" Content="ShowEntrys" HorizontalAlignment="Left" Height="20" Margin="300,60,0,0" VerticalAlignment="Top" Width="80" Grid.Column="1"/>
         <!--Stackpanel Inhabitants Expenses-->
-        <StackPanel            
-             Orientation="Vertical"
+        <Grid               
               HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Margin="20,60">
-            <!--Stackpanel Inhabitant1-->
-            <StackPanel
-            Background="Gray"
+            Margin="20,60"
+            Background="Transparent">
+            <Border
+                Padding="5"
+                BorderBrush="LightBlue"
+                Background="LightBlue"
+                BorderThickness="1"
+                CornerRadius="10">
+                <StackPanel   
+                    Orientation="Vertical"
+                    >
+                    <!--Stackpanel Inhabitant1-->
+                    <StackPanel
+            Background="Transparent"
             Orientation="Horizontal">
-                <Label x:Name="LblBewohner1"  Content="{Binding Bewohner1Name}" Width="50" Height="25"/>
-                <Label x:Name="LblTotalAmountBew1" Content="{Binding AusgabenBewohner1}" ContentStringFormat="{}{0}€" Width="50" Height="25"/>
-            </StackPanel>
-            <!--Stackpanel Inhabitant2-->
-            <StackPanel
-                Background="Bisque"
+                        <Label x:Name="LblBewohner1"  Content="{Binding Bewohner1Name}" Width="50" Height="25"  />
+                        <Label x:Name="LblTotalAmountBew1" Content="{Binding AusgabenBewohner1}" ContentStringFormat="{}{0}€" Width="50" Height="25"/>
+                    </StackPanel>
+                    <!--Stackpanel Inhabitant2-->
+                    <StackPanel
+                Background="Transparent"
             Orientation="Horizontal">
-                <Label x:Name="LblBewohner2" Content="{Binding Bewohner2Name}" Width="50" Height="25" />
-                <Label x:Name="LblTotalAmountBew2" Content="{Binding AusgabenBewohner2}" ContentStringFormat="{}{0}€" Width="50" Height="25"/>
-            </StackPanel>
-            <!--Stackpanel Bezahlen-->
-            <StackPanel
-                Background="#FF8A6328"
+                        <Label x:Name="LblBewohner2" Content="{Binding Bewohner2Name}" Width="50" Height="25" />
+                        <Label x:Name="LblTotalAmountBew2" Content="{Binding AusgabenBewohner2}" ContentStringFormat="{}{0}€" Width="50" Height="25"/>
+                    </StackPanel>
+                    <!--Stackpanel Bezahlen-->
+                    <StackPanel
+                Background="LightCyan"
                 Orientation="Horizontal">
-                <Label x:Name="LblZuBezahlender" Content="{Binding LblZuBezahlenderContent}" ContentStringFormat="{}{0} zahlt" Width="50" Height="25"/>
-                <Label x:Name="LblBill" Content="{Binding LblBillContent}" ContentStringFormat="{}{0}€" Width="50" Height="25"/>
-            </StackPanel>
-        </StackPanel>
+                        <Label x:Name="LblZuBezahlender" Content="{Binding LblZuBezahlenderContent}" ContentStringFormat="{}{0} zahlt" Width="50" Height="25"/>
+                        <Label x:Name="LblBill" Content="{Binding LblBillContent}" ContentStringFormat="{}{0}$"  Width="70" Height="25"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
         <!--Stackpanel Bill and User-->
         <StackPanel
             Margin="0,20"
             Orientation="Horizontal"
             VerticalAlignment="Top"
             >
-            <ComboBox x:Name="cBoxUser" Width="115" Text="{Binding CboxUserText}" SelectedItem="{Binding InhabitantsSelected}" ItemsSource="{Binding Kontext.InhabitantsManager.InhabitantsController.InhabitantsList}" HorizontalAlignment="Left"/>
+            <ComboBox x:Name="cBoxUser" Width="80" Text="{Binding CboxUserText}" SelectedItem="{Binding InhabitantsSelected}" ItemsSource="{Binding Kontext.InhabitantsManager.InhabitantsController.InhabitantsList}" HorizontalAlignment="Left"/>
             <!--Stack Pannel Add Bill-->
             <StackPanel
             Orientation="Horizontal"
                 HorizontalAlignment="Right">
-                <TextBox x:Name="txtBoxCategorie" TextWrapping="Wrap" Text="{Binding TxtBoxCategorieText}" Width="50"/>
-                <TextBox x:Name="txtBoxAddBill" TextWrapping="Wrap" Text="{Binding TxtBoxAddBillText}" Width="50" KeyDown="txtBoxAddBill_KeyDown"/>
-                <Button x:Name="BtnAddBill" Content="Add Bill"  Click="BtnAddBill_Click"/>
+                <AdornerDecorator>
+                    <TextBox x:Name="txtBoxCategorie" TextWrapping="Wrap" Text="{Binding TxtBoxCategorieText}" Width="80">
+                        <controls:WatermarkService.Watermark>
+                            <TextBlock 
+                                FontFamily="Segoe Ui" 
+                                VerticalAlignment="Center">Kategorie</TextBlock>
+                        </controls:WatermarkService.Watermark>
+                    </TextBox>
+                </AdornerDecorator>
+                <AdornerDecorator>
+                <TextBox x:Name="txtBoxAddBill" TextWrapping="Wrap" Text="{Binding TxtBoxAddBillText}" Width="50">
+                    <controls:WatermarkService.Watermark>
+                        <TextBlock 
+                            FontFamily="Segoe Ui" 
+                            VerticalAlignment="Center">Betrag</TextBlock>
+                    </controls:WatermarkService.Watermark>
+                </TextBox>
+                </AdornerDecorator>
+                <Button  x:Name="BtnAddBill" Command="{Binding BtnAddBill}" Content="Add Bill"/>
 
             </StackPanel>
             <!--Stackpanel AddUser-->
             <StackPanel
             Orientation="Horizontal"
                 HorizontalAlignment="Right">
-                <TextBox x:Name="txtBoxAddUser"   TextWrapping="Wrap" Text="{Binding txtBoxAddUserContent}" Width="50" />
-                <Button x:Name="BtnAddUser" Content="Add User" Click="BtnAddUser_Click"/>
+                <AdornerDecorator>
+                    <TextBox x:Name="txtBoxAddUser" TextWrapping="Wrap" Text="{Binding txtBoxAddUserContent, UpdateSourceTrigger=PropertyChanged}" Width="70" >
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding OnEnterAddUser}"/>
+                        </TextBox.InputBindings>
+                        <controls:WatermarkService.Watermark>
+                            <TextBlock
+                            FontFamily="Segoe Ui"
+                            VerticalAlignment="Center"
+                            >Name Here</TextBlock>
+                        </controls:WatermarkService.Watermark>
+                    </TextBox>
+                </AdornerDecorator>
+                <Button x:Name="BtnAddUser" Command="{Binding BtnAddUser}" Content="Add User" />
             </StackPanel>
         </StackPanel>
         <StatusBar  HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="22" Width="300">
