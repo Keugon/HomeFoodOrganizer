@@ -12,8 +12,8 @@ namespace Essensausgleich.Controller
     /// </summary>
     internal interface Ipersistence
     {
-        void Save(Bewohner bewohner1, Bewohner bewohner2);
-        void Load(Bewohner bewohner1, Bewohner bewohner2);
-        void Reset(Bewohner bewohner1, Bewohner bewohner2);
+        void Save(Inhabitant inhabitant1, Inhabitant inhabitant2);
+        void Load(Inhabitant inhabitant1, Inhabitant inhabitant2);
+        void Reset(Inhabitant inhabitant1, Inhabitant inhabitant2);
     }
 }

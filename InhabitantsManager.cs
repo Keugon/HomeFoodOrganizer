@@ -24,7 +24,7 @@ namespace Essensausgleich
             {
                 if (_InhabitantsController == null)
                 {
-                    this._InhabitantsController = this.Kontext.Produziere<Essensausgleich.Controller.InhabitantsController>();
+                    this._InhabitantsController = this.Context.Fabricate<Essensausgleich.Controller.InhabitantsController>();
                 }
                 return _InhabitantsController;
             }

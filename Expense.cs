@@ -7,27 +7,27 @@ using System.Threading.Tasks;
 namespace Essensausgleich
 {
     /// <summary>
-    /// struct to serve as Sigle entrys for the Bewohner object
+    /// struct to serve as Sigle entrys for the Inhabitant object
     /// </summary>
-     public struct Betrag
+     public struct Expense
     {
         /// <summary>
-        /// Categorie string of Betrag
+        /// Categorie string of Expense
         /// </summary>
-        public string kategorie {  get; set; }
+        public string categorie {  get; set; }
         /// <summary>
-        /// Amount in decimal of Betrag
+        /// Amount in decimal of Expense
         /// </summary>
-        public decimal wert {  get; set; }
+        public decimal valueExpense {  get; set; }
         /// <summary>
-        /// constructor for the Betrag Struct
+        /// constructor for the Expense Struct
         /// </summary>
         /// <param name="k"></param>
         /// <param name="w"></param>
-        public Betrag(string k, decimal w)
+        public Expense(string k, decimal w)
         {
-            kategorie = k;
-            wert = w;
+            categorie = k;
+            valueExpense = w;
         }       
     }
 }

@@ -11,17 +11,17 @@ namespace Essensausgleich.Data
 {
     
     /// <summary>
-    /// Class for the Userobject Bewohner 
+    /// Class for the Userobject Inhabitant 
     /// </summary>
-    public class Bewohner : AppObjekt, INotifyPropertyChanged
+    public class Inhabitant : AppObjekt, INotifyPropertyChanged
     {
-        private decimal ausgaben;
+        private decimal _TotalExpense;
         /// <summary>
-        /// inits the Name of the Bewohner to ""
+        /// inits the Name of the Inhabitant to ""
         /// </summary>
         private string _Name = string.Empty;
         /// <summary>
-        /// Gets or Sets the Name propertie of Bewohner
+        /// Gets or Sets the Name propertie of Inhabitant
         /// </summary>
         public string Name
         {
@@ -38,27 +38,27 @@ namespace Essensausgleich.Data
         /// <summary>
         /// List of Entrys for the bewohner
         /// </summary>
-        public List<Betrag> Einzelbetraege = new List<Betrag>();
+        public List<Expense> ListOfExpenses = new List<Expense>();
         /// <summary>
-        /// creates and obj of Bewohner
+        /// creates and obj of Inhabitant
         /// </summary>
-        public Bewohner()
+        public Inhabitant()
         {
 
         }
         /// <summary>
-        /// Access to Ausgaben decimal prevents input of negativ numbers
+        /// Access to TotalExpense decimal prevents input of negativ numbers
         /// </summary>
-        public decimal Ausgaben
+        public decimal TotalExpense
         {
             get
             {
                 
-                return ausgaben;
+                return _TotalExpense;
             }
             set
             {
-                ausgaben = value < 0 ? 0 : value;
+                _TotalExpense = value < 0 ? 0 : value;
                 //OnPropertyChanged();
             }
         }
@@ -66,44 +66,44 @@ namespace Essensausgleich.Data
         /// <summary>
         /// Method to Add new Entries in the <c>ListBetrag</c>
         /// </summary>
-        /// <param name="kategorie"></param>
-        /// <param name="betrag"></param>
-        public void AddBetrag(string kategorie, decimal betrag)
+        /// <param name="categorie"></param>
+        /// <param name="valueExpense"></param>
+        public void AddBetrag(string categorie, decimal valueExpense)
         {
             
-            if (kategorie != "")
+            if (categorie != "")
             {
-                Einzelbetraege.Add(new Betrag(kategorie, betrag));
-                ausgaben += betrag;
+                ListOfExpenses.Add(new Expense(categorie, valueExpense));
+                _TotalExpense += valueExpense;
             }
             else
             {
-                Einzelbetraege.Add(new Betrag("unkategorisiert", betrag));
-                ausgaben += betrag;
+                ListOfExpenses.Add(new Expense("unkategorisiert", valueExpense));
+                _TotalExpense += valueExpense;
             }
         }
         /// <summary>
-        /// Adds the all Items of List to the Ausgaben variable
+        /// Adds the all Items of List to the TotalExpense variable
         /// </summary>
-        public void RefreshBetrag()
+        public void RefreshExpense()
         {
-            foreach (var Betrag in Einzelbetraege)
+            foreach (var Betrag in ListOfExpenses)
             {
-                ausgaben += Betrag.wert;
+                _TotalExpense += Betrag.valueExpense;
             }
         }
         /// <summary>
         /// Resets Name, List and Ausgabe to Zero
         /// </summary>
-        public void ResetBewohnerData()
+        public void ResetInhabitantData()
         {
             _Name = string.Empty;
-            Einzelbetraege.Clear();
-            ausgaben = 0;
+            ListOfExpenses.Clear();
+            _TotalExpense = 0;
             //OnPropertyChanged();
         }
         /// <summary>
-        /// Outputs All Items in List of Betrag to String
+        /// Outputs All Items in List of Expense to String
         /// </summary>
         /// <returns></returns>
         public override string ToString()

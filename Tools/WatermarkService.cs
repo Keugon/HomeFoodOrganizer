@@ -21,7 +21,7 @@ namespace Essensausgleich.Tools
            "Watermark",
            typeof(object),
            typeof(WatermarkService),
-           new FrameworkPropertyMetadata((object)null, new PropertyChangedCallback(OnWatermarkChanged)));
+           new FrameworkPropertyMetadata((object)null!, new PropertyChangedCallback(OnWatermarkChanged)));
 
         #region Private Fields
 
@@ -84,7 +84,9 @@ namespace Essensausgleich.Tools
 
                 // for ItemsSource property  
                 DependencyPropertyDescriptor prop = DependencyPropertyDescriptor.FromProperty(ItemsControl.ItemsSourceProperty, i.GetType());
+#pragma warning disable CS8622 // Die NULL-Zulässigkeit von Verweistypen im Typ des Parameters entspricht (möglicherweise aufgrund von Attributen für die NULL-Zulässigkeit) nicht dem Zieldelegaten.
                 prop.AddValueChanged(i, ItemsSourceChanged);
+#pragma warning restore CS8622 // Die NULL-Zulässigkeit von Verweistypen im Typ des Parameters entspricht (möglicherweise aufgrund von Attributen für die NULL-Zulässigkeit) nicht dem Zieldelegaten.
             }
         }
 
@@ -155,7 +157,7 @@ namespace Essensausgleich.Tools
         private static void ItemsChanged(object sender, ItemsChangedEventArgs e)
         {
             ItemsControl control;
-            if (itemsControls.TryGetValue(sender, out control))
+            if (itemsControls.TryGetValue(sender, out control!))
             {
                 if (ShouldShowWatermark(control))
                 {
@@ -224,15 +226,15 @@ namespace Essensausgleich.Tools
         {
             if (c is ComboBox)
             {
-                return (c as ComboBox).Text == string.Empty;
+                return (c as ComboBox)!.Text == string.Empty;
             }
             else if (c is TextBoxBase)
             {
-                return (c as TextBox).Text == string.Empty;
+                return (c as TextBox)!.Text == string.Empty;
             }
             else if (c is ItemsControl)
             {
-                return (c as ItemsControl).Items.Count == 0;
+                return (c as ItemsControl)!.Items.Count == 0;
             }
             else
             {

@@ -40,9 +40,9 @@ namespace Essensausgleich.Controller
         /// <summary>
         /// Methode to Save data from the User Object bewohner to an XML File
         /// </summary>
-        /// <param name="bewohner1"></param>
-        /// <param name="bewohner2"></param>
-        public void Save(Bewohner bewohner1, Bewohner bewohner2)
+        /// <param name="inhabitant1"></param>
+        /// <param name="inhabitant2"></param>
+        public void Save(Inhabitant inhabitant1, Inhabitant inhabitant2)
         {
             try
             {
@@ -51,22 +51,22 @@ namespace Essensausgleich.Controller
                 settings.ConformanceLevel = ConformanceLevel.Auto;
                 XmlWriter writer = XmlWriter.Create(XMLFileName, settings);
                 writer.WriteStartDocument();
-                writer.WriteStartElement("Abrechnung");
+                writer.WriteStartElement("Billing");
 
-                foreach (var Betrag in bewohner1.Einzelbetraege)
+                foreach (var Expense in inhabitant1.ListOfExpenses)
                 {
                     writer.WriteStartElement("a");
-                    writer.WriteAttributeString("BewohnerName", bewohner1.Name);
-                    writer.WriteAttributeString("kategorie", Betrag.kategorie);
-                    writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
+                    writer.WriteAttributeString("inhabitantName", inhabitant1.Name);
+                    writer.WriteAttributeString("categorie", Expense.categorie);
+                    writer.WriteAttributeString("valueExpense", Expense.valueExpense.ToString());
                     writer.WriteEndElement();
                 }
-                foreach (var Betrag in bewohner2.Einzelbetraege)
+                foreach (var Expense in inhabitant2.ListOfExpenses)
                 {
                     writer.WriteStartElement("b");
-                    writer.WriteAttributeString("BewohnerName", bewohner2.Name);
-                    writer.WriteAttributeString("kategorie", Betrag.kategorie);
-                    writer.WriteAttributeString("Betrag", Betrag.wert.ToString());
+                    writer.WriteAttributeString("inhabitantName", inhabitant2.Name);
+                    writer.WriteAttributeString("categorie", Expense.categorie);
+                    writer.WriteAttributeString("valueExpense", Expense.valueExpense.ToString());
                     writer.WriteEndElement();
                 }
                 writer.WriteEndElement();
@@ -79,11 +79,11 @@ namespace Essensausgleich.Controller
             }
         }
         /// <summary>
-        /// Methode to Load data from the User Object bewohner to an XML File and Calls the Refrehs method of each Bewohner objects itself
+        /// Methode to Load data from the User Object bewohner to an XML File and Calls the Refrehs method of each Inhabitant objects itself
         /// </summary>
-        /// <param name="bewohner1"></param>
-        /// <param name="bewohner2"></param>
-        public void Load(Bewohner bewohner1, Bewohner bewohner2)
+        /// <param name="inhabitant1"></param>
+        /// <param name="inhabitant2"></param>
+        public void Load(Inhabitant inhabitant1, Inhabitant inhabitant2)
         {          
             try
             {
@@ -100,7 +100,7 @@ namespace Essensausgleich.Controller
                 {
                     if (reader.NodeType == XmlNodeType.Element)
                     {
-                        if (reader.Name != "Abrechnung")
+                        if (reader.Name != "Billing")
                         {
                             if (reader.Name == "a")
                             {
@@ -111,19 +111,19 @@ namespace Essensausgleich.Controller
                                         if (reader.Name != "a")
                                             switch (reader.Name)
                                             {
-                                                case "BewohnerName":
+                                                case "inhabitantName":
                                                     b1Name = reader.Value;
                                                     break;
-                                                case "kategorie":
+                                                case "categorie":
                                                     kat1 = reader.Value;
                                                     break;
-                                                case "Betrag":
+                                                case "valueExpense":
                                                     b1betrag = Convert.ToDecimal(reader.Value);
                                                     break;
                                             }
                                     }
-                                    bewohner1.Name = b1Name;
-                                    bewohner1.Einzelbetraege.Add(new Betrag(kat1, b1betrag));
+                                    inhabitant1.Name = b1Name;
+                                    inhabitant1.ListOfExpenses.Add(new Expense(kat1, b1betrag));
                                 }
                             }
                             if (reader.Name == "b")
@@ -135,19 +135,19 @@ namespace Essensausgleich.Controller
                                         if (reader.Name != "b")
                                             switch (reader.Name)
                                             {
-                                                case "BewohnerName":
+                                                case "inhabitantName":
                                                     b2Name = reader.Value;
                                                     break;
-                                                case "kategorie":
+                                                case "categorie":
                                                     kat2 = reader.Value;
                                                     break;
-                                                case "Betrag":
+                                                case "valueExpense":
                                                     b2betrag = Convert.ToDecimal(reader.Value);
                                                     break;
                                             }
                                     }
-                                    bewohner2.Name = b2Name;
-                                    bewohner2.Einzelbetraege.Add(new Betrag(kat2, b2betrag));
+                                    inhabitant2.Name = b2Name;
+                                    inhabitant2.ListOfExpenses.Add(new Expense(kat2, b2betrag));
 
                                 }
                             }
@@ -156,10 +156,10 @@ namespace Essensausgleich.Controller
                 }
                 reader.Close();
                 //Formular refresh
-                this.Kontext.InhabitantsManager.InhabitantsController.AddInhabitant(bewohner1.Name);
-                this.Kontext.InhabitantsManager.InhabitantsController.AddInhabitant(bewohner2.Name);
-                bewohner1.RefreshBetrag();
-                bewohner2.RefreshBetrag();
+                this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant1.Name);
+                this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant2.Name);
+                inhabitant1.RefreshExpense();
+                inhabitant2.RefreshExpense();
                 Log.WriteLine($"{XMLFileName} Loaded");
             }
             catch (Exception exceptionRead)
@@ -170,16 +170,16 @@ namespace Essensausgleich.Controller
             
         }
         /// <summary>
-        /// Calls itself the Reset Method of Bewohner for both Users
+        /// Calls itself the Reset Method of Inhabitant for both Users
         /// </summary>
-        /// <param name="bewohner1"></param>
-        /// <param name="bewohner2"></param>
-        public void Reset(Bewohner bewohner1, Bewohner bewohner2)
+        /// <param name="inhabitants1"></param>
+        /// <param name="inhabitants2"></param>
+        public void Reset(Inhabitant inhabitants1, Inhabitant inhabitants2)
         {
-            bewohner1.ResetBewohnerData();
-            bewohner2.ResetBewohnerData();
+            inhabitants1.ResetInhabitantData();
+            inhabitants2.ResetInhabitantData();
             Log.WriteLine("ResetBewData1,2");
-            this.Kontext.InhabitantsManager.InhabitantsController.ClearInhabitants();
+            this.Context.InhabitantsManager.InhabitantsController.ClearInhabitants();
             Log.WriteLine("ClearInhabsMehtod aftr");
         }
         /// <summary>

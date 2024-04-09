@@ -9,10 +9,9 @@
         >
     
     <Grid>
-        <DataGrid
-            Name="DataGridContribution"
-            ItemsSource="{Binding BeitragsListe}" AutoGenerateColumns="False"
-            SelectedItem="{Binding SelectedBetrag}"
+        <DataGrid            
+            ItemsSource="{Binding ListOfExpenses}" AutoGenerateColumns="False"
+            SelectedItem="{Binding SelectedExpenseItem}"
                         >
             <DataGrid.ContextMenu>
                 <ContextMenu>
@@ -24,8 +23,8 @@
             </DataGrid.ContextMenu>
             
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Kategorie" Width="100" Binding="{Binding kategorie}"/>
-                <DataGridTextColumn Header="Wert" Width="50" Binding="{Binding wert}"/>
+                <DataGridTextColumn Header="Kategorie" Width="100" Binding="{Binding categorie}"/>
+                <DataGridTextColumn Header="Wert" Width="50" Binding="{Binding valueExpense}"/>
 
             </DataGrid.Columns>
         </DataGrid>

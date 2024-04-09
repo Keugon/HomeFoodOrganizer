@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Essensausgleich"
         mc:Ignorable="d"
-        Title="settingsWindow" Height="129" Width="417">
+        Title="settingsWindow" Height="74" Width="288" MinWidth="350" MinHeight="100"
+        >
     <Grid>
         <!--Stackpanel RadioButtons Management choice-->
         <StackPanel
@@ -13,19 +14,16 @@
             HorizontalAlignment="Left"
             Orientation="Vertical">
             <RadioButton Content="No File Management" IsEnabled="False"/>
-            <RadioButton x:Name="RbtnFileSave" Content="XML File Management" IsChecked="True" />
+            <RadioButton Content="XML File Management" IsChecked="True" />
             <RadioButton Content="SQL File Management" IsEnabled="False"/>
         </StackPanel>
         <StackPanel
-            Margin="0,5"
+            Margin="0,5,5,0"
             VerticalAlignment="Top"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
             <Label Content="FileName" />
-            <TextBox x:Name="txtBoxFileNameXML" Text="{Binding FileName}" Width="130"/>
+            <TextBox Text="{Binding FileName, UpdateSourceTrigger=PropertyChanged}" Width="130"/>
         </StackPanel>
-        <Button x:Name="BtnApplyFilesystemChange" Content="Apply" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Click="BtnApplyFilesystemChange_Click"/>
-
-
     </Grid>
 </Window>

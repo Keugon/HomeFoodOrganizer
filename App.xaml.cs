@@ -16,9 +16,9 @@ namespace Essensausgleich
         /// </summary>
         public static Anwendung ViewModelAnwendung { get; set; } = null!;
         /// <summary>
-        /// Stellt den Kontext für die APPobjekte bereit glaub ich
+        /// Stellt den Context für die APPobjekte bereit glaub ich
         /// </summary>
-        public Essensausgleich.Infra.Infrastruktur Kontext
+        public Essensausgleich.Infra.Infrastructur Context
         { get; set; } = null!;
         /// <summary>
         /// Overrides the Statup process and starts my infrastracture
@@ -28,10 +28,10 @@ namespace Essensausgleich
         {
 
             base.OnStartup(e);
-            this.Kontext = new Essensausgleich.Infra.Infrastruktur();
+            this.Context = new Essensausgleich.Infra.Infrastructur();
             
             //Das View Model Initialisieren
-             ViewModelAnwendung = this.Kontext.Produziere<ViewModel.Anwendung>();
+             ViewModelAnwendung = this.Context.Fabricate<ViewModel.Anwendung>();
             ViewModelAnwendung.Initialize();
             //Die Hauptfenster View als Oberfläche benutzen
             ViewModelAnwendung.Anzeigen<MainWindow>();

@@ -12,49 +12,49 @@ namespace Essensausgleich.Infra;
 /// Stellt den Anwendungskontext
 /// für eine WIFI Anwendung bereit
 /// </summary>
-/// <remarks>In der Infrastruktur
+/// <remarks>In der Infrastructur
 /// befinden sich Informationen,
 /// die überall bekannt sein müssen.
 /// Bei einer neuen WIFI Anwendung
 /// mit einem Objekt dieser Klasse beginnen
 /// und alle anderen Objekte der Anwendung
-/// mit Produziere&lt;T&gt; erstellen,
-/// damit diese Infrastruktur überall
+/// mit Fabricate&lt;T&gt; erstellen,
+/// damit diese Infrastructur überall
 /// bekannt ist.</remarks>
-public class Infrastruktur : System.Object
+public class Infrastructur : System.Object
 {
 
     #region Bewohner und BewohnerListe
 
-    private Bewohner _Bewohner1 = null!;
+    private Inhabitant _Inhabitant1 = null!;
     /// <summary>
     /// Gets the object Bewohner1
     /// </summary>
-    public Bewohner bewohner1
+    public Inhabitant Inhabitant1
     {
         get
         {
-            if (this._Bewohner1 == null)
+            if (this._Inhabitant1 == null)
             {
-                this._Bewohner1 = this.Produziere<Bewohner>();
+                this._Inhabitant1 = this.Fabricate<Inhabitant>();
             }
-            return this._Bewohner1;
+            return this._Inhabitant1;
         }
     }
 
-    private Bewohner _Bewohner2 = null!;
+    private Inhabitant _Inhabitant2 = null!;
     /// <summary>
     /// Gets the object Bewohner2
     /// </summary>
-    public Bewohner bewohner2
+    public Inhabitant Inhabitant2
     {
         get
         {
-            if(this._Bewohner2 == null)
+            if(this._Inhabitant2 == null)
             {
-                this._Bewohner2 = this.Produziere<Bewohner>();
+                this._Inhabitant2 = this.Fabricate<Inhabitant>();
             }
-            return this._Bewohner2;
+            return this._Inhabitant2;
         }
     }
 
@@ -72,7 +72,7 @@ public class Infrastruktur : System.Object
         {
             if(_InhabitantsManager == null)
             {
-                this._InhabitantsManager = this.Produziere<InhabitantsManager>();
+                this._InhabitantsManager = this.Fabricate<InhabitantsManager>();
             }
             return this._InhabitantsManager;
         }
@@ -88,7 +88,7 @@ public class Infrastruktur : System.Object
         {
             if (this._FilesSystemManagerService == null)
             {
-                this._FilesSystemManagerService = this.Produziere<FilesSystemManager>();
+                this._FilesSystemManagerService = this.Fabricate<FilesSystemManager>();
             }
             return this._FilesSystemManagerService;
         }
@@ -106,31 +106,31 @@ public class Infrastruktur : System.Object
     /// erweitert und einen öffentlichen Konstruktor
     /// ohne Parameter besitzt</typeparam>
     /// <returns>Ein Objekt mit eingestellter
-    /// Infrastruktur</returns>
-    public T Produziere<T>() where T : AppObjekt, new()
+    /// Infrastructur</returns>
+    public T Fabricate<T>() where T : AppObjekt, new()
     {
 
-        T NeuesObjekt = new T();
+        T newObject = new T();
 
-        // Die Infrastruktur an 
+        // Die Infrastructur an 
         // das neue Objekt übergeben
-        NeuesObjekt.Kontext = this;
+        newObject.Context = this;
 
         //Nur für die Entwickler
         //einen Protokolleintrag für VisualStudio
         //dass ein Objekt prouziert wurde und einen Fehlerbehandler
 #if DEBUG
         System.Diagnostics.Debug.WriteLine($"Es wurde das Objekt:" +
-            $"{NeuesObjekt} produziert");
+            $"{newObject} produziert");
 #endif
         // TODO - hier weitere Produktionsschritte ergänzen
 
-        NeuesObjekt.FehlerAufgetreten += (sender, e) =>
+        newObject.FehlerAufgetreten += (sender, e) =>
         System.Diagnostics.Debug.WriteLine(
-            $"FEHLER! {NeuesObjekt}hat" +
+            $"FEHLER! {newObject}hat" +
             $" eine Ausnahme \"{e.Ursache.Message}\" ausgelöst!");
 
-        return NeuesObjekt;
+        return newObject;
     }
 
     #endregion Objektfabrik

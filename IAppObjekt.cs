@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Essensausgleich;
 /// <summary>
-/// Stellt das Infrastruktur-Objekt bereit.
+/// Stellt das Infrastructur-Objekt bereit.
 /// </summary>
 /// <remarks>Eine Schnittstelle, Interface, ist vergleichbar
 /// mit einer Wunschliste an Objekte. Alle Interfaces beginnen
@@ -17,7 +17,7 @@ public interface IAppObjekt
     //d.h. innerhalb eines Interfaces gibt's keine Zugriffsmodifizierer
 
     /// <summary>
-    /// Ruft das Infrastruktur-Objekt ab oder legt dieses fest.
+    /// Ruft das Infrastructur-Objekt ab oder legt dieses fest.
     /// </summary>
-     Essensausgleich.Infra.Infrastruktur Kontext { get; set; }
+     Essensausgleich.Infra.Infrastructur Context { get; set; }
 }

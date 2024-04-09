@@ -45,13 +45,13 @@ namespace Essensausgleich.Controller
             Log.WriteLine("InhabitantsList cleared");
         }
         /// <summary>
-        /// Adds a bewohner Obj to the List
+        /// Adds a inhabitant Obj to the List
         /// </summary>
-        /// <param name="bewohner"></param>
-        public void AddInhabitant(string bewohner)
+        /// <param name="inhabitant"></param>
+        public void AddInhabitant(string inhabitant)
         {
-            InhabitantsList.Add(bewohner);
-            Log.WriteLine($"{bewohner} Added to InhabitantsList");
+            InhabitantsList.Add(inhabitant);
+            Log.WriteLine($"{inhabitant} Added to InhabitantsList");
         }
 
         #region WPF über Änderungen Informieren

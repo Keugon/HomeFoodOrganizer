@@ -9,7 +9,7 @@ namespace Essensausgleich.Infra;
 /// <summary>
 /// Unterstützt sämtliche 
 /// WIFI Anwendungsobjekte
-/// mit der Infrastruktur und 
+/// mit der Infrastructur und 
 /// weiteren Basisfunktionalitäten
 /// </summary>
 public abstract class AppObjekt : System.Object, IAppObjekt
@@ -17,11 +17,11 @@ public abstract class AppObjekt : System.Object, IAppObjekt
     #region Infrastruktur
 
     /// <summary>
-    /// Ruft das Objekt mit der Infrastruktur
+    /// Ruft das Objekt mit der Infrastructur
     /// einer WIFI Anwendung ab oder legt
     /// dieses fest
     /// </summary>
-    public Infrastruktur Kontext { get; set; } = null!;
+    public Infrastructur Context { get; set; } = null!;
 
     #endregion Infrastruktur
 

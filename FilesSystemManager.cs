@@ -24,8 +24,8 @@ namespace Essensausgleich
         {
             if (this._XMLPersistence == null)
             {
-                this._XMLPersistence = this.Kontext.
-                    Produziere<XMLPersistence>();
+                this._XMLPersistence = this.Context.
+                    Fabricate<XMLPersistence>();
             }
             return this._XMLPersistence;
         }
@@ -39,8 +39,8 @@ namespace Essensausgleich
             {
                 if (this._XMLPersistence == null)
                 {
-                    this._XMLPersistence = this.Kontext.
-                        Produziere<XMLPersistence>();
+                    this._XMLPersistence = this.Context.
+                        Fabricate<XMLPersistence>();
                 }
                 
                 return this._XMLPersistence;
