@@ -10,6 +10,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Update="Views\localization.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>localization.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Views\localization.de.resx">
+      <LastGenOutput>localization.de.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="abrechnung.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
