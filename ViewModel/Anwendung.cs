@@ -81,7 +81,7 @@ namespace Essensausgleich.ViewModel
             set
             {
                 this._ListofExpenses = value;
-                OnPropertyChanged(nameof(ListOfExpenses));
+                //OnPropertyChanged(nameof(ListOfExpenses));
                 Log.WriteLine($"{ListOfExpenses.GetType().Name} has changed");
             }
         }
@@ -157,7 +157,6 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        //private string _Bewohner1Name = null!;
         public decimal ExpenseInhabitant1
         {
             get => inhabitant1.TotalExpense;
@@ -168,7 +167,6 @@ namespace Essensausgleich.ViewModel
                 CalcOutcome();
             }
         }
-        //private decimal _AusgabenBewohner1;
         public decimal ExpenseInhabitant2
         {
             get => inhabitant2.TotalExpense;
@@ -524,21 +522,25 @@ namespace Essensausgleich.ViewModel
             ListOfExpenses.Remove(SelectedExpenseItem);
             if (InhabitantsSelected == Inhabitant1Name)
             {
+                inhabitant1.TotalExpense -= SelectedExpenseItem.valueExpense;
                 inhabitant1.ListOfExpenses.Clear();
                 foreach (var item in ListOfExpenses)
                 {
 
                     inhabitant1.ListOfExpenses.Add(item);
                 }
+                OnPropertyChanged("ExpenseInhabitant1");
             }
             else if (InhabitantsSelected == Inhabitant2Name)
             {
+                inhabitant2.TotalExpense -= SelectedExpenseItem.valueExpense;
                 inhabitant2.ListOfExpenses.Clear();
                 foreach (var item in ListOfExpenses)
                 {
 
                     inhabitant2.ListOfExpenses.Add(item);
                 }
+                OnPropertyChanged("ExpenseInhabitant2");
             }
         }
         #endregion

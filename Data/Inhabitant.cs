@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Essensausgleich.Data
 {
-    
+
     /// <summary>
     /// Class for the Userobject Inhabitant 
     /// </summary>
     public class Inhabitant : AppObjekt, INotifyPropertyChanged
     {
-        private decimal _TotalExpense;
+
         /// <summary>
         /// inits the Name of the Inhabitant to ""
         /// </summary>
@@ -53,7 +53,7 @@ namespace Essensausgleich.Data
         {
             get
             {
-                
+               
                 return _TotalExpense;
             }
             set
@@ -62,7 +62,7 @@ namespace Essensausgleich.Data
                 //OnPropertyChanged();
             }
         }
-
+        private decimal _TotalExpense;
         /// <summary>
         /// Method to Add new Entries in the <c>ListBetrag</c>
         /// </summary>
@@ -70,7 +70,7 @@ namespace Essensausgleich.Data
         /// <param name="valueExpense"></param>
         public void AddBetrag(string categorie, decimal valueExpense)
         {
-            
+
             if (categorie != "")
             {
                 ListOfExpenses.Add(new Expense(categorie, valueExpense));
