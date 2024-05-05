@@ -17,7 +17,7 @@ namespace Essensausgleich.Data
     /// <summary>
     /// Class for the Userobject Inhabitant 
     /// </summary>
-    public class Inhabitant : AppObjekt, INotifyPropertyChanged
+    public class Inhabitant 
     {
 
         /// <summary>
@@ -114,44 +114,6 @@ namespace Essensausgleich.Data
         public override string ToString()
         {
             return base.ToString()!;
-        }
-
-
-        #region WPF über Änderungen Informieren
-        /// <summary>
-        /// Wird ausgelöst, wenn sich der Inhalt
-        /// einer Eigenschaft geändert hat
-        /// </summary>
-        public event PropertyChangedEventHandler?
-            PropertyChanged = null!;
-
-        /// <summary>
-        /// Löst das Ereignis PropertyChanged aus
-        /// </summary>
-        /// <param name="e">Ereginisdaten mit
-        /// dem Namen der geänderten Eigenschaft</param>
-        protected virtual void OnPropertyChanged(
-            PropertyChangedEventArgs e)
-        {
-            var BehandlerKopie = PropertyChanged;
-            if (BehandlerKopie != null)
-            {
-                BehandlerKopie(this, e);
-            }
-        }
-
-        /// <summary>
-        /// Löst das Ereignis PropertyChanged aus
-        /// </summary>
-        /// <param name="nameEigenschaft">optional: Die Bezeichnung
-        /// der Eigenschaft, deren Inhalt geändert wurde</param>
-        /// <remarks>Fehlt der Name der Eigenschaft,
-        /// wird der Name vom Aufrufer eingesetzt</remarks>
-        protected virtual void OnPropertyChanged(
-            [System.Runtime.CompilerServices.CallerMemberName] string nameEigenschaft = null!)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(nameEigenschaft));
-        }
-        #endregion WPF über Änderungen Informieren
+        }   
     }
 }

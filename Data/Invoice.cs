@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Essensausgleich.Data
 {
-    public class OrganizerProject
+    public class Invoices : System.Collections.Generic.List<Invoice>
     {
 
+    }
+
+    public class Invoice
+    {
     }
 }

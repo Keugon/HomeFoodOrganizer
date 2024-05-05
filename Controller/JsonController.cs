@@ -25,7 +25,6 @@ namespace Essensausgleich.Controller
         /// <summary>
         /// Generic method to read a Json File
         /// </summary>
-        /// <typeparam name="T">Generic Object</typeparam>
         /// <param name="FilePathAndName">File path and Name</param>
         /// <returns></returns>
         public T Load(string FilePathAndName)
@@ -56,7 +55,6 @@ namespace Essensausgleich.Controller
         /// <summary>
         /// Generic mehtod for Saving to Json from a generic object
         /// </summary>
-        /// <typeparam name="T">Generic Object</typeparam>
         /// <param name="FilePathAndName">File path and Name</param>
         /// <param name="data">contents of object</param>
         public void Save(string FilePathAndName, T data)
