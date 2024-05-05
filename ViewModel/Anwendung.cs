@@ -26,10 +26,13 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         public void Initialize()
         {
-            this._XMLPersistance = this.Context.FilesSystemManagerService.GetXMLPersistance();
-            inhabitant1 = this.Context.Inhabitant1;
-            inhabitant2 = this.Context.Inhabitant2;
+
+            inhabitant1 = this.Context.InhabitantsManager.Inhabitant1;
+            this.Context.InhabitantsManager.Inhabitants.Add(inhabitant1);
+            inhabitant2 = this.Context.InhabitantsManager.Inhabitant2;
+            this.Context.InhabitantsManager.Inhabitants.Add(inhabitant2);
             _InhabitantsController = this.Context.InhabitantsManager.InhabitantsController;
+
         }
         #region Hauptview
         /// <summary>
@@ -46,7 +49,7 @@ namespace Essensausgleich.ViewModel
             f.DataContext = this;
 
             //Attach Context to the new Window (Infrastructur)
-            
+
             f.Show();
         }
         #endregion
@@ -54,7 +57,8 @@ namespace Essensausgleich.ViewModel
         private Inhabitant inhabitant1 = null!;
         private Inhabitant inhabitant2 = null!;
         private InhabitantsController _InhabitantsController = null!;
-        private XMLPersistence _XMLPersistance = null!;
+
+
         #endregion
         #region RelayCommand
 #pragma warning disable 1591
@@ -70,7 +74,7 @@ namespace Essensausgleich.ViewModel
         public RelayCommand MenueWPFSettings => new(execute => OpenSettingsWindow());
         public RelayCommand OpenContributionWindow => new(execute => OpenContributioWindow());
 
-       
+
 #pragma warning restore 1591
         #endregion
         #region PropertieBinding
@@ -197,7 +201,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private string _TxtBoxAddBillText =null!;
+        private string _TxtBoxAddBillText = null!;
         public string TxtBoxCategorieText
         {
             get => _TxtBoxCategorieText;
@@ -222,11 +226,12 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-                return this.Context.FilesSystemManagerService.GetXMLPersistance().XMLFileName;
+                return this.Context.InhabitantsManager.JsonFileName;
             }
             set
             {
-                this.Context.FilesSystemManagerService.GetXMLPersistance().ChangePath(value);
+                this.Context.InhabitantsManager.JsonFileName = value;
+                OnPropertyChanged();
             }
         }
         #endregion
@@ -272,44 +277,44 @@ namespace Essensausgleich.ViewModel
         {
             if (!string.IsNullOrEmpty(_txtBoxAddUserContent))
             {
-            if (Inhabitant1Name == string.Empty || Inhabitant2Name == string.Empty)
-            {
-                if (Inhabitant1Name == string.Empty && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
+                if (Inhabitant1Name == string.Empty || Inhabitant2Name == string.Empty)
                 {
-                    //replaceToMehtod
-                    Inhabitant1Name = _txtBoxAddUserContent;
-                    _InhabitantsController.AddInhabitant(Inhabitant1Name);
-                    InhabitantsSelected = Inhabitant1Name;
-                    //cBoxUser.Items.Add(txtBoxAddUserContent);
-                    //cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
-                    LblToolStripContent = $"Inhabitant {Inhabitant1Name} wurde angelegt";
-                }
-                else if (Inhabitant2Name == string.Empty && _txtBoxAddUserContent != Inhabitant1Name && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
-                {
-                    Inhabitant2Name = _txtBoxAddUserContent;
-                    _InhabitantsController.AddInhabitant(Inhabitant2Name);
-                    InhabitantsSelected = Inhabitant2Name;
-                    //cBoxUser.Items.Add(txtBoxAddUserContent);
-                    //cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
-                    LblToolStripContent = $"Inhabitant {Inhabitant2Name} wurde angelegt";
+                    if (Inhabitant1Name == string.Empty && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
+                    {
+                        //replaceToMehtod
+                        Inhabitant1Name = _txtBoxAddUserContent;
+                        _InhabitantsController.AddInhabitant(Inhabitant1Name);
+                        InhabitantsSelected = Inhabitant1Name;
+                        //cBoxUser.Items.Add(txtBoxAddUserContent);
+                        //cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
+                        LblToolStripContent = $"Inhabitant {Inhabitant1Name} wurde angelegt";
+                    }
+                    else if (Inhabitant2Name == string.Empty && _txtBoxAddUserContent != Inhabitant1Name && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
+                    {
+                        Inhabitant2Name = _txtBoxAddUserContent;
+                        _InhabitantsController.AddInhabitant(Inhabitant2Name);
+                        InhabitantsSelected = Inhabitant2Name;
+                        //cBoxUser.Items.Add(txtBoxAddUserContent);
+                        //cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
+                        LblToolStripContent = $"Inhabitant {Inhabitant2Name} wurde angelegt";
+                    }
+                    else
+                    {
+                        LblToolStripContent = $"Invalide Username or Already Exists!";
+                    }
                 }
                 else
                 {
-                    LblToolStripContent = $"Invalide Username or Already Exists!";
+                    LblToolStripContent = $"Maximale User anzahl bereits Angelegt";
                 }
+                txtBoxAddUserContent = string.Empty;
             }
             else
             {
-                LblToolStripContent = $"Maximale User anzahl bereits Angelegt";
-            }
-            txtBoxAddUserContent = string.Empty;   
-            }
-            else
-            {
- LblToolStripContent = $"Kein User Name eingegeben";
+                LblToolStripContent = $"Kein User Name eingegeben";
                 return;
             }
-            
+
         }
         public void AddBill()
         {
@@ -397,50 +402,59 @@ namespace Essensausgleich.ViewModel
         public void MenueLoad()
         {
             var dialog = new OpenFileDialog();
-            dialog.Filter = "Xml Files|*.xml";
+            dialog.Filter = "Json Files|*.json|Xml Files|*.xml";
             bool? dialogResult = dialog.ShowDialog();
 
             if (dialogResult == true)
             {
-                _XMLPersistance.ChangePath(dialog.SafeFileName);
-                if (!File.Exists(_XMLPersistance.XMLFileName))
+                this.Context.InhabitantsManager.JsonFileName = dialog.FileName;
+                if (!File.Exists(this.Context.InhabitantsManager.JsonFileName))
                 {
-                    Log.WriteLine($"{_XMLPersistance.XMLFileName} not Found");
+                    Log.WriteLine($"{this.Context.InhabitantsManager.JsonFileName} not Found");
                     return;
                 }
-
+this.Context.InhabitantsManager.Inhabitants = this.Context.InhabitantsManager.InhabitantsController.Load(FilePathAndName:dialog.FileName);
             }
             else
             {
                 Log.WriteLine("OpenFile Dialog cancelt = False");
                 return;
             }
-            _XMLPersistance.Reset(inhabitant1, inhabitant2);
-            _XMLPersistance.Load(inhabitant1, inhabitant2);
+
+
+           //Todo this.Context.InhabitantsManager.InhabitantsController.Reset(inhabitant1, inhabitant2);
+
+            
+
+            inhabitant1 = this.Context.InhabitantsManager.Inhabitants[0];
+            inhabitant2 = this.Context.InhabitantsManager.Inhabitants[1];
 
             Inhabitant1Name = inhabitant1.Name;
             Inhabitant2Name = inhabitant2.Name;
             ExpenseInhabitant1 = inhabitant1.TotalExpense;
             ExpenseInhabitant2 = inhabitant2.TotalExpense;
-            InhabitantsSelected = this.Context.InhabitantsManager.InhabitantsController.InhabitantsList[0];
+            this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant1.Name);
+            this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant2.Name);
+            InhabitantsSelected = this.Context.InhabitantsManager.InhabitantsController.InhabitantsNameList[0];
         }
         public void MenueSave()
         {
+
             if (inhabitant1.TotalExpense > 0 && inhabitant2.TotalExpense > 0)
             {
-                if (!Path.Exists(_XMLPersistance.XMLFileName))
+                if (!Path.Exists(this.Context.InhabitantsManager.JsonFileName))
                 {
                     {
-                        _XMLPersistance.Save(inhabitant1, inhabitant2);
+                        this.Context.InhabitantsManager.Save();
                     }
                 }
                 else
                 {
-                    Log.WriteLine("FileExits!!");
+                    Log.WriteLine("FileExits!");
                     MessageBoxResult mr = MessageBox.Show("File Exists, Overwrite?", "File Name Exits", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (mr == MessageBoxResult.Yes)
                     {
-                        _XMLPersistance.Save(inhabitant1, inhabitant2);
+                        this.Context.InhabitantsManager.Save();
                     }
                     else
                     {
@@ -453,6 +467,33 @@ namespace Essensausgleich.ViewModel
             {
                 Log.WriteLine("Both User needs Intput");
             }
+            //if (inhabitant1.TotalExpense > 0 && inhabitant2.TotalExpense > 0)
+            //{
+            //    if (!Path.Exists(_XMLPersistance.XMLFileName))
+            //    {
+            //        {
+            //            _XMLPersistance.Save(inhabitant1, inhabitant2);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Log.WriteLine("FileExits!!");
+            //        MessageBoxResult mr = MessageBox.Show("File Exists, Overwrite?", "File Name Exits", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            //        if (mr == MessageBoxResult.Yes)
+            //        {
+            //            _XMLPersistance.Save(inhabitant1, inhabitant2);
+            //        }
+            //        else
+            //        {
+            //            Log.WriteLine("Not Saved");
+            //        }
+
+            //    }
+            //}
+            //else
+            //{
+            //    Log.WriteLine("Both User needs Intput");
+            //}
         }
         public void MenueSaveAs()
         {
@@ -466,7 +507,7 @@ namespace Essensausgleich.ViewModel
 
                 if (dialogResult == true)
                 {
-                    _XMLPersistance.ChangePath(dialog.SafeFileName);
+                   //todo _XMLPersistance.ChangePath(dialog.SafeFileName);
                     MenueSave();
                 }
                 else
@@ -484,7 +525,7 @@ namespace Essensausgleich.ViewModel
         }
         public void MenueNew()
         {
-            _XMLPersistance.Reset(inhabitant1, inhabitant2);
+            //todo _XMLPersistance.Reset(inhabitant1, inhabitant2);
             TxtBoxAddBillText = "0";
             TxtBoxCategorieText = string.Empty;
             Inhabitant1Name = inhabitant1.Name;
@@ -510,7 +551,7 @@ namespace Essensausgleich.ViewModel
 #pragma warning restore 1591
         #endregion
         #region settingsWinow
-        
+
         #endregion
         #region contributionWindow
         /// <summary>

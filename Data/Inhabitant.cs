@@ -5,11 +5,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Essensausgleich.Data
 {
+    public class Inhabitants: List<Inhabitant> 
+    {
 
+    }
     /// <summary>
     /// Class for the Userobject Inhabitant 
     /// </summary>
@@ -38,6 +42,7 @@ namespace Essensausgleich.Data
         /// <summary>
         /// List of Entrys for the bewohner
         /// </summary>
+        
         public List<Expense> ListOfExpenses = new List<Expense>();
         /// <summary>
         /// creates and obj of Inhabitant

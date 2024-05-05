@@ -3,7 +3,7 @@
   <Class Name="Essensausgleich.Infra.AppObjekt">
     <Position X="2.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAABAAAAIAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAABAAAgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Infra\AppObjekt.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -15,17 +15,10 @@
       <FileName>Infra\FehlerAufgetreten.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Essensausgleich.Infra.Infrastruktur">
-    <Position X="0.5" Y="0.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>QAAAAAAAAAAAYAAAAAAAAAAEAAAAgAAAAQAAAAAAAAA=</HashCode>
-      <FileName>Infra\Infrastruktur.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Essensausgleich.Infra.ViewModel">
     <Position X="2.75" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAgAAAgAAAABAAAAAAAAAAAAA=</HashCode>
       <FileName>Infra\ViewModel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -33,7 +26,7 @@
   <Class Name="Essensausgleich.ViewModel.Anwendung">
     <Position X="2.75" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAUAgAgAAAwAgAQAIIAAAAAAAgAAgAAAAAAAAAAU=</HashCode>
+      <HashCode>AAQQAUI0YgAAAQIgIwAKLAaAABASRLBgAFBBAABAACU=</HashCode>
       <FileName>ViewModel\Anwendung.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -47,7 +40,7 @@
   <Class Name="Essensausgleich.MainWindow" BaseTypeListCollapsed="true">
     <Position X="7.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEgAAEAAIAAAAAAAAAAAgAAEAAgCEAAARAAAAAAAQ=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Views\MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -55,7 +48,7 @@
   <Class Name="Essensausgleich.App" BaseTypeListCollapsed="true">
     <Position X="4.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <HashCode>IAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
       <FileName>App.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -63,31 +56,53 @@
   <Class Name="Essensausgleich.settingsWindow" BaseTypeListCollapsed="true">
     <Position X="9.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAEQ=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
       <FileName>Views\settingsWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Essensausgleich.Data.Inhabitants">
-    <Position X="0.75" Y="8.5" Width="1.5" />
+    <Position X="0.75" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Data\Bewohner.cs</FileName>
+      <FileName>Data\Inhabitant.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Essensausgleich.Data.Bewohner">
-    <Position X="0.75" Y="4.25" Width="1.5" />
+  <Class Name="Essensausgleich.Data.OrganizerProject">
+    <Position X="0.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAIAAAACAAAEIigAIIQAgAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Data\Bewohner.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\OrganizerProject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Essensausgleich.Controller.JsonPersistance" Collapsed="true">
+    <Position X="12.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAAAAABAgAAAAAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Controller\JsonPersistance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Essensausgleich.Controller.XMLPersistence" Collapsed="true">
+    <Position X="12.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgoAAAAAABAAAAAAAACAAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controller\XMLPersistence.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Struct Name="Essensausgleich.Betrag">
-    <Position X="14.75" Y="1.5" Width="1.5" />
+  <Class Name="Essensausgleich.ViewModel.RelayCommand">
+    <Position X="14.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
-      <FileName>Betrag.cs</FileName>
+      <HashCode>AAAAAAAAACAAAAQAAEAEAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\RelayCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Struct Name="Essensausgleich.Expense">
+    <Position X="14.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Expense.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Delegate Name="Essensausgleich.Infra.FehlerAufgetretenEventHandler">

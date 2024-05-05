@@ -24,42 +24,7 @@ namespace Essensausgleich.Infra;
 public class Infrastructur : System.Object
 {
 
-    #region Bewohner und BewohnerListe
-
-    private Inhabitant _Inhabitant1 = null!;
-    /// <summary>
-    /// Gets the object Bewohner1
-    /// </summary>
-    public Inhabitant Inhabitant1
-    {
-        get
-        {
-            if (this._Inhabitant1 == null)
-            {
-                this._Inhabitant1 = this.Fabricate<Inhabitant>();
-            }
-            return this._Inhabitant1;
-        }
-    }
-
-    private Inhabitant _Inhabitant2 = null!;
-    /// <summary>
-    /// Gets the object Bewohner2
-    /// </summary>
-    public Inhabitant Inhabitant2
-    {
-        get
-        {
-            if(this._Inhabitant2 == null)
-            {
-                this._Inhabitant2 = this.Fabricate<Inhabitant>();
-            }
-            return this._Inhabitant2;
-        }
-    }
-
-
-    #endregion
+    
 
     #region InhabitantsManager
     private InhabitantsManager _InhabitantsManager = null!;
@@ -78,24 +43,7 @@ public class Infrastructur : System.Object
         }
     }
     #endregion
-    #region FilesystemManagaer    
-    /// <summary>
-    /// Ruft den Dienst zum Verwalten des XML Dienstes ab
-    /// </summary>
-    public FilesSystemManager FilesSystemManagerService
-    {
-        get
-        {
-            if (this._FilesSystemManagerService == null)
-            {
-                this._FilesSystemManagerService = this.Fabricate<FilesSystemManager>();
-            }
-            return this._FilesSystemManagerService;
-        }
-    }
 
-    private FilesSystemManager _FilesSystemManagerService = null!;
-    #endregion
 
     #region Objektfabrik
 

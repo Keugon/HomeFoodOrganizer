@@ -14,35 +14,35 @@ namespace Essensausgleich.Controller
     /// <summary>
     /// Controller for Inhabitants
     /// </summary>
-    public class InhabitantsController : AppObjekt, INotifyPropertyChanged
+    public class InhabitantsController : JsonController<Inhabitants>
     {
-        private ObservableCollection<string> _InhabitantsList = new ObservableCollection<string>();
+        private ObservableCollection<string> _InhabitantsNameList = new ObservableCollection<string>();
         /// <summary>
         /// Gets or Sets a ObservableList of Strings 
         /// </summary>
-        public ObservableCollection<string> InhabitantsList
+        public ObservableCollection<string> InhabitantsNameList
         {
             get
             {
-                return _InhabitantsList;
+                return _InhabitantsNameList;
             }
             set
             {
-                _InhabitantsList = value;
+                _InhabitantsNameList = value;
                // OnPropertyChanged();
-                Log.WriteLine("InhabitantsList got Set");
+                Log.WriteLine("InhabitantsNameList got Set");
                 
             }
         }
         /// <summary>
-        /// Clears the content of InhabitantsList
+        /// Clears the content of InhabitantsNameList
         /// </summary>
         public void ClearInhabitants()
         {
-            _InhabitantsList.Clear();
+            _InhabitantsNameList.Clear();
             
-           OnPropertyChanged("InhabitantsList");
-            Log.WriteLine("InhabitantsList cleared");
+          // OnPropertyChanged("InhabitantsNameList");
+            Log.WriteLine("InhabitantsNameList cleared");
         }
         /// <summary>
         /// Adds a inhabitant Obj to the List
@@ -50,11 +50,12 @@ namespace Essensausgleich.Controller
         /// <param name="inhabitant"></param>
         public void AddInhabitant(string inhabitant)
         {
-            InhabitantsList.Add(inhabitant);
-            Log.WriteLine($"{inhabitant} Added to InhabitantsList");
+            InhabitantsNameList.Add(inhabitant);
+            Log.WriteLine($"{inhabitant} Added to InhabitantsNameList");
         }
 
         #region WPF über Änderungen Informieren
+/*
         /// <summary>
         /// Wird ausgelöst, wenn sich der Inhalt
         /// einer Eigenschaft geändert hat
@@ -90,6 +91,7 @@ namespace Essensausgleich.Controller
             OnPropertyChanged(new PropertyChangedEventArgs(nameEigenschaft));
             System.Diagnostics.Debug.WriteLine($"OnPropertyChanged ausgelöst bei:{nameEigenschaft}");
         }
+*/
         #endregion WPF über Änderungen Informieren
     }
 }
