@@ -69,6 +69,7 @@ namespace Essensausgleich.ViewModel
         public RelayCommand OnEnterBill => new(execute => AddBill());
         public RelayCommand MenueWPFNew => new(execute => MenueNew());
         public RelayCommand MenueWPFLoad => new(execute => MenueLoad());
+        public RelayCommand MenueWPFLoadProject => new(execute => MenueLoadProject());
         public RelayCommand MenueWPFSave => new(execute => MenueSave());
         public RelayCommand MenueWPFSaveAs => new(execute => MenueSaveAs());
         public RelayCommand MenueWPFSettings => new(execute => OpenSettingsWindow());
@@ -413,7 +414,7 @@ namespace Essensausgleich.ViewModel
                     Log.WriteLine($"{this.Context.InhabitantsManager.JsonFileName} not Found");
                     return;
                 }
-this.Context.InhabitantsManager.Inhabitants = this.Context.InhabitantsManager.InhabitantsController.Load(FilePathAndName:dialog.FileName);
+                this.Context.InhabitantsManager.Inhabitants = this.Context.InhabitantsManager.InhabitantsController.Load(FilePathAndName: dialog.FileName);
             }
             else
             {
@@ -422,9 +423,9 @@ this.Context.InhabitantsManager.Inhabitants = this.Context.InhabitantsManager.In
             }
 
 
-           //Todo this.Context.InhabitantsManager.InhabitantsController.Reset(inhabitant1, inhabitant2);
+            //Todo this.Context.InhabitantsManager.InhabitantsController.Reset(inhabitant1, inhabitant2);
 
-            
+
 
             inhabitant1 = this.Context.InhabitantsManager.Inhabitants[0];
             inhabitant2 = this.Context.InhabitantsManager.Inhabitants[1];
@@ -436,6 +437,10 @@ this.Context.InhabitantsManager.Inhabitants = this.Context.InhabitantsManager.In
             this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant1.Name);
             this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant2.Name);
             InhabitantsSelected = this.Context.InhabitantsManager.InhabitantsController.InhabitantsNameList[0];
+        }
+        public void MenueLoadProject()
+        {
+
         }
         public void MenueSave()
         {
@@ -507,7 +512,7 @@ this.Context.InhabitantsManager.Inhabitants = this.Context.InhabitantsManager.In
 
                 if (dialogResult == true)
                 {
-                   //todo _XMLPersistance.ChangePath(dialog.SafeFileName);
+                    //todo _XMLPersistance.ChangePath(dialog.SafeFileName);
                     MenueSave();
                 }
                 else

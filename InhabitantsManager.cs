@@ -93,7 +93,8 @@ namespace Essensausgleich
         /// <summary>
         /// Intern cache for filename
         /// </summary>
-        private string _JsonFileName = $"abrechnung_{General.GetCurrentDate()}.json";
+        private string _JsonFileName = $"abrechnung.json";
+        //$"abrechnung_{General.GetCurrentDate()}.json";
         /// <summary>
         /// Gets the XMLFilename in String
         /// </summary>

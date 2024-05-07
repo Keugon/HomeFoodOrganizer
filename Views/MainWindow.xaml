@@ -19,6 +19,7 @@
                 Header="Datei">
                 <MenuItem Command="{Binding MenueWPFNew}" Header="New" />
                 <MenuItem Command="{Binding MenueWPFLoad}" Header="Open"/>
+                <MenuItem Command="{Binding MenueWPFLoadProject}" Header="Open Invoice"/>
                 <MenuItem Command="{Binding MenueWPFSave}" Header="Save"/>
                 <MenuItem Command="{Binding MenueWPFSaveAs}" Header="Save as"/>
             </MenuItem>

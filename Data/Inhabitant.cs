@@ -12,7 +12,7 @@ namespace Essensausgleich.Data
 {
     public class Inhabitants: List<Inhabitant> 
     {
-
+       
     }
     /// <summary>
     /// Class for the Userobject Inhabitant 

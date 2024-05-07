@@ -24,7 +24,22 @@ namespace Essensausgleich.Infra;
 public class Infrastructur : System.Object
 {
 
-    
+    #region InvoiceManager
+
+    private InvoiceManager _InvoiceManager = null!;
+    public InvoiceManager InvoiceManager
+    {
+        get
+        {
+            if(this._InhabitantsManager == null)
+            {
+                this._InvoiceManager = new InvoiceManager();
+            }
+            return this._InvoiceManager;
+        }
+    }
+
+    #endregion
 
     #region InhabitantsManager
     private InhabitantsManager _InhabitantsManager = null!;
