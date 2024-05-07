@@ -31,9 +31,9 @@ public class Infrastructur : System.Object
     {
         get
         {
-            if(this._InhabitantsManager == null)
+            if(this._InvoiceManager == null)
             {
-                this._InvoiceManager = new InvoiceManager();
+                this._InvoiceManager = this.Fabricate<InvoiceManager>();
             }
             return this._InvoiceManager;
         }

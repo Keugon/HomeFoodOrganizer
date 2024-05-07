@@ -11,7 +11,7 @@ namespace Essensausgleich.Data
     /// <summary>
     /// List of Invoices
     /// </summary>
-   public class Invoices : System.Collections.Generic.List<Invoice>
+    public class Invoices : System.Collections.Generic.List<Invoice>
     {
 
     }
@@ -32,16 +32,38 @@ namespace Essensausgleich.Data
             }
             set
             {
-                _InhabitantsNameList = value;
-                Log.WriteLine("InhabitantsNameList got Set");
-
+                this._InhabitantsNameList = value;
             }
         }
         private Inhabitants _Inhabitants = null!;
-
-        public Inhabitants Inhabitants { get; set; }
+        /// <summary>
+        /// Gets or Sets the Content for the Inhabitants List
+        /// </summary>
+        public Inhabitants Inhabitants
+        {
+            get
+            {
+                if (this._Inhabitants == null)
+                {
+                    this._Inhabitants = new Inhabitants();
+                }
+                return this._Inhabitants;
+            }
+            set
+            {
+                this._Inhabitants = value;
+            }
+        }
 
         private string _InvoiceComment = "TestKommentar";
         public string InvoiceComment { get; set; }
+        /// <summary>
+        /// Adds a Inhabitant to the End of the Inhabitants List
+        /// </summary>
+        /// <param name="inhabitantToAdd"></param>
+        public void AddInhabitantToList(Inhabitant inhabitantToAdd)
+        {
+            this.Inhabitants.Add(inhabitantToAdd);
+        }
     }
 }

@@ -26,12 +26,15 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         public void Initialize()
         {
-
+            //inhabitants
             inhabitant1 = this.Context.InhabitantsManager.Inhabitant1;
-            this.Context.InhabitantsManager.Inhabitants.Add(inhabitant1);
             inhabitant2 = this.Context.InhabitantsManager.Inhabitant2;
-            this.Context.InhabitantsManager.Inhabitants.Add(inhabitant2);
+            CurrentInvoice = this.Context.InvoiceManager.Invoice;
+            CurrentInvoice.AddInhabitantToList(inhabitant1);
+            CurrentInvoice.AddInhabitantToList(inhabitant2);
             _InhabitantsController = this.Context.InhabitantsManager.InhabitantsController;
+
+
 
         }
         #region Hauptview
@@ -54,9 +57,11 @@ namespace Essensausgleich.ViewModel
         }
         #endregion
         #region Objectimport
+
         private Inhabitant inhabitant1 = null!;
         private Inhabitant inhabitant2 = null!;
         private InhabitantsController _InhabitantsController = null!;
+        private Invoice CurrentInvoice = null!;
 
 
         #endregion
@@ -155,16 +160,16 @@ namespace Essensausgleich.ViewModel
         private string _txtBoxAddUserContent = null!;
         public string Inhabitant1Name
         {
-            get => inhabitant1.Name;
+            get => CurrentInvoice.Inhabitants[0].Name;
             set
             {
-                inhabitant1.Name = value;
+                CurrentInvoice.Inhabitants[0].Name = value;
                 OnPropertyChanged();
             }
         }
         public decimal ExpenseInhabitant1
         {
-            get => inhabitant1.TotalExpense;
+            get => CurrentInvoice.Inhabitants[0].TotalExpense;
             set
             {
                 inhabitant1.TotalExpense = value;
@@ -174,7 +179,7 @@ namespace Essensausgleich.ViewModel
         }
         public decimal ExpenseInhabitant2
         {
-            get => inhabitant2.TotalExpense;
+            get => CurrentInvoice.Inhabitants[1].TotalExpense;
             set
             {
                 inhabitant2.TotalExpense = value;
@@ -185,10 +190,10 @@ namespace Essensausgleich.ViewModel
         //private decimal _AusgabenBewohner2;
         public string Inhabitant2Name
         {
-            get => inhabitant2.Name;
+            get => CurrentInvoice.Inhabitants[1].Name;
             set
             {
-                inhabitant2.Name = value;
+                CurrentInvoice.Inhabitants[1].Name = value;
                 OnPropertyChanged();
             }
         }
@@ -227,11 +232,11 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-                return this.Context.InhabitantsManager.JsonFileName;
+                return this.Context.InvoiceManager.JsonFileName;
             }
             set
             {
-                this.Context.InhabitantsManager.JsonFileName = value;
+                this.Context.InvoiceManager.JsonFileName = value;
                 OnPropertyChanged();
             }
         }
@@ -244,22 +249,22 @@ namespace Essensausgleich.ViewModel
             Log.WriteLine("CalcOutcome entert");
             decimal Endwert = 0;
             string zBezahlender;
-            if (inhabitant1.Name != "" && inhabitant2.Name != "")
+            if (CurrentInvoice.Inhabitants[0].Name != "" && CurrentInvoice.Inhabitants[1].Name != "")
             {
-                Endwert = (inhabitant1.TotalExpense + inhabitant2.TotalExpense) / 2;
-                if (inhabitant1.TotalExpense > 0 || inhabitant2.TotalExpense > 0)
+                Endwert = (CurrentInvoice.Inhabitants[0].TotalExpense + CurrentInvoice.Inhabitants[1].TotalExpense) / 2;
+                if (CurrentInvoice.Inhabitants[0].TotalExpense > 0 || CurrentInvoice.Inhabitants[1].TotalExpense > 0)
                 {
-                    if (inhabitant1.TotalExpense > inhabitant2.TotalExpense)
+                    if (CurrentInvoice.Inhabitants[0].TotalExpense > CurrentInvoice.Inhabitants[1].TotalExpense)
                     {
-                        Endwert = inhabitant1.TotalExpense - Endwert;
-                        zBezahlender = inhabitant2.Name;
+                        Endwert = CurrentInvoice.Inhabitants[0].TotalExpense - Endwert;
+                        zBezahlender = CurrentInvoice.Inhabitants[1].Name;
                         LblBillContent = Convert.ToString(Endwert);
                         LblpayingInhabitantContent = zBezahlender;
                     }
                     else
                     {
-                        Endwert = inhabitant2.TotalExpense - Endwert;
-                        zBezahlender = inhabitant1.Name;
+                        Endwert = CurrentInvoice.Inhabitants[1].TotalExpense - Endwert;
+                        zBezahlender = CurrentInvoice.Inhabitants[0].Name;
                         LblBillContent = Convert.ToString(Endwert);
                         LblpayingInhabitantContent = zBezahlender;
                     }
@@ -282,21 +287,17 @@ namespace Essensausgleich.ViewModel
                 {
                     if (Inhabitant1Name == string.Empty && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
                     {
-                        //replaceToMehtod
+                        
                         Inhabitant1Name = _txtBoxAddUserContent;
-                        _InhabitantsController.AddInhabitant(Inhabitant1Name);
-                        InhabitantsSelected = Inhabitant1Name;
-                        //cBoxUser.Items.Add(txtBoxAddUserContent);
-                        //cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
+                        CurrentInvoice.InhabitantsNameList.Add(Inhabitant1Name);
+                        InhabitantsSelected = Inhabitant1Name;                        
                         LblToolStripContent = $"Inhabitant {Inhabitant1Name} wurde angelegt";
                     }
                     else if (Inhabitant2Name == string.Empty && _txtBoxAddUserContent != Inhabitant1Name && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
                     {
                         Inhabitant2Name = _txtBoxAddUserContent;
-                        _InhabitantsController.AddInhabitant(Inhabitant2Name);
-                        InhabitantsSelected = Inhabitant2Name;
-                        //cBoxUser.Items.Add(txtBoxAddUserContent);
-                        //cBoxUser.SelectedIndex = cBoxUser.Items.Count - 1;
+                        CurrentInvoice.InhabitantsNameList.Add(Inhabitant2Name);
+                        InhabitantsSelected = Inhabitant2Name;                        
                         LblToolStripContent = $"Inhabitant {Inhabitant2Name} wurde angelegt";
                     }
                     else
@@ -327,13 +328,13 @@ namespace Essensausgleich.ViewModel
                 {
                     if (inhabitant1.Name == CboxUserText && CboxUserText != string.Empty)
                     {
-                        inhabitant1.AddBetrag(_TxtBoxCategorieText, bill);
+                        CurrentInvoice.Inhabitants[0].AddBetrag(_TxtBoxCategorieText, bill);
                         ExpenseInhabitant1 = inhabitant1.TotalExpense;
                         LblToolStripContent = $"Expense {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
                     }
                     else if (inhabitant2.Name == CboxUserText && CboxUserText != string.Empty)
                     {
-                        inhabitant2.AddBetrag(_TxtBoxCategorieText, bill);
+                        CurrentInvoice.Inhabitants[1].AddBetrag(_TxtBoxCategorieText, bill);
                         ExpenseInhabitant2 = inhabitant2.TotalExpense;
                         LblToolStripContent = $"Expense {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
                     }
@@ -408,13 +409,15 @@ namespace Essensausgleich.ViewModel
 
             if (dialogResult == true)
             {
-                this.Context.InhabitantsManager.JsonFileName = dialog.FileName;
-                if (!File.Exists(this.Context.InhabitantsManager.JsonFileName))
+                this.Context.InvoiceManager.JsonFileName = dialog.FileName;
+                if (!File.Exists(this.Context.InvoiceManager.JsonFileName))
                 {
-                    Log.WriteLine($"{this.Context.InhabitantsManager.JsonFileName} not Found");
+                    Log.WriteLine($"{this.Context.InvoiceManager.JsonFileName} not Found");
                     return;
                 }
-                this.Context.InhabitantsManager.Inhabitants = this.Context.InhabitantsManager.InhabitantsController.Load(FilePathAndName: dialog.FileName);
+                CurrentInvoice = null!;
+                CurrentInvoice = this.Context.InvoiceManager.Load();
+
             }
             else
             {
@@ -427,16 +430,16 @@ namespace Essensausgleich.ViewModel
 
 
 
-            inhabitant1 = this.Context.InhabitantsManager.Inhabitants[0];
-            inhabitant2 = this.Context.InhabitantsManager.Inhabitants[1];
+            //inhabitant1 = this.Context.InhabitantsManager.Inhabitants[0];
+            //inhabitant2 = this.Context.InhabitantsManager.Inhabitants[1];
 
-            Inhabitant1Name = inhabitant1.Name;
-            Inhabitant2Name = inhabitant2.Name;
-            ExpenseInhabitant1 = inhabitant1.TotalExpense;
-            ExpenseInhabitant2 = inhabitant2.TotalExpense;
-            this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant1.Name);
-            this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant2.Name);
-            InhabitantsSelected = this.Context.InhabitantsManager.InhabitantsController.InhabitantsNameList[0];
+            //Inhabitant1Name = inhabitant1.Name;
+            //Inhabitant2Name = inhabitant2.Name;
+            //ExpenseInhabitant1 = inhabitant1.TotalExpense;
+            //ExpenseInhabitant2 = inhabitant2.TotalExpense;
+            //this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant1.Name);
+            //this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant2.Name);
+            //InhabitantsSelected = this.Context.InhabitantsManager.InhabitantsController.InhabitantsNameList[0];
         }
         public void MenueLoadProject()
         {
@@ -447,10 +450,10 @@ namespace Essensausgleich.ViewModel
 
             if (inhabitant1.TotalExpense > 0 && inhabitant2.TotalExpense > 0)
             {
-                if (!Path.Exists(this.Context.InhabitantsManager.JsonFileName))
+                if (!Path.Exists(this.Context.InvoiceManager.JsonFileName))
                 {
                     {
-                        this.Context.InhabitantsManager.Save();
+                        this.Context.InvoiceManager.Save(CurrentInvoice);
                     }
                 }
                 else
@@ -459,7 +462,7 @@ namespace Essensausgleich.ViewModel
                     MessageBoxResult mr = MessageBox.Show("File Exists, Overwrite?", "File Name Exits", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (mr == MessageBoxResult.Yes)
                     {
-                        this.Context.InhabitantsManager.Save();
+                        this.Context.InvoiceManager.Save(CurrentInvoice);
                     }
                     else
                     {
@@ -530,22 +533,7 @@ namespace Essensausgleich.ViewModel
         }
         public void MenueNew()
         {
-            //todo _XMLPersistance.Reset(inhabitant1, inhabitant2);
-            TxtBoxAddBillText = "0";
-            TxtBoxCategorieText = string.Empty;
-            Inhabitant1Name = inhabitant1.Name;
-            Inhabitant2Name = inhabitant2.Name;
-            ExpenseInhabitant1 = inhabitant1.TotalExpense;
-            ExpenseInhabitant2 = inhabitant2.TotalExpense;
-            LblpayingInhabitantContent = string.Empty;
-            LblBillContent = string.Empty;
-            ////LblBewohner1.Content = "Bew1";
-            //LblBewohner2.Content = "Bew2";
-            //LblBill.Content = "0";
-            //LblTotalAmountBew1.Content = "0";
-            //LblTotalAmountBew2.Content = "0";
-            //cBoxUser.Items.Clear();
-            //cBoxUser.Text = "";
+
         }
         public void OpenSettingsWindow()
         {

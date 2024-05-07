@@ -78,7 +78,7 @@
             >
             <ComboBox 
                 Width="80" Text="{Binding CboxUserText}" SelectedItem="{Binding InhabitantsSelected}" 
-                ItemsSource="{Binding Context.InhabitantsManager.InhabitantsController.InhabitantsNameList}" 
+                ItemsSource="{Binding Context.InvoiceManager.Invoice.InhabitantsNameList}" 
                 HorizontalAlignment="Left"/>
             <!--Stack Pannel Add Bill-->
             <StackPanel
