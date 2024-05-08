@@ -16,6 +16,28 @@ namespace Essensausgleich
         /// <summary>
         /// Field Cache
         /// </summary>
+        private Invoices _Invoices = null!;
+        /// <summary>
+        /// Gets or Sets a List of Invoice
+        /// </summary>
+        public Invoices Invoices
+        {
+            get
+            {
+                if(this._Invoices == null)
+                {
+                    this._Invoices = new Invoices();
+                }
+                return this._Invoices;
+            }
+            set
+            {
+                this._Invoices = value;
+            }
+        }
+        /// <summary>
+        /// Field Cache
+        /// </summary>
         private Invoice _Invoice = null!;
         /// <summary>
         /// New Invoice Object
@@ -70,7 +92,7 @@ namespace Essensausgleich
             }
         }
         /// <summary>
-        /// Method to save the Inhabits (List) to Jsonfile
+        /// Method to Load a Invoice from the JsonFileName Path
         /// </summary>
         public Invoice Load()
         {
@@ -81,6 +103,28 @@ namespace Essensausgleich
                var Invoice = this.InvoiceController.Load(this.JsonFileName);
 
                 System.Diagnostics.Debug.WriteLine($"Invoice Sucsesfully read from File:{this.JsonFileName}");
+                return Invoice;
+            }
+            catch (Exception ex)
+            {
+
+                var Invoice = new Invoice();
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return Invoice;
+            }
+        }
+        /// <summary>
+        /// Method to Load a Invoice from a give Path
+        /// </summary>
+        public Invoice Load(string pathWithFileName)
+        {
+            try
+            {
+
+                System.Diagnostics.Debug.WriteLine($"Try load File: {pathWithFileName}");
+                var Invoice = this.InvoiceController.Load(pathWithFileName);
+
+                System.Diagnostics.Debug.WriteLine($"Invoice Sucsesfully read from File:{pathWithFileName}");
                 return Invoice;
             }
             catch (Exception ex)

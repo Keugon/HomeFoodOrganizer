@@ -10,11 +10,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="250" Width="400" MinHeight="250" MinWidth="400"
         FontFamily="Segoe Ui" >
-    <Grid Margin="0,0,0,0">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <Menu x:Name="MenuWPFMain"  
               HorizontalAlignment="Left" 
               VerticalAlignment="Top" 
-              Background="#FFCFDBFB">
+              Background="#FFCFDBFB"
+                  Grid.Column="0"
+                  Grid.Row="0">
             <MenuItem 
                 Header="Datei">
                 <MenuItem Command="{Binding MenueWPFNew}" Header="New" />
@@ -25,13 +36,23 @@
             </MenuItem>
             <MenuItem Command="{Binding MenueWPFSettings}" Header="Settings"/>
         </Menu>
+        <StackPanel 
+            Orientation="Horizontal"
+            Grid.Row="0"
+            Grid.Column="1"
+            >
+           <Button Command="{Binding NextInvoice}" Content="Next" FontFamily="Segoe UI Symbol"/>
+            <Button Command="{Binding PreviousInvoice}" Content="Prev" FontFamily="Segoe UI Symbol"/>
+        </StackPanel>
+        
         <Button Command="{Binding OpenContributionWindow}" Content="ShowEntrys" HorizontalAlignment="Left" 
                 Height="20" Margin="300,60,0,0" VerticalAlignment="Top" Width="80" Grid.Column="1"/>
         <!--Stackpanel Inhabitants Expenses-->
-        <Grid               
-              HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Margin="20,60"
+        <Grid  
+            Grid.Row="1"
+            Grid.Column="0"
+              HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Background="Transparent">
             <Border
                 Padding="5"
@@ -71,10 +92,12 @@
             </Border>
         </Grid>
         <!--Stackpanel Bill and User-->
-        <StackPanel
-            Margin="0,20"
+        <StackPanel           
             Orientation="Horizontal"
             VerticalAlignment="Top"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
             >
             <ComboBox 
                 Width="80" Text="{Binding CboxUserText}" SelectedItem="{Binding InhabitantsSelected}" 
@@ -128,7 +151,15 @@
                 <Button Command="{Binding BtnAddUser}" Content="Add User" />
             </StackPanel>
         </StackPanel>
-        <StatusBar  HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="22" Width="300">
+        <StatusBar  
+            HorizontalAlignment="Left" 
+            VerticalAlignment="Bottom" 
+            Height="22" 
+            Width="300"
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            >
             <StatusBarItem x:Name="LblToolStrip" Content="{Binding LblToolStripContent}"/>
         </StatusBar>
     </Grid>

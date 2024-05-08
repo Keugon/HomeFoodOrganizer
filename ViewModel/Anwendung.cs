@@ -62,6 +62,9 @@ namespace Essensausgleich.ViewModel
         private Inhabitant inhabitant2 = null!;
         private InhabitantsController _InhabitantsController = null!;
         private Invoice CurrentInvoice = null!;
+        private int CurrentInvoicesIndex = 0;
+
+
 
 
         #endregion
@@ -71,6 +74,46 @@ namespace Essensausgleich.ViewModel
         public RelayCommand BtnAddUser => new RelayCommand(execute => AddUser());
         public RelayCommand OnEnterAddUser => new RelayCommand(execute => AddUser());
         public RelayCommand BtnAddBill => new(execute => AddBill());
+        public RelayCommand NextInvoice => new RelayCommand(execute =>
+        {
+            
+            this.CurrentInvoice = this.Context.InvoiceManager.Invoices[++CurrentInvoicesIndex];
+
+            System.Diagnostics.Debug.WriteLine($"Current Invoice Comment: {this.CurrentInvoice.InvoiceComment}");
+            System.Diagnostics.Debug.WriteLine(CurrentInvoicesIndex);
+
+        }, canExecute =>
+        {
+            if (CurrentInvoicesIndex < this.Context.InvoiceManager.Invoices.Count-1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        });
+        public RelayCommand PreviousInvoice => new RelayCommand(execute =>
+        {
+
+            
+            this.CurrentInvoice = this.Context.InvoiceManager.Invoices[--CurrentInvoicesIndex];
+            System.Diagnostics.Debug.WriteLine($"Current Invoice Comment: {this.CurrentInvoice.InvoiceComment}");
+            System.Diagnostics.Debug.WriteLine(CurrentInvoicesIndex);
+
+        }, canExecute =>
+{
+if (CurrentInvoicesIndex > 0)
+{
+    return true;
+}
+else
+{
+    return false;
+
+}
+});
         public RelayCommand OnEnterBill => new(execute => AddBill());
         public RelayCommand MenueWPFNew => new(execute => MenueNew());
         public RelayCommand MenueWPFLoad => new(execute => MenueLoad());
@@ -287,17 +330,17 @@ namespace Essensausgleich.ViewModel
                 {
                     if (Inhabitant1Name == string.Empty && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
                     {
-                        
+
                         Inhabitant1Name = _txtBoxAddUserContent;
                         CurrentInvoice.InhabitantsNameList.Add(Inhabitant1Name);
-                        InhabitantsSelected = Inhabitant1Name;                        
+                        InhabitantsSelected = Inhabitant1Name;
                         LblToolStripContent = $"Inhabitant {Inhabitant1Name} wurde angelegt";
                     }
                     else if (Inhabitant2Name == string.Empty && _txtBoxAddUserContent != Inhabitant1Name && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
                     {
                         Inhabitant2Name = _txtBoxAddUserContent;
                         CurrentInvoice.InhabitantsNameList.Add(Inhabitant2Name);
-                        InhabitantsSelected = Inhabitant2Name;                        
+                        InhabitantsSelected = Inhabitant2Name;
                         LblToolStripContent = $"Inhabitant {Inhabitant2Name} wurde angelegt";
                     }
                     else
@@ -443,7 +486,26 @@ namespace Essensausgleich.ViewModel
         }
         public void MenueLoadProject()
         {
+            var dialog = new OpenFolderDialog();
+            bool? dialogResult = dialog.ShowDialog();
 
+            if (dialogResult == true)
+            {
+                if (!Directory.Exists(dialog.FolderName))
+                {
+                    Log.WriteLine($"The Directory: {dialog.FolderName} does not exist or cant be accsessd");
+                    return;
+                }
+                string[] files = Directory.GetFiles(dialog.FolderName);
+                Invoices FileLoadList = new Invoices();
+                foreach (string file in files)
+                {
+
+                    FileLoadList.Add(this.Context.InvoiceManager.Load(file));
+                }
+                this.Context.InvoiceManager.Invoices = FileLoadList;
+
+            }
         }
         public void MenueSave()
         {
