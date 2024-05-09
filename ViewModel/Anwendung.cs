@@ -29,7 +29,8 @@ namespace Essensausgleich.ViewModel
             //inhabitants
             inhabitant1 = this.Context.InhabitantsManager.Inhabitant1;
             inhabitant2 = this.Context.InhabitantsManager.Inhabitant2;
-            CurrentInvoice = this.Context.InvoiceManager.Invoice;
+            //CurrentInvoice = this.Context.InvoiceManager.Invoice;
+            
             CurrentInvoice.AddInhabitantToList(inhabitant1);
             CurrentInvoice.AddInhabitantToList(inhabitant2);
             _InhabitantsController = this.Context.InhabitantsManager.InhabitantsController;
@@ -61,7 +62,7 @@ namespace Essensausgleich.ViewModel
         private Inhabitant inhabitant1 = null!;
         private Inhabitant inhabitant2 = null!;
         private InhabitantsController _InhabitantsController = null!;
-        private Invoice CurrentInvoice = null!;
+
         private int CurrentInvoicesIndex = 0;
 
 
@@ -76,44 +77,32 @@ namespace Essensausgleich.ViewModel
         public RelayCommand BtnAddBill => new(execute => AddBill());
         public RelayCommand NextInvoice => new RelayCommand(execute =>
         {
-            
             this.CurrentInvoice = this.Context.InvoiceManager.Invoices[++CurrentInvoicesIndex];
-
-            System.Diagnostics.Debug.WriteLine($"Current Invoice Comment: {this.CurrentInvoice.InvoiceComment}");
-            System.Diagnostics.Debug.WriteLine(CurrentInvoicesIndex);
-
         }, canExecute =>
-        {
-            if (CurrentInvoicesIndex < this.Context.InvoiceManager.Invoices.Count-1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        });
+                        {
+                            if (CurrentInvoicesIndex < this.Context.InvoiceManager.Invoices.Count - 1)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        });
         public RelayCommand PreviousInvoice => new RelayCommand(execute =>
         {
-
-            
             this.CurrentInvoice = this.Context.InvoiceManager.Invoices[--CurrentInvoicesIndex];
-            System.Diagnostics.Debug.WriteLine($"Current Invoice Comment: {this.CurrentInvoice.InvoiceComment}");
-            System.Diagnostics.Debug.WriteLine(CurrentInvoicesIndex);
-
         }, canExecute =>
-{
-if (CurrentInvoicesIndex > 0)
-{
-    return true;
-}
-else
-{
-    return false;
-
-}
-});
+                        {
+                            if (CurrentInvoicesIndex > 0)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        });
         public RelayCommand OnEnterBill => new(execute => AddBill());
         public RelayCommand MenueWPFNew => new(execute => MenueNew());
         public RelayCommand MenueWPFLoad => new(execute => MenueLoad());
@@ -128,6 +117,34 @@ else
         #endregion
         #region PropertieBinding
 #pragma warning disable 1591
+        private Invoice _CurrentInvoice = null!;
+        public Invoice CurrentInvoice
+        {
+            get
+            {
+                if(this._CurrentInvoice == null)
+                {
+                    this._CurrentInvoice = new Invoice();
+                }
+                return this._CurrentInvoice;
+            }
+            set
+            {
+
+                System.Diagnostics.Debug.WriteLine("CurrentInvoice Beginn Set");
+                this._CurrentInvoice = value;
+                OnPropertyChanged(nameof(Inhabitant1Name));
+                OnPropertyChanged(nameof(Inhabitant2Name));
+                if (this.CurrentInvoice.Inhabitants.Count > 1)
+                {
+                    ExpenseInhabitant1 = this.CurrentInvoice.Inhabitants[0].TotalExpense;
+                    ExpenseInhabitant2 = this.CurrentInvoice.Inhabitants[1].TotalExpense;                                      
+                }
+                OnPropertyChanged(nameof(InhabitantsNameList));
+                InhabitantsSelected = this.CurrentInvoice.InhabitantsNameList[0];
+                System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
+            }
+        }
         public ObservableCollection<Expense> ListOfExpenses
         {
             get => this._ListofExpenses;
@@ -138,7 +155,7 @@ else
                 Log.WriteLine($"{ListOfExpenses.GetType().Name} has changed");
             }
         }
-        private ObservableCollection<Expense> _ListofExpenses = new ObservableCollection<Expense>();
+        private ObservableCollection<Expense> _ListofExpenses;
 
         public Expense SelectedExpenseItem
         {
@@ -152,7 +169,11 @@ else
         private Expense _SelectedExpenseItem;
         public string InhabitantsSelected
         {
-            get => _InhabitansSelected;
+            get
+            {
+               
+                return this._InhabitansSelected;
+            }
             set
             {
                 _InhabitansSelected = value;
@@ -240,6 +261,13 @@ else
                 OnPropertyChanged();
             }
         }
+        private ObservableCollection<string> _InhabitantsNameList = new ObservableCollection<string>();
+        public ObservableCollection<string> InhabitantsNameList
+        {
+            get => this.CurrentInvoice.InhabitantsNameList;
+            
+           
+        }
         //private string _Bewohner2Name = null!;
         public string TxtBoxAddBillText
         {
@@ -275,6 +303,10 @@ else
         {
             get
             {
+                if (this.CurrentInvoice.FileName != null)
+                {
+                    return this.CurrentInvoice.FileName;
+                }
                 return this.Context.InvoiceManager.JsonFileName;
             }
             set
@@ -500,12 +532,19 @@ else
                 Invoices FileLoadList = new Invoices();
                 foreach (string file in files)
                 {
-
-                    FileLoadList.Add(this.Context.InvoiceManager.Load(file));
+                    Invoice i = this.Context.InvoiceManager.Load(file);
+                    i.FileName = Path.GetFileName(file);
+                    FileLoadList.Add(i);
                 }
                 this.Context.InvoiceManager.Invoices = FileLoadList;
+                if (this.Context.InvoiceManager.Invoices != null)
+                {
+                    this.CurrentInvoice = this.Context.InvoiceManager.Invoices[0];
+                }
 
             }
+
+            System.Diagnostics.Debug.WriteLine("MenueLoadProject End");
         }
         public void MenueSave()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,11 +29,15 @@ namespace Essensausgleich.Data
         {
             get
             {
-                return _InhabitantsNameList;
+
+                System.Diagnostics.Debug.WriteLine($"InhabitantsNameList Get");
+                return this._InhabitantsNameList;
             }
             set
             {
+
                 this._InhabitantsNameList = value;
+                System.Diagnostics.Debug.WriteLine($"InhabitantsNameList got Set");
             }
         }
         private Inhabitants _Inhabitants = null!;
@@ -56,7 +61,21 @@ namespace Essensausgleich.Data
         }
 
         private string _InvoiceComment = "TestKommentar";
-        public string InvoiceComment { get; set; }
+        /// <summary>
+        /// Text Commentary for this Invoice
+        /// </summary>
+        public string InvoiceComment
+        {
+            get => this._InvoiceComment;
+            set => this._InvoiceComment = value;
+        }
+
+
+        /// <summary>
+        /// FileName gets set on load from File
+        /// </summary>
+        public string? FileName { get; set; }
+
         /// <summary>
         /// Adds a Inhabitant to the End of the Inhabitants List
         /// </summary>
@@ -65,5 +84,8 @@ namespace Essensausgleich.Data
         {
             this.Inhabitants.Add(inhabitantToAdd);
         }
+        
     }
+
+
 }

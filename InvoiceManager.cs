@@ -56,6 +56,8 @@ namespace Essensausgleich
             set
             {
                 this._Invoice = value;
+
+                System.Diagnostics.Debug.WriteLine("Invoice Changed");
             }
         }
         #endregion

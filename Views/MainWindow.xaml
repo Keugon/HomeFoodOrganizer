@@ -101,7 +101,8 @@
             >
             <ComboBox 
                 Width="80" Text="{Binding CboxUserText}" SelectedItem="{Binding InhabitantsSelected}" 
-                ItemsSource="{Binding Context.InvoiceManager.Invoice.InhabitantsNameList}" 
+                ItemsSource="{Binding InhabitantsNameList,UpdateSourceTrigger=PropertyChanged}" 
+                
                 HorizontalAlignment="Left"/>
             <!--Stack Pannel Add Bill-->
             <StackPanel

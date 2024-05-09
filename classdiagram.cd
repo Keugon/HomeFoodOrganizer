@@ -23,10 +23,10 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Essensausgleich.ViewModel.Anwendung" Collapsed="true">
+  <Class Name="Essensausgleich.ViewModel.Anwendung">
     <Position X="13.75" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQQAUI0YgAAAQIgIwAKLAaAABASBLBgAFBBAABAACE=</HashCode>
+      <HashCode>IAQQAUI0YgAAAQIgIwAKLgaAABASBLBgCFBBAIBAwCE=</HashCode>
       <FileName>ViewModel\Anwendung.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -79,7 +79,7 @@
   <Class Name="Essensausgleich.Data.Invoice" Collapsed="true">
     <Position X="9" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAQAACCAAAIAAAAAAAAAACAAAAEAAAAAABAAAAAAAA=</HashCode>
       <FileName>Data\Invoice.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -114,12 +114,12 @@
   <Class Name="Essensausgleich.InvoiceManager">
     <Position X="9" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>ACAAgoAAAAAAAAgAAAAAAAAAAAAAAAARAAAAACAAAQA=</HashCode>
       <FileName>InvoiceManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Essensausgleich.Data.Invoices" Collapsed="true">
-    <Position X="9" Y="5.25" Width="1.5" />
+    <Position X="9" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\Invoice.cs</FileName>
