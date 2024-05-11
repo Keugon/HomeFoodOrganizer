@@ -23,10 +23,12 @@ namespace Essensausgleich.Infra;
 /// bekannt ist.</remarks>
 public class Infrastructur : System.Object
 {
-
     #region InvoiceManager
 
     private InvoiceManager _InvoiceManager = null!;
+    /// <summary>
+    /// InvoiceManager Service
+    /// </summary>
     public InvoiceManager InvoiceManager
     {
         get
@@ -40,26 +42,6 @@ public class Infrastructur : System.Object
     }
 
     #endregion
-
-    #region InhabitantsManager
-    private InhabitantsManager _InhabitantsManager = null!;
-     /// <summary>
-     /// Gets the Service for Controlling the Inhabitants
-     /// </summary>
-    public InhabitantsManager InhabitantsManager
-    {
-        get
-        {
-            if(_InhabitantsManager == null)
-            {
-                this._InhabitantsManager = this.Fabricate<InhabitantsManager>();
-            }
-            return this._InhabitantsManager;
-        }
-    }
-    #endregion
-
-
     #region Objektfabrik
 
     /// <summary>

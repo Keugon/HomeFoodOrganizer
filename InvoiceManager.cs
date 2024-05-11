@@ -10,6 +10,9 @@ using Log = System.Diagnostics.Debug;
 
 namespace Essensausgleich
 {
+    /// <summary>
+    /// Manages Invoices
+    /// </summary>
     public class InvoiceManager :AppObjekt
     {
         #region Invoice and List
@@ -63,7 +66,9 @@ namespace Essensausgleich
         #endregion
 
         private InvoiceController _InvoiceController = null!;
-
+        /// <summary>
+        /// Service for Serializing and deserializing of Invoice Obejcts
+        /// </summary>
         public InvoiceController InvoiceController
         {
             get

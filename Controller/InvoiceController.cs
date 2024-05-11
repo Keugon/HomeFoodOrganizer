@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Essensausgleich.Controller
 {
+    /// <summary>
+    /// Type save JsonController for Invoice Obeject
+    /// </summary>
     public class InvoiceController : Controller.JsonController<Invoice>
     {
     }

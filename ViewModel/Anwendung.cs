@@ -26,16 +26,6 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         public void Initialize()
         {
-            //inhabitants
-            // inhabitant1 = this.Context.InhabitantsManager.Inhabitant1;
-            // inhabitant2 = this.Context.InhabitantsManager.Inhabitant2;
-            //CurrentInvoice = this.Context.InvoiceManager.Invoice;
-
-            // CurrentInvoice.AddInhabitantToList(inhabitant1);
-            // CurrentInvoice.AddInhabitantToList(inhabitant2);
-            //_InhabitantsController = this.Context.InhabitantsManager.InhabitantsController;
-
-
 
         }
         #region Hauptview
@@ -57,18 +47,7 @@ namespace Essensausgleich.ViewModel
             f.Show();
         }
         #endregion
-        #region Objectimport
-
-        //private Inhabitant inhabitant1 = null!;
-        //private Inhabitant inhabitant2 = null!;
-        private InhabitantsController _InhabitantsController = null!;
-
         private int CurrentInvoicesIndex = 0;
-
-
-
-
-        #endregion
         #region RelayCommand
 #pragma warning disable 1591
         public RelayCommand DeleteEntry => new RelayCommand(execute => DeleteDataGridEntry());
@@ -111,8 +90,6 @@ namespace Essensausgleich.ViewModel
         public RelayCommand MenueWPFSaveAs => new(execute => MenueSaveAs());
         public RelayCommand MenueWPFSettings => new(execute => OpenSettingsWindow());
         public RelayCommand OpenContributionWindow => new(execute => OpenContributioWindow());
-
-
 #pragma warning restore 1591
         #endregion
         #region PropertieBinding
@@ -149,18 +126,15 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-
                 if (this._ListofExpenses == null)
                 {
                     this._ListofExpenses = new ObservableCollection<Expense>();
                 }
                 return this._ListofExpenses;
             }
-
             set
             {
                 this._ListofExpenses = value;
-                //OnPropertyChanged(nameof(ListOfExpenses));
                 Log.WriteLine($"{ListOfExpenses.GetType().Name} has changed");
             }
         }
@@ -179,7 +153,6 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-
                 return this._InhabitansSelected;
             }
             set
@@ -242,24 +215,11 @@ namespace Essensausgleich.ViewModel
         public decimal ExpenseInhabitant1
         {
             get => CurrentInvoice.Inhabitants[0].TotalExpense;
-            //set
-            //{
-            //    this.CurrentInvoice.Inhabitants[0].TotalExpense = value;
-            //    OnPropertyChanged();
-            //    CalcOutcome();
-            //}
         }
         public decimal ExpenseInhabitant2
         {
             get => CurrentInvoice.Inhabitants[1].TotalExpense;
-            //set
-            //{
-            //    this.CurrentInvoice.Inhabitants[1].TotalExpense = value;
-            //    OnPropertyChanged();
-            //    CalcOutcome();
-            //}
         }
-        //private decimal _AusgabenBewohner2;
         public string Inhabitant2Name
         {
             get => CurrentInvoice.Inhabitants[1].Name;
@@ -276,7 +236,6 @@ namespace Essensausgleich.ViewModel
 
 
         }
-        //private string _Bewohner2Name = null!;
         public string TxtBoxAddBillText
         {
             get => _TxtBoxAddBillText;
@@ -311,7 +270,6 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-
                 return this.CurrentInvoice.FileName!;
             }
             set
@@ -320,45 +278,11 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        #endregion
-        #region MainWindow
-
-
-        public void CalcOutcome()
-        {
-            Log.WriteLine("CalcOutcome entert");
-            decimal Endwert = 0;
-            string zBezahlender;
-            if (CurrentInvoice.Inhabitants[0].Name != "" && CurrentInvoice.Inhabitants[1].Name != "")
-            {
-                Endwert = (CurrentInvoice.Inhabitants[0].TotalExpense + CurrentInvoice.Inhabitants[1].TotalExpense) / 2;
-                if (CurrentInvoice.Inhabitants[0].TotalExpense > 0 || CurrentInvoice.Inhabitants[1].TotalExpense > 0)
-                {
-                    if (CurrentInvoice.Inhabitants[0].TotalExpense > CurrentInvoice.Inhabitants[1].TotalExpense)
-                    {
-                        Endwert = CurrentInvoice.Inhabitants[0].TotalExpense - Endwert;
-                        zBezahlender = CurrentInvoice.Inhabitants[1].Name;
-                        LblBillContent = Convert.ToString(Endwert);
-                        LblpayingInhabitantContent = zBezahlender;
-                    }
-                    else
-                    {
-                        Endwert = CurrentInvoice.Inhabitants[1].TotalExpense - Endwert;
-                        zBezahlender = CurrentInvoice.Inhabitants[0].Name;
-                        LblBillContent = Convert.ToString(Endwert);
-                        LblpayingInhabitantContent = zBezahlender;
-                    }
-                }
-                else
-                {
-                    LblToolStripContent = $"Mindestens eine Partei muss TotalExpense hinterlegen";
-                }
-            }
-            else
-            {
-                LblToolStripContent = $"Es wurden nicht mindestens 2 User Angelegt";
-            }
-        }
+#pragma warning restore 1591
+        #endregion       
+        /// <summary>
+        /// Adds the Name to the Inhabitant object and Name List
+        /// </summary>
         public void AddUser()
         {
             if (!string.IsNullOrEmpty(_txtBoxAddUserContent))
@@ -398,6 +322,9 @@ namespace Essensausgleich.ViewModel
             }
 
         }
+        /// <summary>
+        /// Adds a Expens struct to the dedicated Inhabitant object
+        /// </summary>
         public void AddBill()
         {
             if (CboxUserText != string.Empty)
@@ -410,14 +337,12 @@ namespace Essensausgleich.ViewModel
                     {
                         CurrentInvoice.Inhabitants[0].AddBetrag(_TxtBoxCategorieText, bill);
                         OnPropertyChanged(nameof(ExpenseInhabitant1));
-                        //ExpenseInhabitant1 = this.CurrentInvoice.Inhabitants[0].TotalExpense;
                         LblToolStripContent = $"Expense {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
                     }
                     else if (this.CurrentInvoice.Inhabitants[1].Name == CboxUserText && CboxUserText != string.Empty)
                     {
                         CurrentInvoice.Inhabitants[1].AddBetrag(_TxtBoxCategorieText, bill);
                         OnPropertyChanged(nameof(ExpenseInhabitant2));
-                        //ExpenseInhabitant2 = this.CurrentInvoice.Inhabitants[1].TotalExpense;
                         LblToolStripContent = $"Expense {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
                     }
                     else
@@ -438,7 +363,7 @@ namespace Essensausgleich.ViewModel
         /// Opens The window and fills the Datagrid with the Current
         /// selectedInhabitant to display the total Expenses
         /// </summary>
-        public void OpenContributioWindow()
+                public void OpenContributioWindow()
         {
             var contributionWindow = new contributionWindow();
             contributionWindow.DataContext = this;
@@ -453,9 +378,7 @@ namespace Essensausgleich.ViewModel
                     {
                         ListOfExpenses.Add(item);
                     }
-
                     this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpenses);
-
                 }
                 else if (InhabitantsSelected == Inhabitant2Name)
                 {
@@ -472,17 +395,10 @@ namespace Essensausgleich.ViewModel
                 }
             }
             Log.WriteLine("ButtonAuflistung Clicked");
-
-            //Hengt datakontext nicht richtig an ak
-            /*
-            var vm = this.Context.Fabricate<ViewModel.Anwendung>();
-            vm.Anzeigen<contributionWindow>();
-            OnPropertyChanged("ListOfExpenses");
-            */
-
-
-
         }
+        /// <summary>
+        /// Loads a Single Invoice File
+        /// </summary>
         public void MenueLoad()
         {
             var dialog = new OpenFileDialog();
@@ -497,7 +413,6 @@ namespace Essensausgleich.ViewModel
                     Log.WriteLine($"{dialog.FileName} not Found");
                     return;
                 }
-                //CurrentInvoice = null!;
                 Invoice i = this.Context.InvoiceManager.Load(dialog.FileName);
                 i.FileName = dialog.FileName;
                 CurrentInvoice = i;
@@ -508,23 +423,10 @@ namespace Essensausgleich.ViewModel
                 Log.WriteLine("OpenFile Dialog cancelt = False");
                 return;
             }
-
-
-            //Todo this.Context.InhabitantsManager.InhabitantsController.Reset(inhabitant1, inhabitant2);
-
-
-
-            //inhabitant1 = this.Context.InhabitantsManager.Inhabitants[0];
-            //inhabitant2 = this.Context.InhabitantsManager.Inhabitants[1];
-
-            //Inhabitant1Name = inhabitant1.Name;
-            //Inhabitant2Name = inhabitant2.Name;
-            //ExpenseInhabitant1 = inhabitant1.TotalExpense;
-            //ExpenseInhabitant2 = inhabitant2.TotalExpense;
-            //this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant1.Name);
-            //this.Context.InhabitantsManager.InhabitantsController.AddInhabitant(inhabitant2.Name);
-            //InhabitantsSelected = this.Context.InhabitantsManager.InhabitantsController.InhabitantsNameList[0];
         }
+        /// <summary>
+        /// Loads all Fitting Invoice Files of a Choosen Folder
+        /// </summary>
         public void MenueLoadProject()
         {
             var dialog = new OpenFolderDialog();
@@ -552,11 +454,12 @@ namespace Essensausgleich.ViewModel
                 {
                     this.CurrentInvoice = this.Context.InvoiceManager.Invoices[0];
                 }
-
             }
-
             System.Diagnostics.Debug.WriteLine("MenueLoadProject End");
         }
+        /// <summary>
+        /// Saves the Current Invoice Object in the Current FileName if not null else switches to SaveAs()
+        /// </summary>
         public void MenueSave()
         {
             if (this.CurrentInvoice.FileName != null)
@@ -579,22 +482,19 @@ namespace Essensausgleich.ViewModel
                     {
                         Log.WriteLine("Not Saved");
                     }
-
                 }
             }
             else
             {
-
                 System.Diagnostics.Debug.WriteLine("No FilePath exist therefore a new \"Not Loaded File\"");
                 MenueSaveAs();
             }
-
-
-
         }
+        /// <summary>
+        /// Saves the Current Invoice Object per Dialog to a Choosen FileName and Location
+        /// </summary>
         public void MenueSaveAs()
         {
-
             var dialog = new SaveFileDialog();
             dialog.Filter = "Json Files|*.json";
             dialog.AddExtension = true;
@@ -612,39 +512,37 @@ namespace Essensausgleich.ViewModel
                 return;
             }
 
-
-
         }
+        /// <summary>
+        /// Nulls the CurrentInvoice Object to start Fresh over
+        /// </summary>
         public void MenueNew()
         {
             this.CurrentInvoice = null!;
         }
+        /// <summary>
+        /// Opens the SettingsWindow to Access FileName and Comment
+        /// </summary>
         public void OpenSettingsWindow()
         {
             var settingsWindow = new settingsWindow();
             settingsWindow.DataContext = this;
             settingsWindow.Show();
         }
-#pragma warning restore 1591
-        #endregion
-        #region settingsWinow
-
-        #endregion
         #region contributionWindow
         /// <summary>
         /// Delets via Context Menue a DataGrid item 
         /// and convays the change down to the Inhabitant object 
         /// </summary>
         public void DeleteDataGridEntry()
-        {// delet Entry and updates source
+        {
+            // delet Entry and updates source
             ListOfExpenses.Remove(SelectedExpenseItem);
             if (InhabitantsSelected == Inhabitant1Name)
             {
-                //this.CurrentInvoice.Inhabitants[0].TotalExpense -= SelectedExpenseItem.valueExpense;
                 this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Clear();
                 foreach (var item in ListOfExpenses)
                 {
-
                     this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Add(item);
                 }
                 OnPropertyChanged(nameof(ExpenseInhabitant1));
@@ -652,11 +550,9 @@ namespace Essensausgleich.ViewModel
             }
             else if (InhabitantsSelected == Inhabitant2Name)
             {
-                //this.CurrentInvoice.Inhabitants[1].TotalExpense -= SelectedExpenseItem.valueExpense;
                 this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Clear();
                 foreach (var item in ListOfExpenses)
                 {
-
                     this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Add(item);
                 }
                 OnPropertyChanged(nameof(ExpenseInhabitant2));
