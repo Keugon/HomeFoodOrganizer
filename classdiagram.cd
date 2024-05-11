@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Essensausgleich.Infra.AppObjekt">
-    <Position X="8" Y="0.5" Width="1.5" />
+    <Position X="4.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAABAAAgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Infra\AppObjekt.cs</FileName>
@@ -9,29 +9,45 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Essensausgleich.Infra.FehlerAufgetretenEventArgs" Collapsed="true">
-    <Position X="18" Y="0.5" Width="1.5" />
+    <Position X="16.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAgAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Infra\FehlerAufgetreten.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Essensausgleich.Infra.ViewModel">
-    <Position X="13.75" Y="3.25" Width="1.5" />
+    <Position X="7" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAIAAAgAAAgAAAABAAAAAAAAAAAAA=</HashCode>
       <FileName>Infra\ViewModel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Essensausgleich.ViewModel.Anwendung" Collapsed="true">
-    <Position X="13.75" Y="6" Width="1.5" />
+  <Class Name="Essensausgleich.ViewModel.Anwendung">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="_CboxUserText" Hidden="true" />
+      <Field Name="_CurrentInvoice" Hidden="true" />
+      <Field Name="_InhabitansSelected" Hidden="true" />
+      <Field Name="_InhabitantsNameList" Hidden="true" />
+      <Field Name="_InvoiceCommentary" Hidden="true" />
+      <Field Name="_lblBillContent" Hidden="true" />
+      <Field Name="_LblpayingInhabitantContent" Hidden="true" />
+      <Field Name="_lblToolStripContent" Hidden="true" />
+      <Field Name="_ListofExpenses" Hidden="true" />
+      <Field Name="_SelectedExpenseItem" Hidden="true" />
+      <Field Name="_TxtBoxAddBillText" Hidden="true" />
+      <Field Name="_txtBoxAddUserContent" Hidden="true" />
+      <Field Name="_TxtBoxCategorieText" Hidden="true" />
+      <Field Name="CurrentInvoicesIndex" Hidden="true" />
+    </Members>
     <TypeIdentifier>
-      <HashCode>IAQQAUK0YgAAAQIgIwAKLgaAABASBLBgCFBBAIBAwCE=</HashCode>
+      <HashCode>IAQQAUK0YgAAAQIAIwAKLgaAABASBLBgCFJBEIBAwCE=</HashCode>
       <FileName>ViewModel\Anwendung.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Essensausgleich.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="18" Y="1.5" Width="1.5" />
+    <Position X="14.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Views\MainWindow.xaml.cs</FileName>
@@ -39,7 +55,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Essensausgleich.App" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="16.25" Y="0.5" Width="1.5" />
+    <Position X="14.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
       <FileName>App.xaml.cs</FileName>
@@ -47,7 +63,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Essensausgleich.settingsWindow" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="16.25" Y="2.5" Width="1.5" />
+    <Position X="18" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
       <FileName>Views\settingsWindow.xaml.cs</FileName>
@@ -55,85 +71,86 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Essensausgleich.Data.Inhabitants" Collapsed="true">
-    <Position X="7" Y="8.5" Width="1.5" />
+    <Position X="10.75" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\Inhabitant.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Essensausgleich.ViewModel.RelayCommand" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="19.75" Y="1.5" Width="1.5" />
+    <Position X="16.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAQAAEAEAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ViewModel\RelayCommand.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="Essensausgleich.Controller.JsonController&lt;T&gt;" Collapsed="true">
-    <Position X="3.5" Y="3.25" Width="1.5" />
+  <Class Name="Essensausgleich.Controller.JsonController&lt;T&gt;">
+    <Position X="2.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Controller\JsonController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Essensausgleich.Data.Invoice">
-    <Position X="9" Y="7" Width="1.5" />
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="_Inhabitants" Hidden="true" />
+      <Field Name="_InhabitantsNameList" Hidden="true" />
+      <Field Name="_InvoiceComment" Hidden="true" />
+    </Members>
     <TypeIdentifier>
-      <HashCode>AAAQAACCAAAIAAAAAAAAACCAAAAEAAAAAABAAABAIAA=</HashCode>
+      <HashCode>AAAQAACCAAAIAAAAAAAAACCAAAAEAAAAAABAAABAAAA=</HashCode>
       <FileName>Data\Invoice.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Essensausgleich.Controller.InvoiceController" Collapsed="true">
-    <Position X="2.5" Y="4.75" Width="1.5" />
+  <Class Name="Essensausgleich.Controller.InvoiceController">
+    <Position X="2.5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Controller\InvoiceController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Essensausgleich.Controller.InhabitantsController" Collapsed="true">
-    <Position X="4.75" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAACAAAAAAAABAAAAAACAAAAAAAAgAAAAAAAAAAA=</HashCode>
-      <FileName>Controller\InhabitantsController.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Essensausgleich.Data.Inhabitant" Collapsed="true">
-    <Position X="7" Y="7.5" Width="1.5" />
+  <Class Name="Essensausgleich.Data.Inhabitant">
+    <Position X="10.75" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="_Name" Hidden="true" />
+      <Field Name="_TotalExpense" Hidden="true" />
+      <Field Name="ListOfExpenses" Hidden="true" />
+    </Members>
     <TypeIdentifier>
       <HashCode>AEAAAAAGAIAAAAAEACAAIAQAAAAQAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\Inhabitant.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Essensausgleich.InhabitantsManager">
-    <Position X="7" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAQQAIACAAAAAQgAAIAAAAAAAAAAAAAQAABAAAAAAAA=</HashCode>
-      <FileName>InhabitantsManager.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Essensausgleich.InvoiceManager">
-    <Position X="9" Y="3.25" Width="1.5" />
+    <Position X="4.75" Y="3.25" Width="1.5" />
+    <Members>
+      <Field Name="_Invoice" Hidden="true" />
+      <Field Name="_InvoiceController" Hidden="true" />
+      <Field Name="_Invoices" Hidden="true" />
+    </Members>
     <TypeIdentifier>
-      <HashCode>ACAAgoAAAAAAAAgAAAAAAAAAAAAAAAARAAAAACAAAQA=</HashCode>
+      <HashCode>ACAAgoAAAAAAAAAAAAAAAAAAAAAAAAABAAAAACAAAQA=</HashCode>
       <FileName>InvoiceManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Essensausgleich.Data.Invoices" Collapsed="true">
-    <Position X="11.25" Y="7.5" Width="1.5" />
+    <Position X="12.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\Invoice.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="Essensausgleich.Expense">
-    <Position X="18" Y="2.5" Width="1.5" />
+    <Position X="10.75" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAABAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Expense.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Delegate Name="Essensausgleich.Infra.FehlerAufgetretenEventHandler" Collapsed="true">
-    <Position X="16.25" Y="5" Width="1.5" />
+    <Position X="14.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAABAAAA=</HashCode>
       <FileName>Infra\FehlerAufgetreten.cs</FileName>
