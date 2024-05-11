@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Essensausgleich.Data
 {
+    /// <summary>
+    /// Type save List of Inhabitant Obejct
+    /// </summary>
     public class Inhabitants: List<Inhabitant> 
     {
        
@@ -58,13 +61,16 @@ namespace Essensausgleich.Data
         {
             get
             {
-               
-                return _TotalExpense;
+                this._TotalExpense = 0;
+               foreach (var expense in ListOfExpenses)
+                {
+                    this._TotalExpense += expense.valueExpense;
+                }
+                return this._TotalExpense;
             }
             set
             {
-                _TotalExpense = value < 0 ? 0 : value;
-                //OnPropertyChanged();
+                this._TotalExpense = value;
             }
         }
         private decimal _TotalExpense;

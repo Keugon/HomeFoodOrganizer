@@ -82,9 +82,9 @@ namespace Essensausgleich
         {
             try
             {
-               this.InvoiceController.Save(this.JsonFileName, invoiceToSave);
+               this.InvoiceController.Save(invoiceToSave.FileName!, invoiceToSave);
 
-                System.Diagnostics.Debug.WriteLine($"This Invoice got saved to:{this.JsonFileName}") ;
+                System.Diagnostics.Debug.WriteLine($"This Invoice got saved to:{invoiceToSave.FileName}") ;
             }
             catch (Exception ex)
             {
@@ -93,28 +93,8 @@ namespace Essensausgleich
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
-        /// <summary>
-        /// Method to Load a Invoice from the JsonFileName Path
-        /// </summary>
-        public Invoice Load()
-        {
-            try
-            {
 
-                System.Diagnostics.Debug.WriteLine($"Try load File: {this.JsonFileName}");
-               var Invoice = this.InvoiceController.Load(this.JsonFileName);
-
-                System.Diagnostics.Debug.WriteLine($"Invoice Sucsesfully read from File:{this.JsonFileName}");
-                return Invoice;
-            }
-            catch (Exception ex)
-            {
-
-                var Invoice = new Invoice();
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                return Invoice;
-            }
-        }
+       
         /// <summary>
         /// Method to Load a Invoice from a give Path
         /// </summary>
@@ -137,6 +117,7 @@ namespace Essensausgleich
                 return Invoice;
             }
         }
+        /*
         /// <summary>
         /// Intern cache for filename
         /// </summary>
@@ -167,5 +148,6 @@ namespace Essensausgleich
             }
 
         }
+        */
     }
 }

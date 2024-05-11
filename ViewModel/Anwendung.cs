@@ -27,13 +27,13 @@ namespace Essensausgleich.ViewModel
         public void Initialize()
         {
             //inhabitants
-            inhabitant1 = this.Context.InhabitantsManager.Inhabitant1;
-            inhabitant2 = this.Context.InhabitantsManager.Inhabitant2;
+            // inhabitant1 = this.Context.InhabitantsManager.Inhabitant1;
+            // inhabitant2 = this.Context.InhabitantsManager.Inhabitant2;
             //CurrentInvoice = this.Context.InvoiceManager.Invoice;
-            
-            CurrentInvoice.AddInhabitantToList(inhabitant1);
-            CurrentInvoice.AddInhabitantToList(inhabitant2);
-            _InhabitantsController = this.Context.InhabitantsManager.InhabitantsController;
+
+            // CurrentInvoice.AddInhabitantToList(inhabitant1);
+            // CurrentInvoice.AddInhabitantToList(inhabitant2);
+            //_InhabitantsController = this.Context.InhabitantsManager.InhabitantsController;
 
 
 
@@ -59,8 +59,8 @@ namespace Essensausgleich.ViewModel
         #endregion
         #region Objectimport
 
-        private Inhabitant inhabitant1 = null!;
-        private Inhabitant inhabitant2 = null!;
+        //private Inhabitant inhabitant1 = null!;
+        //private Inhabitant inhabitant2 = null!;
         private InhabitantsController _InhabitantsController = null!;
 
         private int CurrentInvoicesIndex = 0;
@@ -122,7 +122,7 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-                if(this._CurrentInvoice == null)
+                if (this._CurrentInvoice == null)
                 {
                     this._CurrentInvoice = new Invoice();
                 }
@@ -135,19 +135,28 @@ namespace Essensausgleich.ViewModel
                 this._CurrentInvoice = value;
                 OnPropertyChanged(nameof(Inhabitant1Name));
                 OnPropertyChanged(nameof(Inhabitant2Name));
-                if (this.CurrentInvoice.Inhabitants.Count > 1)
-                {
-                    ExpenseInhabitant1 = this.CurrentInvoice.Inhabitants[0].TotalExpense;
-                    ExpenseInhabitant2 = this.CurrentInvoice.Inhabitants[1].TotalExpense;                                      
-                }
                 OnPropertyChanged(nameof(InhabitantsNameList));
-                InhabitantsSelected = this.CurrentInvoice.InhabitantsNameList[0];
+                if (this.CurrentInvoice.InhabitantsNameList.Count == 2)
+                {
+                    InhabitantsSelected = this.CurrentInvoice.InhabitantsNameList[0];
+                }
+                OnPropertyChanged(nameof(ExpenseInhabitant1));
+                OnPropertyChanged(nameof(ExpenseInhabitant2));
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
         public ObservableCollection<Expense> ListOfExpenses
         {
-            get => this._ListofExpenses;
+            get
+            {
+
+                if (this._ListofExpenses == null)
+                {
+                    this._ListofExpenses = new ObservableCollection<Expense>();
+                }
+                return this._ListofExpenses;
+            }
+
             set
             {
                 this._ListofExpenses = value;
@@ -155,8 +164,7 @@ namespace Essensausgleich.ViewModel
                 Log.WriteLine($"{ListOfExpenses.GetType().Name} has changed");
             }
         }
-        private ObservableCollection<Expense> _ListofExpenses;
-
+        private ObservableCollection<Expense>? _ListofExpenses;
         public Expense SelectedExpenseItem
         {
             get => _SelectedExpenseItem;
@@ -171,7 +179,7 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-               
+
                 return this._InhabitansSelected;
             }
             set
@@ -234,22 +242,22 @@ namespace Essensausgleich.ViewModel
         public decimal ExpenseInhabitant1
         {
             get => CurrentInvoice.Inhabitants[0].TotalExpense;
-            set
-            {
-                inhabitant1.TotalExpense = value;
-                OnPropertyChanged();
-                CalcOutcome();
-            }
+            //set
+            //{
+            //    this.CurrentInvoice.Inhabitants[0].TotalExpense = value;
+            //    OnPropertyChanged();
+            //    CalcOutcome();
+            //}
         }
         public decimal ExpenseInhabitant2
         {
             get => CurrentInvoice.Inhabitants[1].TotalExpense;
-            set
-            {
-                inhabitant2.TotalExpense = value;
-                OnPropertyChanged();
-                CalcOutcome();
-            }
+            //set
+            //{
+            //    this.CurrentInvoice.Inhabitants[1].TotalExpense = value;
+            //    OnPropertyChanged();
+            //    CalcOutcome();
+            //}
         }
         //private decimal _AusgabenBewohner2;
         public string Inhabitant2Name
@@ -265,8 +273,8 @@ namespace Essensausgleich.ViewModel
         public ObservableCollection<string> InhabitantsNameList
         {
             get => this.CurrentInvoice.InhabitantsNameList;
-            
-           
+
+
         }
         //private string _Bewohner2Name = null!;
         public string TxtBoxAddBillText
@@ -303,15 +311,12 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-                if (this.CurrentInvoice.FileName != null)
-                {
-                    return this.CurrentInvoice.FileName;
-                }
-                return this.Context.InvoiceManager.JsonFileName;
+
+                return this.CurrentInvoice.FileName!;
             }
             set
             {
-                this.Context.InvoiceManager.JsonFileName = value;
+                this.CurrentInvoice.FileName = value;
                 OnPropertyChanged();
             }
         }
@@ -401,16 +406,18 @@ namespace Essensausgleich.ViewModel
 
                 if (decimal.TryParse(_TxtBoxAddBillText, out bill) && bill > 0)
                 {
-                    if (inhabitant1.Name == CboxUserText && CboxUserText != string.Empty)
+                    if (this.CurrentInvoice.Inhabitants[0].Name == CboxUserText && CboxUserText != string.Empty)
                     {
                         CurrentInvoice.Inhabitants[0].AddBetrag(_TxtBoxCategorieText, bill);
-                        ExpenseInhabitant1 = inhabitant1.TotalExpense;
+                        OnPropertyChanged(nameof(ExpenseInhabitant1));
+                        //ExpenseInhabitant1 = this.CurrentInvoice.Inhabitants[0].TotalExpense;
                         LblToolStripContent = $"Expense {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
                     }
-                    else if (inhabitant2.Name == CboxUserText && CboxUserText != string.Empty)
+                    else if (this.CurrentInvoice.Inhabitants[1].Name == CboxUserText && CboxUserText != string.Empty)
                     {
                         CurrentInvoice.Inhabitants[1].AddBetrag(_TxtBoxCategorieText, bill);
-                        ExpenseInhabitant2 = inhabitant2.TotalExpense;
+                        OnPropertyChanged(nameof(ExpenseInhabitant2));
+                        //ExpenseInhabitant2 = this.CurrentInvoice.Inhabitants[1].TotalExpense;
                         LblToolStripContent = $"Expense {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
                     }
                     else
@@ -442,22 +449,22 @@ namespace Essensausgleich.ViewModel
                 if (InhabitantsSelected == Inhabitant1Name)
                 {
                     ListOfExpenses.Clear();
-                    foreach (var item in inhabitant1.ListOfExpenses)
+                    foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpenses)
                     {
                         ListOfExpenses.Add(item);
                     }
 
-                    this.ListOfExpenses = new ObservableCollection<Expense>(inhabitant1.ListOfExpenses);
+                    this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpenses);
 
                 }
                 else if (InhabitantsSelected == Inhabitant2Name)
                 {
                     ListOfExpenses.Clear();
-                    foreach (var item in inhabitant2.ListOfExpenses)
+                    foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpenses)
                     {
                         ListOfExpenses.Add(item);
                     }
-                    this.ListOfExpenses = new ObservableCollection<Expense>(inhabitant2.ListOfExpenses);
+                    this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpenses);
                 }
                 else
                 {
@@ -484,14 +491,16 @@ namespace Essensausgleich.ViewModel
 
             if (dialogResult == true)
             {
-                this.Context.InvoiceManager.JsonFileName = dialog.FileName;
-                if (!File.Exists(this.Context.InvoiceManager.JsonFileName))
+
+                if (!File.Exists(dialog.FileName))
                 {
-                    Log.WriteLine($"{this.Context.InvoiceManager.JsonFileName} not Found");
+                    Log.WriteLine($"{dialog.FileName} not Found");
                     return;
                 }
-                CurrentInvoice = null!;
-                CurrentInvoice = this.Context.InvoiceManager.Load();
+                //CurrentInvoice = null!;
+                Invoice i = this.Context.InvoiceManager.Load(dialog.FileName);
+                i.FileName = dialog.FileName;
+                CurrentInvoice = i;
 
             }
             else
@@ -528,15 +537,17 @@ namespace Essensausgleich.ViewModel
                     Log.WriteLine($"The Directory: {dialog.FolderName} does not exist or cant be accsessd");
                     return;
                 }
+                Invoice.FolderPath = dialog.FolderName;
                 string[] files = Directory.GetFiles(dialog.FolderName);
                 Invoices FileLoadList = new Invoices();
                 foreach (string file in files)
                 {
                     Invoice i = this.Context.InvoiceManager.Load(file);
-                    i.FileName = Path.GetFileName(file);
+                    i.FileName = file;
                     FileLoadList.Add(i);
                 }
                 this.Context.InvoiceManager.Invoices = FileLoadList;
+
                 if (this.Context.InvoiceManager.Invoices != null)
                 {
                     this.CurrentInvoice = this.Context.InvoiceManager.Invoices[0];
@@ -548,10 +559,9 @@ namespace Essensausgleich.ViewModel
         }
         public void MenueSave()
         {
-
-            if (inhabitant1.TotalExpense > 0 && inhabitant2.TotalExpense > 0)
+            if (this.CurrentInvoice.FileName != null)
             {
-                if (!Path.Exists(this.Context.InvoiceManager.JsonFileName))
+                if (!Path.Exists(this.FileName))
                 {
                     {
                         this.Context.InvoiceManager.Save(CurrentInvoice);
@@ -574,67 +584,40 @@ namespace Essensausgleich.ViewModel
             }
             else
             {
-                Log.WriteLine("Both User needs Intput");
-            }
-            //if (inhabitant1.TotalExpense > 0 && inhabitant2.TotalExpense > 0)
-            //{
-            //    if (!Path.Exists(_XMLPersistance.XMLFileName))
-            //    {
-            //        {
-            //            _XMLPersistance.Save(inhabitant1, inhabitant2);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Log.WriteLine("FileExits!!");
-            //        MessageBoxResult mr = MessageBox.Show("File Exists, Overwrite?", "File Name Exits", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            //        if (mr == MessageBoxResult.Yes)
-            //        {
-            //            _XMLPersistance.Save(inhabitant1, inhabitant2);
-            //        }
-            //        else
-            //        {
-            //            Log.WriteLine("Not Saved");
-            //        }
 
-            //    }
-            //}
-            //else
-            //{
-            //    Log.WriteLine("Both User needs Intput");
-            //}
+                System.Diagnostics.Debug.WriteLine("No FilePath exist therefore a new \"Not Loaded File\"");
+                MenueSaveAs();
+            }
+
+
+
         }
         public void MenueSaveAs()
         {
-            if (inhabitant1.TotalExpense > 0 && inhabitant2.TotalExpense > 0)
-            {
-                var dialog = new SaveFileDialog();
-                dialog.Filter = "Xml Files|*.xml";
-                dialog.AddExtension = true;
-                dialog.DefaultExt = ".xml";
-                bool? dialogResult = dialog.ShowDialog();
 
-                if (dialogResult == true)
-                {
-                    //todo _XMLPersistance.ChangePath(dialog.SafeFileName);
-                    MenueSave();
-                }
-                else
-                {
-                    Log.WriteLine("OpenFile Dialog cancelt = False");
-                    return;
-                }
+            var dialog = new SaveFileDialog();
+            dialog.Filter = "Json Files|*.json";
+            dialog.AddExtension = true;
+            dialog.DefaultExt = ".json";
+            bool? dialogResult = dialog.ShowDialog();
+
+            if (dialogResult == true)
+            {
+                this.CurrentInvoice.FileName = dialog.FileName;
+                this.Context.InvoiceManager.Save(CurrentInvoice);
             }
             else
             {
-                Log.WriteLine("Both User needs Intput");
+                Log.WriteLine("OpenFile Dialog cancelt = False");
+                return;
             }
+
 
 
         }
         public void MenueNew()
         {
-
+            this.CurrentInvoice = null!;
         }
         public void OpenSettingsWindow()
         {
@@ -657,25 +640,27 @@ namespace Essensausgleich.ViewModel
             ListOfExpenses.Remove(SelectedExpenseItem);
             if (InhabitantsSelected == Inhabitant1Name)
             {
-                inhabitant1.TotalExpense -= SelectedExpenseItem.valueExpense;
-                inhabitant1.ListOfExpenses.Clear();
+                //this.CurrentInvoice.Inhabitants[0].TotalExpense -= SelectedExpenseItem.valueExpense;
+                this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Clear();
                 foreach (var item in ListOfExpenses)
                 {
 
-                    inhabitant1.ListOfExpenses.Add(item);
+                    this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Add(item);
                 }
-                OnPropertyChanged("ExpenseInhabitant1");
+                OnPropertyChanged(nameof(ExpenseInhabitant1));
+                OnPropertyChanged(nameof(ListOfExpenses));
             }
             else if (InhabitantsSelected == Inhabitant2Name)
             {
-                inhabitant2.TotalExpense -= SelectedExpenseItem.valueExpense;
-                inhabitant2.ListOfExpenses.Clear();
+                //this.CurrentInvoice.Inhabitants[1].TotalExpense -= SelectedExpenseItem.valueExpense;
+                this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Clear();
                 foreach (var item in ListOfExpenses)
                 {
 
-                    inhabitant2.ListOfExpenses.Add(item);
+                    this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Add(item);
                 }
-                OnPropertyChanged("ExpenseInhabitant2");
+                OnPropertyChanged(nameof(ExpenseInhabitant2));
+                OnPropertyChanged(nameof(ListOfExpenses));
             }
         }
         #endregion

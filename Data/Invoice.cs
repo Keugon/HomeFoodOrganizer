@@ -14,13 +14,22 @@ namespace Essensausgleich.Data
     /// </summary>
     public class Invoices : System.Collections.Generic.List<Invoice>
     {
-
+        
     }
     /// <summary>
     /// Object to handle one Invoice including 2 Inhabitants
     /// </summary>
     public class Invoice
     {
+
+        
+ /// <summary>
+        /// Path of the Folder where all Invoice Objects get read from
+        /// </summary>
+        public static string? FolderPath { get; set; }
+        /// <summary>
+        /// Internal Field for Caching
+        /// </summary>
         private ObservableCollection<string> _InhabitantsNameList = new ObservableCollection<string>();
         /// <summary>
         /// Gets or Sets a ObservableList of Strings 
@@ -51,6 +60,8 @@ namespace Essensausgleich.Data
                 if (this._Inhabitants == null)
                 {
                     this._Inhabitants = new Inhabitants();
+                    this.Inhabitants.Add(new Inhabitant());
+                    this.Inhabitants.Add(new Inhabitant());
                 }
                 return this._Inhabitants;
             }
