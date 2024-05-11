@@ -119,6 +119,7 @@ namespace Essensausgleich.ViewModel
                 }
                 OnPropertyChanged(nameof(ExpenseInhabitant1));
                 OnPropertyChanged(nameof(ExpenseInhabitant2));
+                OnPropertyChanged(nameof(InvoiceCommentary));
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
@@ -277,6 +278,15 @@ namespace Essensausgleich.ViewModel
                 this.CurrentInvoice.FileName = value;
                 OnPropertyChanged();
             }
+        }
+        private string _InvoiceCommentary = string.Empty!;
+        /// <summary>
+        /// Gets or Sets the Commentary for the CurrentInvoice Object
+        /// </summary>
+        public string InvoiceCommentary
+        {
+            get => this.CurrentInvoice.InvoiceComment;
+            set => this.CurrentInvoice.InvoiceComment = value;
         }
 #pragma warning restore 1591
         #endregion       

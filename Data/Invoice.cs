@@ -71,7 +71,7 @@ namespace Essensausgleich.Data
             }
         }
 
-        private string _InvoiceComment = "TestKommentar";
+        private string _InvoiceComment = "";
         /// <summary>
         /// Text Commentary for this Invoice
         /// </summary>
