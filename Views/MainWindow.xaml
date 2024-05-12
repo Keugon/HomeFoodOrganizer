@@ -35,23 +35,17 @@
                 <MenuItem Command="{Binding MenueWPFSave}" Header="Save"/>
                 <MenuItem Command="{Binding MenueWPFSaveAs}" Header="Save as"/>
             </MenuItem>
+            <!--SettingsWindowButton-->
             <MenuItem Command="{Binding MenueWPFSettings}" Header="Settings"/>
         </Menu>
+        <!--StackPanel Next Previous Invoice Item-->
         <StackPanel 
             Orientation="Horizontal"
             Grid.Row="0"
-            Grid.Column="1"
-            >
-           <Button Command="{Binding NextInvoice}" Content="Next" FontFamily="Segoe UI Symbol"/>
+            Grid.Column="1">
             <Button Command="{Binding PreviousInvoice}" Content="Prev" FontFamily="Segoe UI Symbol"/>
+            <Button Command="{Binding NextInvoice}" Content="Next" FontFamily="Segoe UI Symbol"/>
         </StackPanel>
-        <!--SettingsWindowButton-->
-        <Button 
-            Grid.Row="0"
-            Grid.Column="0"
-            Command="{Binding OpenContributionWindow}" Content="ShowEntrys" 
-            HorizontalAlignment="Right"   
-            VerticalAlignment="Center"/>
         <!--Stackpanel CommentaryInvoice-->
         <StackPanel 
             Grid.Row="2"
@@ -93,15 +87,33 @@
                     <StackPanel
             Background="Transparent"
             Orientation="Horizontal">
-                        <Label Content="{Binding Inhabitant1Name}" Width="60" Height="25"  />
+                        <Label Content="{Binding Inhabitant1Name}" 
+                               Width="60" 
+                               Height="25">
+                            <Label.InputBindings>
+                                <MouseBinding Gesture="LeftClick" 
+                                              Command="{Binding OpenContributionWindow}" 
+                                              CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Label}}}" />
+                            </Label.InputBindings>
+                        </Label>
                         <Label Content="{Binding ExpenseInhabitant1}" 
-                               ContentStringFormat="{}{0}€" Width="50" Height="25"/>
+                               ContentStringFormat="{}{0}€" 
+                               Width="50" 
+                               Height="25"/>
                     </StackPanel>
                     <!--Stackpanel Inhabitant2-->
                     <StackPanel
                 Background="Transparent"
             Orientation="Horizontal">
-                        <Label Content="{Binding Inhabitant2Name}" Width="60" Height="25" />
+                        <Label Content="{Binding Inhabitant2Name}" 
+                               Width="60" 
+                               Height="25" >
+                            <Label.InputBindings>
+                                <MouseBinding Gesture="LeftClick" 
+                      Command="{Binding OpenContributionWindow}" 
+                      CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Label}}}" />
+                            </Label.InputBindings>
+                        </Label>
                         <Label Content="{Binding ExpenseInhabitant2}" 
                                ContentStringFormat="{}{0}€" Width="50" Height="25"/>
                     </StackPanel>
@@ -148,12 +160,12 @@
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding OnEnterBill}"/>
                         </TextBox.InputBindings>
-                    <controls:WatermarkService.Watermark>
-                        <TextBlock 
+                        <controls:WatermarkService.Watermark>
+                            <TextBlock 
                             FontFamily="Segoe Ui" 
                             VerticalAlignment="Center">Betrag</TextBlock>
-                    </controls:WatermarkService.Watermark>
-                </TextBox>
+                        </controls:WatermarkService.Watermark>
+                    </TextBox>
                 </AdornerDecorator>
                 <Button Command="{Binding BtnAddBill}" Content="Add Bill"/>
             </StackPanel>

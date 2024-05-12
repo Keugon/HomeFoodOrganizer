@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -89,7 +90,18 @@ namespace Essensausgleich.ViewModel
         public RelayCommand MenueWPFSave => new(execute => MenueSave());
         public RelayCommand MenueWPFSaveAs => new(execute => MenueSaveAs());
         public RelayCommand MenueWPFSettings => new(execute => OpenSettingsWindow());
-        public RelayCommand OpenContributionWindow => new(execute => OpenContributioWindow());
+        public RelayCommand OpenContributionWindow => new(execute => OpenContributioWindow(execute), canExecute =>
+        {
+            if (canExecute is System.Windows.Controls.Label label)
+            {
+                if (label.Content.ToString() == string.Empty)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        });
 #pragma warning restore 1591
         #endregion
         #region PropertieBinding
@@ -373,38 +385,45 @@ namespace Essensausgleich.ViewModel
         /// Opens The window and fills the Datagrid with the Current
         /// selectedInhabitant to display the total Expenses
         /// </summary>
-                public void OpenContributioWindow()
+        public void OpenContributioWindow(object parameter)
         {
-            var contributionWindow = new contributionWindow();
-            contributionWindow.DataContext = this;
-            contributionWindow.Show();
 
-            if (!string.IsNullOrEmpty(InhabitantsSelected))
+
+            if (parameter is System.Windows.Controls.Label label)
             {
-                if (InhabitantsSelected == Inhabitant1Name)
+                System.Diagnostics.Debug.WriteLine($"Label Content:{label.Content}");
+                var contributionWindow = new contributionWindow();
+                contributionWindow.DataContext = this;
+
+
+                if (label.Content.ToString() != string.Empty)
                 {
-                    ListOfExpenses.Clear();
-                    foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpenses)
+                    if (label.Content.ToString() == Inhabitant1Name)
                     {
-                        ListOfExpenses.Add(item);
+                        ListOfExpenses.Clear();
+                        foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpenses)
+                        {
+                            ListOfExpenses.Add(item);
+                        }
+                        this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpenses);
+                        contributionWindow.Show();
                     }
-                    this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpenses);
-                }
-                else if (InhabitantsSelected == Inhabitant2Name)
-                {
-                    ListOfExpenses.Clear();
-                    foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpenses)
+                    else if (label.Content.ToString() == Inhabitant2Name)
                     {
-                        ListOfExpenses.Add(item);
+                        ListOfExpenses.Clear();
+                        foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpenses)
+                        {
+                            ListOfExpenses.Add(item);
+                        }
+                        this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpenses);
+                        contributionWindow.Show();
                     }
-                    this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpenses);
-                }
-                else
-                {
-                    Log.WriteLine($"No Inhabitant selected or not found, Selcted:{InhabitantsSelected}");
+                    else
+                    {
+                        Log.WriteLine($"No Inhabitant selected or not found, Selcted:{InhabitantsSelected}");
+                    }
                 }
             }
-            Log.WriteLine("ButtonAuflistung Clicked");
         }
         /// <summary>
         /// Loads a Single Invoice File
