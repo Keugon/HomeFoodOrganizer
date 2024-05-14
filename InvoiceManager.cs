@@ -3,6 +3,8 @@ using Essensausgleich.Data;
 using Essensausgleich.Infra;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +15,7 @@ namespace Essensausgleich
     /// <summary>
     /// Manages Invoices
     /// </summary>
-    public class InvoiceManager :AppObjekt
+    public class InvoiceManager :AppObjekt ,INotifyPropertyChanged
     {
         #region Invoice and List
         /// <summary>
@@ -31,11 +33,14 @@ namespace Essensausgleich
                 {
                     this._Invoices = new Invoices();
                 }
-                return this._Invoices;
+                                return this._Invoices;
             }
             set
             {
-                this._Invoices = value;
+this._Invoices = value;
+               this.OnPropertyChanged(nameof(this.Invoices));
+
+                
             }
         }
         /// <summary>
@@ -88,6 +93,7 @@ namespace Essensausgleich
             try
             {
                this.InvoiceController.Save(invoiceToSave.FileName!, invoiceToSave);
+                
 
                 System.Diagnostics.Debug.WriteLine($"This Invoice got saved to:{invoiceToSave.FileName}") ;
             }
@@ -122,37 +128,15 @@ namespace Essensausgleich
                 return Invoice;
             }
         }
-        /*
-        /// <summary>
-        /// Intern cache for filename
-        /// </summary>
-        private string _JsonFileName = $"abrechnung.json";
-        //$"abrechnung_{General.GetCurrentDate()}.json";
-        /// <summary>
-        /// Gets the XMLFilename in String
-        /// </summary>
-        public string JsonFileName
+        #region WPF über Änderungen Informieren
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-            get
-            {
-                return _JsonFileName;
-            }
-            set
-            {
-                if (!string.IsNullOrEmpty(value))
-                {
-                    _JsonFileName = value;
-                    Log.WriteLine("FileName changed");
-                    Log.WriteLine($"NewFileName: {value}");
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-                }
-                else
-                {
-                    Log.WriteLine("FileName Missing or Null");
-                }
-            }
-
+            System.Diagnostics.Debug.WriteLine($"OnPropertyChanged Called in InvoiceManager:{propertyName}");
         }
-        */
+        #endregion WPF über Änderungen Informieren
     }
 }

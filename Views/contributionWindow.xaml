@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Essensausgleich.ViewModel"
         mc:Ignorable="d"
-        Title="contributionWindow" Height="200" Width="180" 
+        Title="contributionWindow" Height="50" Width="250" 
+        
         >
     
-    <Grid>
+    <Grid
+        ScrollViewer.VerticalScrollBarVisibility="Auto">
         <DataGrid            
             ItemsSource="{Binding ListOfExpenses}" AutoGenerateColumns="False"
             SelectedItem="{Binding SelectedExpenseItem}"
@@ -21,10 +23,11 @@
                         />
                 </ContextMenu>
             </DataGrid.ContextMenu>
-            
+            <!--Found a bug where i get a exception of wrongt
+            string format if i use 12pt points size instead of 12 pixel size-->
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Kategorie" Width="100" Binding="{Binding categorie}"/>
-                <DataGridTextColumn Header="Wert" Width="50" Binding="{Binding valueExpense}"/>
+                <DataGridTextColumn Header="Categorie" Width="100" Binding="{Binding categorie}" FontSize="12"/>
+                <DataGridTextColumn Header="Value" Width="50" Binding="{Binding valueExpense}" FontSize="12"/>
 
             </DataGrid.Columns>
         </DataGrid>

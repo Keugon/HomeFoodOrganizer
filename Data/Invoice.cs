@@ -14,16 +14,13 @@ namespace Essensausgleich.Data
     /// </summary>
     public class Invoices : System.Collections.Generic.List<Invoice>
     {
-        
     }
     /// <summary>
     /// Object to handle one Invoice including 2 Inhabitants
     /// </summary>
-    public class Invoice
+    public partial class Invoice : INotifyPropertyChanged
     {
-
-        
- /// <summary>
+        /// <summary>
         /// Path of the Folder where all Invoice Objects get read from
         /// </summary>
         public static string? FolderPath { get; set; }
@@ -38,15 +35,11 @@ namespace Essensausgleich.Data
         {
             get
             {
-
-                System.Diagnostics.Debug.WriteLine($"InhabitantsNameList Get");
                 return this._InhabitantsNameList;
             }
             set
             {
-
                 this._InhabitantsNameList = value;
-                System.Diagnostics.Debug.WriteLine($"InhabitantsNameList got Set");
             }
         }
         private Inhabitants _Inhabitants = null!;
@@ -78,15 +71,51 @@ namespace Essensausgleich.Data
         public string InvoiceComment
         {
             get => this._InvoiceComment;
-            set => this._InvoiceComment = value;
+            set
+            {
+                this._InvoiceComment = value;
+                OnPropertyChanged(nameof(InvoiceComment));
+            }
         }
-
-
+        private string? _FileName;
         /// <summary>
         /// FileName gets set on load from File
         /// </summary>
-        public string? FileName { get; set; }
-
+        public string? FileName
+        {
+        get => this._FileName;
+            set
+            {
+                this._FileName = value;
+                OnPropertyChanged(nameof(FileName));
+            }
+        }
+        private DateTime? _DateTimeCreation;
+        /// <summary>
+        /// Gets or Set the First Time this Invoice was Saved to File
+        /// </summary>
+        public DateTime? DateTimeCreation
+        {
+            get => this._DateTimeCreation;
+            set
+            {
+                this._DateTimeCreation = value;
+                OnPropertyChanged(nameof(DateTimeCreation));
+            }
+        }
+        private DateTime? _DateTimeChanged;
+        /// <summary>
+        /// Gets or Set the Last Time this Invoice was Saved to File
+        /// </summary>
+        public DateTime? DateTimeChanged
+        {
+            get => this._DateTimeChanged;
+            set
+            {
+                this._DateTimeChanged = value;
+                OnPropertyChanged(nameof(DateTimeChanged));
+            }
+        }
         /// <summary>
         /// Adds a Inhabitant to the End of the Inhabitants List
         /// </summary>
@@ -95,7 +124,16 @@ namespace Essensausgleich.Data
         {
             this.Inhabitants.Add(inhabitantToAdd);
         }
-        
+        #region WPF über Änderungen Informieren
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+            System.Diagnostics.Debug.WriteLine($"OnPropertyChanged Called in InvoiceManager:{propertyName}");
+        }
+        #endregion WPF über Änderungen Informieren
     }
 
 

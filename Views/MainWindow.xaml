@@ -8,17 +8,22 @@
         xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
         d:DataContext="{d:DesignInstance Type=viewmodel:Anwendung}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="250" Width="400" MinHeight="250" MinWidth="400"
-        FontFamily="Segoe Ui" >
+        Title="MainWindow" Height="280" Width="395" MinHeight="250"
+        FontFamily="Segoe Ui" 
+        ResizeMode="NoResize"
+        >
+    <Window.Resources>
+        <controls:FilePathToFileNameConverter x:Key="FilePathToFileNameConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="55"/>
             <RowDefinition Height="30"/>
             <RowDefinition/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Menu x:Name="MenuWPFMain"  
@@ -31,33 +36,46 @@
                 Header="Datei">
                 <MenuItem Command="{Binding MenueWPFNew}" Header="New" />
                 <MenuItem Command="{Binding MenueWPFLoad}" Header="Open"/>
-                <MenuItem Command="{Binding MenueWPFLoadProject}" Header="Open Invoice"/>
+                <MenuItem Command="{Binding MenueWPFLoadProject}" Header="Open Folder"/>
                 <MenuItem Command="{Binding MenueWPFSave}" Header="Save"/>
                 <MenuItem Command="{Binding MenueWPFSaveAs}" Header="Save as"/>
             </MenuItem>
             <!--SettingsWindowButton-->
+            <!-- Currently not needed
             <MenuItem Command="{Binding MenueWPFSettings}" Header="Settings"/>
+            -->
         </Menu>
         <!--StackPanel Next Previous Invoice Item-->
         <StackPanel 
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
             Orientation="Horizontal"
+            Margin="0,0,3,3"
             Grid.Row="0"
             Grid.Column="1">
-            <Button Command="{Binding PreviousInvoice}" Content="Prev" FontFamily="Segoe UI Symbol"/>
-            <Button Command="{Binding NextInvoice}" Content="Next" FontFamily="Segoe UI Symbol"/>
+            <Button Command="{Binding PreviousInvoice}" Content="&#xE016;" FontFamily="Segoe UI Symbol" FontSize="14pt"/>
+            <Button Command="{Binding NextInvoice}" Content="&#xE017;" FontFamily="Segoe UI Symbol" FontSize="14pt"/>
+            <Button 
+   Command="{Binding OpenInvoiceViewSideWindow}" Content="&#x2338;"               
+   FontFamily="Segoe UI Symbol"
+   FontSize="16pt"
+/>
+           
         </StackPanel>
         <!--Stackpanel CommentaryInvoice-->
         <StackPanel 
             Grid.Row="2"
             Grid.Column="1"
-            Orientation="Horizontal"
-            >
+            Orientation="Vertical"
+            Width="156"
+            Margin="0,22,3,0"
+            HorizontalAlignment="Right">
             <AdornerDecorator>
                 <TextBox 
+                    Height="84"
                     TextWrapping="Wrap" 
-                    Text="{Binding InvoiceCommentary}"
-                    Width="170"
-                    >
+                    Text="{Binding InvoiceCommentary,UpdateSourceTrigger=PropertyChanged}"
+                    VerticalScrollBarVisibility="Visible">
                     <controls:WatermarkService.Watermark>
                         <TextBlock 
                  FontFamily="Segoe Ui" 
@@ -65,7 +83,6 @@
                     </controls:WatermarkService.Watermark>
                 </TextBox>
             </AdornerDecorator>
-
         </StackPanel>
         <!--Stackpanel Inhabitants Expenses-->
         <Grid  
@@ -89,7 +106,8 @@
             Orientation="Horizontal">
                         <Label Content="{Binding Inhabitant1Name}" 
                                Width="60" 
-                               Height="25">
+                               Height="25"
+                               Cursor="Hand">
                             <Label.InputBindings>
                                 <MouseBinding Gesture="LeftClick" 
                                               Command="{Binding OpenContributionWindow}" 
@@ -107,7 +125,8 @@
             Orientation="Horizontal">
                         <Label Content="{Binding Inhabitant2Name}" 
                                Width="60" 
-                               Height="25" >
+                               Height="25" 
+                               Cursor="Hand">
                             <Label.InputBindings>
                                 <MouseBinding Gesture="LeftClick" 
                       Command="{Binding OpenContributionWindow}" 
@@ -118,88 +137,106 @@
                                ContentStringFormat="{}{0}€" Width="50" Height="25"/>
                     </StackPanel>
                     <!--Stackpanel Bezahlen-->
-                    <StackPanel
+                    <StackPanel                       
                 Background="LightCyan"
                 Orientation="Horizontal">
                         <Label Content="{Binding LblpayingInhabitantContent}" 
                                ContentStringFormat="{}{0}" Width="60" Height="25"/>
                         <Label Content="{Binding LblBillContent}" 
-                               ContentStringFormat="{}{0}$"  Width="70" Height="25"/>
+                               ContentStringFormat="{}{0}€"  Width="70" Height="25"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
         </Grid>
-        <!--Stackpanel Bill and User-->
+        <!--Stackpanel Combobox User-->
         <StackPanel           
             Orientation="Horizontal"
-            VerticalAlignment="Top"
             Grid.Row="1"
             Grid.Column="0"
-            Grid.ColumnSpan="2"
-            >
-            <ComboBox 
-                Width="80" Text="{Binding CboxUserText}" SelectedItem="{Binding InhabitantsSelected}" 
-                ItemsSource="{Binding InhabitantsNameList,UpdateSourceTrigger=PropertyChanged}" 
-                
-                HorizontalAlignment="Left"/>
-            <!--Stack Pannel Add Bill-->
-            <StackPanel
-            Orientation="Horizontal"
-                HorizontalAlignment="Right">
-                <AdornerDecorator>
-                    <TextBox TextWrapping="Wrap" Text="{Binding TxtBoxCategorieText}" Width="80">
-                        <controls:WatermarkService.Watermark>
-                            <TextBlock 
-                                FontFamily="Segoe Ui" 
-                                VerticalAlignment="Center">Kategorie(opt)</TextBlock>
-                        </controls:WatermarkService.Watermark>
-                    </TextBox>
-                </AdornerDecorator>
-                <AdornerDecorator>
-                    <TextBox TextWrapping="Wrap" Text="{Binding TxtBoxAddBillText, UpdateSourceTrigger=PropertyChanged}" Width="50">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding OnEnterBill}"/>
-                        </TextBox.InputBindings>
-                        <controls:WatermarkService.Watermark>
-                            <TextBlock 
-                            FontFamily="Segoe Ui" 
-                            VerticalAlignment="Center">Betrag</TextBlock>
-                        </controls:WatermarkService.Watermark>
-                    </TextBox>
-                </AdornerDecorator>
-                <Button Command="{Binding BtnAddBill}" Content="Add Bill"/>
-            </StackPanel>
-            <!--Stackpanel AddUser-->
-            <StackPanel
-            Orientation="Horizontal"
-                HorizontalAlignment="Right">
-                <AdornerDecorator>
-                    <TextBox TextWrapping="Wrap" 
-                             Text="{Binding txtBoxAddUserContent, UpdateSourceTrigger=PropertyChanged}" Width="70" >
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding OnEnterAddUser}"/>
-                        </TextBox.InputBindings>
-                        <controls:WatermarkService.Watermark>
-                            <TextBlock
-                            FontFamily="Segoe Ui"
-                            VerticalAlignment="Center"
-                            >Name Here</TextBlock>
-                        </controls:WatermarkService.Watermark>
-                    </TextBox>
-                </AdornerDecorator>
-                <Button Command="{Binding BtnAddUser}" Content="Add User" />
-            </StackPanel>
+            Grid.ColumnSpan="2">
+            
         </StackPanel>
+        <!--Stackpanel AddUser-->
+        <StackPanel 
+        Grid.Row="0"
+        Grid.Column="0"
+        Grid.ColumnSpan="2"
+        Height="30"
+        Margin="3,0,0,3"
+ Orientation="Horizontal"
+ HorizontalAlignment="Left"
+        VerticalAlignment="Bottom">
+            <ComboBox 
+HorizontalContentAlignment="Left"
+VerticalContentAlignment="Center"
+Width="100" Text="{Binding CboxUserText}" SelectedItem="{Binding InhabitantsSelected}" 
+ItemsSource="{Binding InhabitantsNameList,UpdateSourceTrigger=PropertyChanged}"    
+HorizontalAlignment="Left"/>
+            <AdornerDecorator>
+                <TextBox TextWrapping="Wrap" 
+              Text="{Binding txtBoxAddUserContent, UpdateSourceTrigger=PropertyChanged}" Width="70" >
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding OnEnterAddUser}"/>
+                    </TextBox.InputBindings>
+                    <controls:WatermarkService.Watermark>
+                        <TextBlock
+             FontFamily="Segoe Ui"
+             VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+             >Username</TextBlock>
+                    </controls:WatermarkService.Watermark>
+                </TextBox>
+            </AdornerDecorator>
+            <Button Command="{Binding BtnAddUser}" Content="Add User" />
+        </StackPanel>
+        <!--Stack Pannel Add Bill-->
+        <StackPanel
+ Orientation="Horizontal"
+     HorizontalAlignment="Left"
+            Margin="3,0,0,0"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2">
+            <AdornerDecorator>
+                <TextBox TextWrapping="Wrap" Text="{Binding TxtBoxCategorieText}" Width="80">
+                    <controls:WatermarkService.Watermark>
+                        <TextBlock 
+                     FontFamily="Segoe Ui" 
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center">Categorie(opt)</TextBlock>
+                    </controls:WatermarkService.Watermark>
+                </TextBox>
+            </AdornerDecorator>
+            <AdornerDecorator>
+                <TextBox TextWrapping="Wrap" Text="{Binding TxtBoxAddBillText, UpdateSourceTrigger=PropertyChanged}" Width="50">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding OnEnterBill}"/>
+                    </TextBox.InputBindings>
+                    <controls:WatermarkService.Watermark>
+                        <TextBlock 
+                 FontFamily="Segoe Ui" 
+                 VerticalAlignment="Center"
+                     HorizontalAlignment="Center">Value</TextBlock>
+                    </controls:WatermarkService.Watermark>
+                </TextBox>
+            </AdornerDecorator>
+            <Button Command="{Binding BtnAddBill}" Content="Add Bill"/>
+        </StackPanel>
+       
         <StatusBar  
             HorizontalAlignment="Left" 
             VerticalAlignment="Bottom" 
-            Height="22" 
-            Width="300"
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            >
+            Height="22" 
+            Width="230">
             <StatusBarItem x:Name="LblToolStrip" Content="{Binding LblToolStripContent}"/>
         </StatusBar>
+        <Label
+                Content="{Binding FileName,Converter={StaticResource FilePathToFileNameConverter}}"
+                HorizontalAlignment="Right"
+                Grid.Row="3"
+            Grid.Column="1"/>
     </Grid>
 </Window>

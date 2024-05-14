@@ -1,5 +1,6 @@
 ﻿using Essensausgleich.Controller;
 using Essensausgleich.Data;
+using Essensausgleich.Views;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -83,6 +84,16 @@ namespace Essensausgleich.ViewModel
                                 return false;
                             }
                         });
+        public RelayCommand OpenInvoiceViewSideWindow => new(execute => InvoiceViewSideWindow(), canExecute =>
+        {
+            if (this.Context.InvoiceManager.Invoices.Count > 0)
+            {
+                return true;
+
+            }
+            return false;
+
+        });
         public RelayCommand OnEnterBill => new(execute => AddBill());
         public RelayCommand MenueWPFNew => new(execute => MenueNew());
         public RelayCommand MenueWPFLoad => new(execute => MenueLoad());
@@ -132,6 +143,9 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged(nameof(ExpenseInhabitant1));
                 OnPropertyChanged(nameof(ExpenseInhabitant2));
                 OnPropertyChanged(nameof(InvoiceCommentary));
+                OnPropertyChanged(nameof(LblpayingInhabitantContent));
+                OnPropertyChanged(nameof(LblBillContent));
+                OnPropertyChanged(nameof(FileName));
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
@@ -178,7 +192,21 @@ namespace Essensausgleich.ViewModel
         private string _InhabitansSelected = null!;
         public string LblBillContent
         {
-            get => _lblBillContent;
+            get
+            {
+                decimal result = (this.CurrentInvoice.Inhabitants[0].TotalExpense + this.CurrentInvoice.Inhabitants[1].TotalExpense) / 2;
+                if (this.CurrentInvoice.Inhabitants[0].TotalExpense > this.CurrentInvoice.Inhabitants[1].TotalExpense)
+                {
+                    result = this.CurrentInvoice.Inhabitants[0].TotalExpense - result;
+                }
+                else
+                {
+
+                    result = this.CurrentInvoice.Inhabitants[1].TotalExpense - result;
+
+                }
+                return result.ToString();
+            }
             set
             {
                 _lblBillContent = value;
@@ -188,7 +216,18 @@ namespace Essensausgleich.ViewModel
         private string _lblBillContent = null!;
         public string LblpayingInhabitantContent
         {
-            get => _LblpayingInhabitantContent;
+            get
+            {
+                if (this.CurrentInvoice.Inhabitants[0].TotalExpense > this.CurrentInvoice.Inhabitants[1].TotalExpense)
+                {
+                    return this._LblpayingInhabitantContent = this.CurrentInvoice.Inhabitants[1].Name;
+                }
+                else if (this.CurrentInvoice.Inhabitants[1].TotalExpense > this.CurrentInvoice.Inhabitants[0].TotalExpense)
+                {
+                    return this._LblpayingInhabitantContent = this.CurrentInvoice.Inhabitants[0].Name;
+                }
+                return string.Empty;
+            }
             set
             {
                 _LblpayingInhabitantContent = value;
@@ -380,6 +419,8 @@ namespace Essensausgleich.ViewModel
             else LblToolStripContent = $"Missing Username";
             TxtBoxAddBillText = string.Empty;
             TxtBoxCategorieText = string.Empty;
+            OnPropertyChanged(nameof(LblpayingInhabitantContent));
+            OnPropertyChanged(nameof(LblBillContent));
         }
         /// <summary>
         /// Opens The window and fills the Datagrid with the Current
@@ -407,6 +448,7 @@ namespace Essensausgleich.ViewModel
                         }
                         this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpenses);
                         contributionWindow.Show();
+                        contributionWindow.SizeToContent = SizeToContent.Height;
                     }
                     else if (label.Content.ToString() == Inhabitant2Name)
                     {
@@ -417,6 +459,7 @@ namespace Essensausgleich.ViewModel
                         }
                         this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpenses);
                         contributionWindow.Show();
+                        contributionWindow.SizeToContent = SizeToContent.Height;
                     }
                     else
                     {
@@ -454,7 +497,7 @@ namespace Essensausgleich.ViewModel
             }
         }
         /// <summary>
-        /// Loads all Fitting Invoice Files of a Choosen Folder
+        /// Loads all Fitting Invoice Files of a Choosen Folder via Dialog
         /// </summary>
         public void MenueLoadProject()
         {
@@ -478,14 +521,41 @@ namespace Essensausgleich.ViewModel
                     FileLoadList.Add(i);
                 }
                 this.Context.InvoiceManager.Invoices = FileLoadList;
-
+                //To Avoid Index Missmatch on reload
+                CurrentInvoicesIndex = 0;
                 if (this.Context.InvoiceManager.Invoices != null)
                 {
-                    this.CurrentInvoice = this.Context.InvoiceManager.Invoices[0];
+                    this.CurrentInvoice = this.Context.InvoiceManager.Invoices[CurrentInvoicesIndex];
                 }
             }
+
             System.Diagnostics.Debug.WriteLine("MenueLoadProject End");
         }
+        /// <summary>
+        /// Loads all Fitting Files from a Choosen Folder
+        /// </summary>
+        /// <param name="FolderName"></param>
+        public void MenueLoadProject(string FolderName)
+        {
+            if (!Directory.Exists(FolderName))
+            {
+                Log.WriteLine($"The Directory: {FolderName} does not exist or cant be accsessd");
+                return;
+            }
+            Invoice.FolderPath = FolderName;
+            string[] files = Directory.GetFiles(FolderName);
+            Invoices FileLoadList = new Invoices();
+            foreach (string file in files)
+            {
+                Invoice i = this.Context.InvoiceManager.Load(file);
+                i.FileName = file;
+                FileLoadList.Add(i);
+            }
+            this.Context.InvoiceManager.Invoices = FileLoadList;
+            //To Avoid Index Missmatch on reload
+            CurrentInvoicesIndex = 0;
+            this.CurrentInvoice = this.Context.InvoiceManager.Invoices[CurrentInvoicesIndex];
+                    }
         /// <summary>
         /// Saves the Current Invoice Object in the Current FileName if not null else switches to SaveAs()
         /// </summary>
@@ -496,6 +566,12 @@ namespace Essensausgleich.ViewModel
                 if (!Path.Exists(this.FileName))
                 {
                     {
+                        //Only on creation of a invoice to keep the original datetime
+                        if (this.CurrentInvoice.DateTimeCreation == null)
+                        {
+                            this.CurrentInvoice.DateTimeCreation = DateTime.Now;
+                        }
+                        this.CurrentInvoice.DateTimeChanged = DateTime.Now;
                         this.Context.InvoiceManager.Save(CurrentInvoice);
                     }
                 }
@@ -505,7 +581,18 @@ namespace Essensausgleich.ViewModel
                     MessageBoxResult mr = MessageBox.Show("File Exists, Overwrite?", "File Name Exits", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (mr == MessageBoxResult.Yes)
                     {
+                        //Only on creation of a invoice to keep the original datetime
+                        if (this.CurrentInvoice.DateTimeCreation == null)
+                        {
+                            this.CurrentInvoice.DateTimeCreation = DateTime.Now;
+                        }
+                        this.CurrentInvoice.DateTimeChanged = DateTime.Now;
                         this.Context.InvoiceManager.Save(CurrentInvoice);
+                        if (this.Context.InvoiceManager.Invoices.Count > 0)
+                        {
+                            this.Context.InvoiceManager.Invoices = this.Context.InvoiceManager.Invoices;
+                        }
+
                     }
                     else
                     {
@@ -532,8 +619,22 @@ namespace Essensausgleich.ViewModel
 
             if (dialogResult == true)
             {
+                var CurrenInvoiceFolder = Path.GetDirectoryName(this.CurrentInvoice.FileName);
                 this.CurrentInvoice.FileName = dialog.FileName;
+
+                //Only on creation of a invoice to keep the original datetime
+                if (this.CurrentInvoice.DateTimeCreation == null)
+                {
+                    this.CurrentInvoice.DateTimeCreation = DateTime.Now;
+                }
+                this.CurrentInvoice.DateTimeChanged = DateTime.Now;
                 this.Context.InvoiceManager.Save(CurrentInvoice);
+
+                if (this.Context.InvoiceManager.Invoices.Count > 0 && Path.GetDirectoryName(dialog.FileName) == CurrenInvoiceFolder)
+                {
+                    MenueLoadProject(CurrenInvoiceFolder!);
+                    System.Diagnostics.Debug.WriteLine("File Added to current Invoices Folder");
+                }
             }
             else
             {
@@ -550,6 +651,25 @@ namespace Essensausgleich.ViewModel
             this.CurrentInvoice = null!;
         }
         /// <summary>
+        /// Opens and Closes a to the Right attached Window to Display a Datagrid with all Loaded Invoices
+        /// </summary>
+        public void InvoiceViewSideWindow()
+        {
+            var InvoiceView = App.Current.Windows.OfType<InvoiceViewSideWindow>().FirstOrDefault();
+            if (InvoiceView != null)
+            {
+                InvoiceView.Close();
+            }
+            else
+            {
+                var InvoiceViewWindow = new InvoiceViewSideWindow();
+                InvoiceViewWindow.DataContext = this;
+                InvoiceViewWindow.Left = App.Current.MainWindow.Left + App.Current.MainWindow.Width;
+                InvoiceViewWindow.Top = App.Current.MainWindow.Top;
+                InvoiceViewWindow.Show();
+            }
+        }
+        /// <summary>
         /// Opens the SettingsWindow to Access FileName and Comment
         /// </summary>
         public void OpenSettingsWindow()
@@ -558,7 +678,6 @@ namespace Essensausgleich.ViewModel
             settingsWindow.DataContext = this;
             settingsWindow.Show();
         }
-        #region contributionWindow
         /// <summary>
         /// Delets via Context Menue a DataGrid item 
         /// and convays the change down to the Inhabitant object 
@@ -587,7 +706,9 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged(nameof(ExpenseInhabitant2));
                 OnPropertyChanged(nameof(ListOfExpenses));
             }
+            OnPropertyChanged(nameof(LblpayingInhabitantContent));
+            OnPropertyChanged(nameof(LblBillContent));
         }
-        #endregion
+
     }
 }
