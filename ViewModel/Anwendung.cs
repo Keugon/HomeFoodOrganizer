@@ -511,6 +511,12 @@ namespace Essensausgleich.ViewModel
                     Log.WriteLine($"The Directory: {dialog.FolderName} does not exist or cant be accsessd");
                     return;
                 }
+                string[] FilesInFolder = Directory.GetFiles(dialog.FolderName);
+                if (FilesInFolder.Length == 0)
+                {
+                    Log.WriteLine("EmpfyFolder");
+                    return;
+                }
                 Invoice.FolderPath = dialog.FolderName;
                 string[] files = Directory.GetFiles(dialog.FolderName);
                 Invoices FileLoadList = new Invoices();
@@ -519,6 +525,18 @@ namespace Essensausgleich.ViewModel
                     Invoice i = this.Context.InvoiceManager.Load(file);
                     i.FileName = file;
                     FileLoadList.Add(i);
+                }
+                if (FileLoadList.Count > 0)
+                {
+
+                    Log.WriteLine("No Invoices Found");
+                    Log.WriteLine($"Files in Folder:");
+                    foreach (var file in files)
+                    {
+                        Log.WriteLine($"{Path.GetFileName(file)}");
+                    }
+
+                    return;
                 }
                 this.Context.InvoiceManager.Invoices = FileLoadList;
                 //To Avoid Index Missmatch on reload
@@ -555,7 +573,7 @@ namespace Essensausgleich.ViewModel
             //To Avoid Index Missmatch on reload
             CurrentInvoicesIndex = 0;
             this.CurrentInvoice = this.Context.InvoiceManager.Invoices[CurrentInvoicesIndex];
-                    }
+        }
         /// <summary>
         /// Saves the Current Invoice Object in the Current FileName if not null else switches to SaveAs()
         /// </summary>
