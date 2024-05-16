@@ -125,7 +125,7 @@ this._Invoices = value;
 
                 var Invoice = new Invoice();
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                return Invoice;
+                return null!;
             }
         }
         #region WPF über Änderungen Informieren

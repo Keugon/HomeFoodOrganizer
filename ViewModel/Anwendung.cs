@@ -523,12 +523,14 @@ namespace Essensausgleich.ViewModel
                 foreach (string file in files)
                 {
                     Invoice i = this.Context.InvoiceManager.Load(file);
-                    i.FileName = file;
-                    FileLoadList.Add(i);
-                }
-                if (FileLoadList.Count > 0)
+                    if (i != null)
+                    {
+                        i.FileName = file;
+                        FileLoadList.Add(i);
+                    }
+                                    }
+                if (FileLoadList.Count == 0)
                 {
-
                     Log.WriteLine("No Invoices Found");
                     Log.WriteLine($"Files in Folder:");
                     foreach (var file in files)
@@ -566,8 +568,22 @@ namespace Essensausgleich.ViewModel
             foreach (string file in files)
             {
                 Invoice i = this.Context.InvoiceManager.Load(file);
-                i.FileName = file;
-                FileLoadList.Add(i);
+                if (i != null)
+                {
+                    i.FileName = file;
+                    FileLoadList.Add(i);
+                }
+            }
+            if (FileLoadList.Count == 0)
+            {
+                Log.WriteLine("No Invoices Found");
+                Log.WriteLine($"Files in Folder:");
+                foreach (var file in files)
+                {
+                    Log.WriteLine($"{Path.GetFileName(file)}");
+                }
+
+                return;
             }
             this.Context.InvoiceManager.Invoices = FileLoadList;
             //To Avoid Index Missmatch on reload
