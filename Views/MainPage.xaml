@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Essensausgleich.Views.MainPage"
+             xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
+             x:DataType="viewmodel:Anwendung">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <!--StackPanel Next Previous Invoice Item-->
+        <HorizontalStackLayout 
+            Margin="0,0,3,3"
+            Grid.Row="0"
+            Grid.Column="1">
+            <Button Command="{Binding PreviousInvoice}" Text="&#xE016;" FontFamily="Segoe UI Symbol" FontSize="14"/>
+            <Button Command="{Binding NextInvoice}" Text="&#xE017;" FontFamily="Segoe UI Symbol" FontSize="14"/>
+            <Button Command="{Binding OpenInvoiceViewSideWindow}" Text="&#x2338;" FontFamily="Segoe UI Symbol" FontSize="16"/>
+        </HorizontalStackLayout>
+        <!--Stackpanel CommentaryInvoice-->
+        <VerticalStackLayout
+            Grid.Row="2"
+            Grid.Column="1">
+            <Editor Text ="{Binding InvoiceCommentary}"
+                    HeightRequest="40"
+                    MinimumHeightRequest="80"
+                    WidthRequest="40"
+                    MinimumWidthRequest="80"
+                    BackgroundColor="Coral"/>
+        </VerticalStackLayout>
+        <!--Stackpanel Inhabitants Expenses-->
+        <Grid  
+            Grid.Row="2"
+            Grid.Column="0"
+            Background="Transparent">
+            <Border               
+                Padding="5"       
+                Background="LightBlue"       >
+                <VerticalStackLayout >
+                    <!--Stackpanel Inhabitant1-->
+                    <HorizontalStackLayout
+                        Background="Transparent">
+                        <Label Text="{Binding Inhabitant1Name}"  
+                               MinimumWidthRequest="50" 
+                               MinimumHeightRequest="25">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding OpenContributionWindow}" 
+                                    CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label Text="{Binding ExpenseInhabitant1}"  
+                               MinimumWidthRequest="50" 
+                               MinimumHeightRequest="25"/>
+                    </HorizontalStackLayout>
+                    <!--Stackpanel Inhabitant2-->
+                    <HorizontalStackLayout
+                        Background="Transparent">
+                        <Label Text="{Binding Inhabitant2Name}"  
+                               MinimumWidthRequest="50" 
+                               MinimumHeightRequest="25">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding OpenContributionWindow}" 
+                                    CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label Text="{Binding ExpenseInhabitant2}"  
+                               MinimumWidthRequest="50" 
+                               MinimumHeightRequest="25"/>
+                    </HorizontalStackLayout>
+                    <!--Stackpanel Bezahlen-->
+                    <HorizontalStackLayout 
+                        Background="LightCyan">
+                        <Label Text="{Binding LblpayingInhabitantContent}" 
+                               MinimumWidthRequest="50" 
+                               MinimumHeightRequest="25"/>
+                        <Label Text="{Binding LblBillContent}" 
+                               MinimumWidthRequest="50" 
+                               MinimumHeightRequest="25"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+        <!--Stackpanel AddUser And Combox User-->
+        <HorizontalStackLayout
+        Grid.Row="0"
+        Grid.Column="0"
+        Grid.ColumnSpan="2"
+        MinimumHeightRequest="30">
+            <Picker
+                MinimumWidthRequest="100" 
+                Title="{Binding CboxUserText}" 
+                SelectedItem="{Binding InhabitantsSelected}" 
+                ItemsSource="{Binding InhabitantsNameList}"/>
+            <Editor 
+                Text="{Binding txtBoxAddUserContent}" 
+                MinimumWidthRequest="70" >
+            </Editor>
+            <Button Command="{Binding BtnAddUser}" Text="Add User" />
+        </HorizontalStackLayout>
+        <!--Stack Pannel Add Bill-->
+        <HorizontalStackLayout
+           Grid.Row="1"
+           Grid.Column="0"
+           Grid.ColumnSpan="2">
+            <Editor
+                Text="{Binding TxtBoxCategorieText}" 
+                MinimumWidthRequest="80"/>
+            <Editor
+                Text="{Binding TxtBoxAddBillText}" 
+                MinimumWidthRequest="50"/>
+            <Button Command="{Binding BtnAddBill}" Text="Add Bill"/>
+        </HorizontalStackLayout>
+    </Grid>
+
+</ContentPage>

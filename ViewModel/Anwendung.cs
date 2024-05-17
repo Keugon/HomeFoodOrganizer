@@ -1,4 +1,5 @@
-﻿using Essensausgleich.Controller;
+﻿using CommunityToolkit.Mvvm.Input;
+using Essensausgleich.Controller;
 using Essensausgleich.Data;
 using Essensausgleich.Views;
 using Microsoft.Win32;
@@ -21,7 +22,7 @@ namespace Essensausgleich.ViewModel
     /// <summary>
     /// blablablaAnwednung
     /// </summary>
-    public class Anwendung : Essensausgleich.Infra.ViewModel
+    public partial class Anwendung : Essensausgleich.Infra.ViewModel
     {
         /// <summary>
         /// inits the Viewmodel and pulls object referenzes
@@ -31,6 +32,8 @@ namespace Essensausgleich.ViewModel
 
         }
         #region Hauptview
+        /* AnzeigenMethode
+        
         /// <summary>
         /// Opens the &lt;T&gt; Window
         /// </summary>
@@ -48,10 +51,14 @@ namespace Essensausgleich.ViewModel
 
             f.Show();
         }
+        
+        */
         #endregion
         private int CurrentInvoicesIndex = 0;
+
         #region RelayCommand
-#pragma warning disable 1591
+       
+        /*
         public RelayCommand DeleteEntry => new RelayCommand(execute => DeleteDataGridEntry());
         public RelayCommand BtnAddUser => new RelayCommand(execute => AddUser());
         public RelayCommand OnEnterAddUser => new RelayCommand(execute => AddUser());
@@ -103,6 +110,7 @@ namespace Essensausgleich.ViewModel
         public RelayCommand MenueWPFSettings => new(execute => OpenSettingsWindow());
         public RelayCommand OpenContributionWindow => new(execute => OpenContributioWindow(execute), canExecute =>
         {
+            
             if (canExecute is System.Windows.Controls.Label label)
             {
                 if (label.Content.ToString() == string.Empty)
@@ -111,10 +119,14 @@ namespace Essensausgleich.ViewModel
                 }
                 return true;
             }
+            
             return false;
         });
-#pragma warning restore 1591
+
+
+    */
         #endregion
+
         #region PropertieBinding
 #pragma warning disable 1591
         private Invoice _CurrentInvoice = null!;
@@ -428,51 +440,53 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         public void OpenContributioWindow(object parameter)
         {
+            /*
 
-
-            if (parameter is System.Windows.Controls.Label label)
-            {
-                System.Diagnostics.Debug.WriteLine($"Label Content:{label.Content}");
-                var contributionWindow = new contributionWindow();
-                contributionWindow.DataContext = this;
-
-
-                if (label.Content.ToString() != string.Empty)
-                {
-                    if (label.Content.ToString() == Inhabitant1Name)
-                    {
-                        ListOfExpenses.Clear();
-                        foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpenses)
+                        if (parameter is System.Windows.Controls.Label label)
                         {
-                            ListOfExpenses.Add(item);
+                            System.Diagnostics.Debug.WriteLine($"Label Content:{label.Content}");
+                            var contributionWindow = new contributionWindow();
+                            contributionWindow.DataContext = this;
+
+
+                            if (label.Content.ToString() != string.Empty)
+                            {
+                                if (label.Content.ToString() == Inhabitant1Name)
+                                {
+                                    ListOfExpenses.Clear();
+                                    foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpenses)
+                                    {
+                                        ListOfExpenses.Add(item);
+                                    }
+                                    this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpenses);
+                                    contributionWindow.Show();
+                                    contributionWindow.SizeToContent = SizeToContent.Height;
+                                }
+                                else if (label.Content.ToString() == Inhabitant2Name)
+                                {
+                                    ListOfExpenses.Clear();
+                                    foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpenses)
+                                    {
+                                        ListOfExpenses.Add(item);
+                                    }
+                                    this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpenses);
+                                    contributionWindow.Show();
+                                    contributionWindow.SizeToContent = SizeToContent.Height;
+                                }
+                                else
+                                {
+                                    Log.WriteLine($"No Inhabitant selected or not found, Selcted:{InhabitantsSelected}");
+                                }
+                            }
                         }
-                        this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpenses);
-                        contributionWindow.Show();
-                        contributionWindow.SizeToContent = SizeToContent.Height;
-                    }
-                    else if (label.Content.ToString() == Inhabitant2Name)
-                    {
-                        ListOfExpenses.Clear();
-                        foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpenses)
-                        {
-                            ListOfExpenses.Add(item);
-                        }
-                        this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpenses);
-                        contributionWindow.Show();
-                        contributionWindow.SizeToContent = SizeToContent.Height;
-                    }
-                    else
-                    {
-                        Log.WriteLine($"No Inhabitant selected or not found, Selcted:{InhabitantsSelected}");
-                    }
-                }
-            }
+            */
         }
         /// <summary>
         /// Loads a Single Invoice File
         /// </summary>
         public void MenueLoad()
         {
+            /*
             var dialog = new OpenFileDialog();
             dialog.Filter = "Json Files|*.json|Xml Files|*.xml";
             bool? dialogResult = dialog.ShowDialog();
@@ -495,12 +509,13 @@ namespace Essensausgleich.ViewModel
                 Log.WriteLine("OpenFile Dialog cancelt = False");
                 return;
             }
+            */
         }
         /// <summary>
         /// Loads all Fitting Invoice Files of a Choosen Folder via Dialog
         /// </summary>
         public void MenueLoadProject()
-        {
+        {/*
             var dialog = new OpenFolderDialog();
             bool? dialogResult = dialog.ShowDialog();
 
@@ -528,7 +543,7 @@ namespace Essensausgleich.ViewModel
                         i.FileName = file;
                         FileLoadList.Add(i);
                     }
-                                    }
+                }
                 if (FileLoadList.Count == 0)
                 {
                     Log.WriteLine("No Invoices Found");
@@ -550,6 +565,7 @@ namespace Essensausgleich.ViewModel
             }
 
             System.Diagnostics.Debug.WriteLine("MenueLoadProject End");
+            */
         }
         /// <summary>
         /// Loads all Fitting Files from a Choosen Folder
@@ -595,6 +611,7 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         public void MenueSave()
         {
+            /*
             if (this.CurrentInvoice.FileName != null)
             {
                 if (!Path.Exists(this.FileName))
@@ -639,19 +656,22 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine("No FilePath exist therefore a new \"Not Loaded File\"");
                 MenueSaveAs();
             }
+            */
         }
         /// <summary>
         /// Saves the Current Invoice Object per Dialog to a Choosen FileName and Location
         /// </summary>
-        public void MenueSaveAs()
+        [RelayCommand]
+        public async Task MenueSaveAs()
         {
-            var dialog = new SaveFileDialog();
-            dialog.Filter = "Json Files|*.json";
-            dialog.AddExtension = true;
-            dialog.DefaultExt = ".json";
-            bool? dialogResult = dialog.ShowDialog();
+            
+            var dialog = await FilePicker.Default.PickAsync(default);
+            
+            
+           
+           
 
-            if (dialogResult == true)
+            if (dialog !=  null)
             {
                 var CurrenInvoiceFolder = Path.GetDirectoryName(this.CurrentInvoice.FileName);
                 this.CurrentInvoice.FileName = dialog.FileName;
@@ -684,34 +704,42 @@ namespace Essensausgleich.ViewModel
         {
             this.CurrentInvoice = null!;
         }
+
         /// <summary>
         /// Opens and Closes a to the Right attached Window to Display a Datagrid with all Loaded Invoices
         /// </summary>
         public void InvoiceViewSideWindow()
         {
-            var InvoiceView = App.Current.Windows.OfType<InvoiceViewSideWindow>().FirstOrDefault();
-            if (InvoiceView != null)
-            {
-                InvoiceView.Close();
-            }
-            else
-            {
-                var InvoiceViewWindow = new InvoiceViewSideWindow();
-                InvoiceViewWindow.DataContext = this;
-                InvoiceViewWindow.Left = App.Current.MainWindow.Left + App.Current.MainWindow.Width;
-                InvoiceViewWindow.Top = App.Current.MainWindow.Top;
-                InvoiceViewWindow.Show();
-            }
+            /*
+                        var InvoiceView = App.Current.Windows.OfType<InvoiceViewSideWindow>().FirstOrDefault();
+                        if (InvoiceView != null)
+                        {
+                            InvoiceView.Close();
+                        }
+                        else
+                        {
+                            var InvoiceViewWindow = new InvoiceViewSideWindow();
+                            InvoiceViewWindow.DataContext = this;
+                            InvoiceViewWindow.Left = App.Current.MainWindow.Left + App.Current.MainWindow.Width;
+                            InvoiceViewWindow.Top = App.Current.MainWindow.Top;
+                            InvoiceViewWindow.Show();
+                        }
+            */
         }
+
+
         /// <summary>
         /// Opens the SettingsWindow to Access FileName and Comment
         /// </summary>
         public void OpenSettingsWindow()
         {
-            var settingsWindow = new settingsWindow();
-            settingsWindow.DataContext = this;
-            settingsWindow.Show();
+            /*
+                       var settingsWindow = new settingsWindow();
+                       settingsWindow.DataContext = this;
+                       settingsWindow.Show();
+           */
         }
+
         /// <summary>
         /// Delets via Context Menue a DataGrid item 
         /// and convays the change down to the Inhabitant object 

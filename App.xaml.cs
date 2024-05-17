@@ -1,16 +1,19 @@
-﻿using Essensausgleich.ViewModel;
-using System.Configuration;
-using System.Data;
-using System.Windows;
-using Log = System.Diagnostics.Debug;
+﻿using Essensausgleich.Controller;
+using Essensausgleich.Data;
+using Essensausgleich.Views;
+using Essensausgleich.ViewModel;
 
 namespace Essensausgleich
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application, IAppObjekt
+    public partial class App : Application
     {
+        public App()
+        {
+            InitializeComponent();
+
+            MainPage = new AppShell();
+        }
+
         /// <summary>
         /// ViewModel
         /// </summary>
@@ -24,20 +27,18 @@ namespace Essensausgleich
         /// Overrides the Statup process and starts my infrastracture
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnStartup(StartupEventArgs e)
+        protected override void OnStart()
         {
 
-            base.OnStartup(e);
+            base.OnStart();
             this.Context = new Essensausgleich.Infra.Infrastructur();
-            
+
             //Das View Model Initialisieren
-             ViewModelAnwendung = this.Context.Fabricate<ViewModel.Anwendung>();
+            ViewModelAnwendung = this.Context.Fabricate<ViewModel.Anwendung>();
             ViewModelAnwendung.Initialize();
-            //Die Hauptfenster View als Oberfläche benutzen
-            ViewModelAnwendung.Anzeigen<MainWindow>();
+           
 
             //Log.WriteLine("FilesystemManager Init");
         }
     }
-
 }
