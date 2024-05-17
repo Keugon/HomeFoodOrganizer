@@ -57,7 +57,7 @@ namespace Essensausgleich.ViewModel
         private int CurrentInvoicesIndex = 0;
 
         #region RelayCommand
-       
+
         /*
         public RelayCommand DeleteEntry => new RelayCommand(execute => DeleteDataGridEntry());
         public RelayCommand BtnAddUser => new RelayCommand(execute => AddUser());
@@ -322,7 +322,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private string _TxtBoxCategorieText = null!;       
+        private string _TxtBoxCategorieText = null!;
         public string FileName
         {
             get
@@ -434,8 +434,50 @@ namespace Essensausgleich.ViewModel
         /// selectedInhabitant to display the total Expenses
         /// </summary>
         [RelayCommand]
-        public void OpenContributioWindow(object parameter)
+        public async Task OpenContributioWindow(object parameter)
         {
+            if (parameter is Microsoft.Maui.Controls.Label label)
+            {
+                if (label.Text == Inhabitant1Name || label.Text == Inhabitant2Name)
+                {
+                    if (label.Text.ToString() == Inhabitant1Name)
+                    {
+                        ListOfExpenses.Clear();
+                        foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpenses)
+                        {
+                            ListOfExpenses.Add(item);
+                        }
+                        this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpenses);
+
+                    }
+                    else if (label.Text.ToString() == Inhabitant2Name)
+                    {
+                        ListOfExpenses.Clear();
+                        foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpenses)
+                        {
+                            ListOfExpenses.Add(item);
+                        }
+                        this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpenses);
+
+                    }
+                    try
+                    {
+                        await Shell.Current.GoToAsync($"{nameof(ContributionPage)}");
+                    }
+                    catch (Exception ex)
+                    {
+
+
+                        System.Diagnostics.Debug.WriteLine(ex.Message);
+                    }
+
+                }
+                else
+                {
+                    Log.WriteLine($"No Inhabitant selected or not found, Selcted:{InhabitantsSelected}");
+                }
+            }
+
             /*
 
                         if (parameter is System.Windows.Controls.Label label)
@@ -660,14 +702,14 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public async Task MenueSaveAs()
         {
-            
-            var dialog = await FilePicker.Default.PickAsync(default);
-            
-            
-           
-           
 
-            if (dialog !=  null)
+            var dialog = await FilePicker.Default.PickAsync(default);
+
+
+
+
+
+            if (dialog != null)
             {
                 var CurrenInvoiceFolder = Path.GetDirectoryName(this.CurrentInvoice.FileName);
                 this.CurrentInvoice.FileName = dialog.FileName;

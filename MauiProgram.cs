@@ -18,6 +18,7 @@ namespace Essensausgleich
                 });
             builder.Services.AddSingleton<Anwendung>();
             builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddTransient<ContributionPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

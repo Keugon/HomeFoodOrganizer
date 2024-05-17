@@ -1,18 +1,16 @@
 ﻿using Essensausgleich.ViewModel;
 
-namespace Essensausgleich.Views
+namespace Essensausgleich.Views;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    
+
+    public MainPage(Anwendung thisDataContext)
     {
-        int count = 0;
-
-        public MainPage(Anwendung thisDataContext)
-        {
-            InitializeComponent();
-            BindingContext = thisDataContext;
-        }
-
-       
+        InitializeComponent();
+        BindingContext = thisDataContext;
     }
 
+   
 }

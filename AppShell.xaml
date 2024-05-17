@@ -6,11 +6,13 @@
     xmlns:local="clr-namespace:Essensausgleich"
     xmlns:views="clr-namespace:Essensausgleich.Views"
     Shell.FlyoutBehavior="Disabled"
-    Title="Essensausgleich">
+    Title="Essensausgleich"
+    >
 
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate views:MainPage}"
         Route="MainPage" />
+    
 
 </Shell>

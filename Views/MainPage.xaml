@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Essensausgleich.Views.MainPage"
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
-             x:DataType="viewmodel:Anwendung">
+             x:DataType="viewmodel:Anwendung"
+             >
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -118,6 +119,7 @@
                 MinimumWidthRequest="50"/>
             <Button Command="{Binding AddBillCommand}" Text="Add Bill"/>
         </HorizontalStackLayout>
+        
     </Grid>
 
 </ContentPage>
