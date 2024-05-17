@@ -20,9 +20,9 @@
             Margin="0,0,3,3"
             Grid.Row="0"
             Grid.Column="1">
-            <Button Command="{Binding PreviousInvoice}" Text="&#xE016;" FontFamily="Segoe UI Symbol" FontSize="14"/>
-            <Button Command="{Binding NextInvoice}" Text="&#xE017;" FontFamily="Segoe UI Symbol" FontSize="14"/>
-            <Button Command="{Binding OpenInvoiceViewSideWindow}" Text="&#x2338;" FontFamily="Segoe UI Symbol" FontSize="16"/>
+            <Button  Text="&#xE016;" FontFamily="Segoe UI Symbol" FontSize="14"/>
+            <Button  Text="&#xE017;" FontFamily="Segoe UI Symbol" FontSize="14"/>
+            <Button Command="{Binding InvoiceViewSideWindowCommand}" Text="&#x2338;" FontFamily="Segoe UI Symbol" FontSize="16"/>
         </HorizontalStackLayout>
         <!--Stackpanel CommentaryInvoice-->
         <VerticalStackLayout
@@ -52,7 +52,7 @@
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer 
-                                    Command="{Binding OpenContributionWindow}" 
+                                    Command="{Binding OpenContributioWindowCommand}" 
                                     CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
                             </Label.GestureRecognizers>
                         </Label>
@@ -68,7 +68,7 @@
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer 
-                                    Command="{Binding OpenContributionWindow}" 
+                                    Command="{Binding OpenContributioWindowCommand}" 
                                     CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
                             </Label.GestureRecognizers>
                         </Label>
@@ -95,16 +95,15 @@
         Grid.Column="0"
         Grid.ColumnSpan="2"
         MinimumHeightRequest="30">
-            <Picker
-                MinimumWidthRequest="100" 
-                Title="{Binding CboxUserText}" 
+            <Picker               
+                MinimumWidthRequest="100"                  
                 SelectedItem="{Binding InhabitantsSelected}" 
                 ItemsSource="{Binding InhabitantsNameList}"/>
             <Editor 
                 Text="{Binding txtBoxAddUserContent}" 
                 MinimumWidthRequest="70" >
             </Editor>
-            <Button Command="{Binding BtnAddUser}" Text="Add User" />
+            <Button Command="{Binding AddUserCommand}" Text="Add User" />
         </HorizontalStackLayout>
         <!--Stack Pannel Add Bill-->
         <HorizontalStackLayout
@@ -117,7 +116,7 @@
             <Editor
                 Text="{Binding TxtBoxAddBillText}" 
                 MinimumWidthRequest="50"/>
-            <Button Command="{Binding BtnAddBill}" Text="Add Bill"/>
+            <Button Command="{Binding AddBillCommand}" Text="Add Bill"/>
         </HorizontalStackLayout>
     </Grid>
 

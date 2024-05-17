@@ -188,6 +188,9 @@ namespace Essensausgleich.ViewModel
             }
         }
         private Expense _SelectedExpenseItem;
+        /// <summary>
+        /// Property to Bound on UI Picker Control
+        /// </summary>
         public string InhabitantsSelected
         {
             get
@@ -319,17 +322,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private string _TxtBoxCategorieText = null!;
-        public string CboxUserText
-        {
-            get => _CboxUserText;
-            set
-            {
-                _CboxUserText = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _CboxUserText = null!;
+        private string _TxtBoxCategorieText = null!;       
         public string FileName
         {
             get
@@ -356,6 +349,7 @@ namespace Essensausgleich.ViewModel
         /// <summary>
         /// Adds the Name to the Inhabitant object and Name List
         /// </summary>
+        [RelayCommand]
         public void AddUser()
         {
             if (!string.IsNullOrEmpty(_txtBoxAddUserContent))
@@ -398,21 +392,22 @@ namespace Essensausgleich.ViewModel
         /// <summary>
         /// Adds a Expens struct to the dedicated Inhabitant object
         /// </summary>
+        [RelayCommand]
         public void AddBill()
         {
-            if (CboxUserText != string.Empty)
+            if (InhabitantsSelected != string.Empty)
             {
                 decimal bill = 0;
 
                 if (decimal.TryParse(_TxtBoxAddBillText, out bill) && bill > 0)
                 {
-                    if (this.CurrentInvoice.Inhabitants[0].Name == CboxUserText && CboxUserText != string.Empty)
+                    if (this.CurrentInvoice.Inhabitants[0].Name == InhabitantsSelected && InhabitantsSelected != string.Empty)
                     {
                         CurrentInvoice.Inhabitants[0].AddBetrag(_TxtBoxCategorieText, bill);
                         OnPropertyChanged(nameof(ExpenseInhabitant1));
                         LblToolStripContent = $"Expense {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
                     }
-                    else if (this.CurrentInvoice.Inhabitants[1].Name == CboxUserText && CboxUserText != string.Empty)
+                    else if (this.CurrentInvoice.Inhabitants[1].Name == InhabitantsSelected && InhabitantsSelected != string.Empty)
                     {
                         CurrentInvoice.Inhabitants[1].AddBetrag(_TxtBoxCategorieText, bill);
                         OnPropertyChanged(nameof(ExpenseInhabitant2));
@@ -438,6 +433,7 @@ namespace Essensausgleich.ViewModel
         /// Opens The window and fills the Datagrid with the Current
         /// selectedInhabitant to display the total Expenses
         /// </summary>
+        [RelayCommand]
         public void OpenContributioWindow(object parameter)
         {
             /*
@@ -708,6 +704,7 @@ namespace Essensausgleich.ViewModel
         /// <summary>
         /// Opens and Closes a to the Right attached Window to Display a Datagrid with all Loaded Invoices
         /// </summary>
+        [RelayCommand]
         public void InvoiceViewSideWindow()
         {
             /*
