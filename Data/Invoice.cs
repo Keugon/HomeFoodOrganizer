@@ -125,7 +125,7 @@ namespace Essensausgleich.Data
             this.Inhabitants.Add(inhabitantToAdd);
         }
         #region WPF über Änderungen Informieren
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {

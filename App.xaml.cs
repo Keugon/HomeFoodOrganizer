@@ -45,7 +45,6 @@ namespace Essensausgleich
         /// <summary>
         /// Overrides the Statup process and starts my infrastracture
         /// </summary>
-        /// <param name="e"></param>
         protected override void OnStart()
         {
 

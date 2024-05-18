@@ -780,7 +780,7 @@ namespace Essensausgleich.ViewModel
         /// and convays the change down to the Inhabitant object 
         /// </summary>
         [RelayCommand]
-        public async Task DeleteDataGridEntry()
+        public void DeleteDataGridEntry()
         {
             
             // delet Entry and updates source
@@ -824,10 +824,7 @@ namespace Essensausgleich.ViewModel
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+           
             
             return false;
         }
@@ -847,10 +844,7 @@ namespace Essensausgleich.ViewModel
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }            
+                  
             return false;
         }
     }
