@@ -134,8 +134,6 @@ this._Invoices = value;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-            System.Diagnostics.Debug.WriteLine($"OnPropertyChanged Called in InvoiceManager:{propertyName}");
         }
         #endregion WPF über Änderungen Informieren
     }

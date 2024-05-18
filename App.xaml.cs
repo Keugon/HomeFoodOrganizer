@@ -32,7 +32,7 @@ namespace Essensausgleich
 
             MainPage = new AppShell();
         }
-
+        
         /// <summary>
         /// ViewModel
         /// </summary>
@@ -59,5 +59,6 @@ namespace Essensausgleich
 
             //Log.WriteLine("FilesystemManager Init");
         }
+        
     }
 }

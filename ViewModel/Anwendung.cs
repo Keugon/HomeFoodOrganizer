@@ -818,7 +818,11 @@ namespace Essensausgleich.ViewModel
         
         public bool canExecuteNextInvoice()
         {
-            /*
+            
+            if(this.Context is null)
+            {
+                return false;
+            }
             if (CurrentInvoicesIndex < this.Context.InvoiceManager.Invoices.Count - 1)
             {
                 return true;
@@ -827,18 +831,22 @@ namespace Essensausgleich.ViewModel
             {
                 return false;
             }
-            */
+            
             return false;
         }
 
         [RelayCommand(CanExecute =nameof(canExecutePreviousInvoice))]
         public void PreviousInvoice()
         {
+
             this.CurrentInvoice = this.Context.InvoiceManager.Invoices[--CurrentInvoicesIndex];
         }
         public bool canExecutePreviousInvoice()
         {
-            /*
+            if (this.Context is null)
+            {
+                return false;
+            }           
             if (CurrentInvoicesIndex > 0)
             {
                 return true;
@@ -846,8 +854,7 @@ namespace Essensausgleich.ViewModel
             else
             {
                 return false;
-            }
-            */
+            }            
             return false;
         }
     }

@@ -26,13 +26,13 @@
             MaximumHeightRequest="100">
             <!--Previous Invoice Arrow-->
             <Button
-                Text="&#xE016;" 
-                Command="{Binding }"
+                Text="&#xE085;" 
+                Command="{Binding PreviousInvoiceCommand}"
                 FontFamily="Segoe UI Symbol" 
                 FontSize="14"/>
             <!--NextInvoiceArrow-->
             <Button  
-                Text="&#xE017;"
+                Text="&#xE086;"
                 Command="{Binding NextInvoiceCommand}"
                 FontFamily="Segoe UI Symbol" 
                 FontSize="14"/>
