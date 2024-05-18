@@ -12,5 +12,8 @@ public partial class MainPage : ContentPage
         BindingContext = thisDataContext;
     }
 
-   
+    private void Entry_Completed(object sender, EventArgs e)
+    {
+
+    }
 }

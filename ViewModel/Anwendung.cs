@@ -810,6 +810,39 @@ namespace Essensausgleich.ViewModel
             OnPropertyChanged(nameof(LblpayingInhabitantContent));
             OnPropertyChanged(nameof(LblBillContent));
         }
+        [RelayCommand(CanExecute = nameof(canExecuteNextInvoice))]
+        public void NextInvoice()
+        {
+            this.CurrentInvoice = this.Context.InvoiceManager.Invoices[++CurrentInvoicesIndex];
+        }
+        
+        public bool canExecuteNextInvoice()
+        {
+            if (CurrentInvoicesIndex < this.Context.InvoiceManager.Invoices.Count - 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
+        [RelayCommand(CanExecute =nameof(canExecutePreviousInvoice))]
+        public void PreviousInvoice()
+        {
+            this.CurrentInvoice = this.Context.InvoiceManager.Invoices[--CurrentInvoicesIndex];
+        }
+        public bool canExecutePreviousInvoice()
+        {
+            if (CurrentInvoicesIndex > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
