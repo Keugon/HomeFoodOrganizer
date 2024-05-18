@@ -1,4 +1,5 @@
-﻿using Essensausgleich.ViewModel;
+﻿using CommunityToolkit.Maui;
+using Essensausgleich.ViewModel;
 using Essensausgleich.Views;
 using Microsoft.Extensions.Logging;
 
@@ -13,6 +14,7 @@ namespace Essensausgleich
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -22,6 +24,7 @@ namespace Essensausgleich
             builder.Services.AddSingleton<Anwendung>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<ContributionPage>();
+            builder.Services.AddTransient<InvoiceViewSidePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

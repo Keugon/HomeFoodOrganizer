@@ -91,7 +91,7 @@ namespace Essensausgleich.ViewModel
                                 return false;
                             }
                         });
-        public RelayCommand OpenInvoiceViewSideWindow => new(execute => InvoiceViewSideWindow(), canExecute =>
+        public RelayCommand OpenInvoiceViewSideWindow => new(execute => OpenInvoiceViewSidePage(), canExecute =>
         {
             if (this.Context.InvoiceManager.Invoices.Count > 0)
             {
@@ -647,6 +647,7 @@ namespace Essensausgleich.ViewModel
         /// <summary>
         /// Saves the Current Invoice Object in the Current FileName if not null else switches to SaveAs()
         /// </summary>
+        [RelayCommand]
         public void MenueSave()
         {
             /*
@@ -746,45 +747,42 @@ namespace Essensausgleich.ViewModel
         /// <summary>
         /// Opens and Closes a to the Right attached Window to Display a Datagrid with all Loaded Invoices
         /// </summary>
-        [RelayCommand]
-        public void InvoiceViewSideWindow()
+        [RelayCommand(CanExecute =nameof(canExecuteInvoiceViewSidePage))]
+        public async Task OpenInvoiceViewSidePage()
         {
-            /*
-                        var InvoiceView = App.Current.Windows.OfType<InvoiceViewSideWindow>().FirstOrDefault();
-                        if (InvoiceView != null)
-                        {
-                            InvoiceView.Close();
-                        }
-                        else
-                        {
-                            var InvoiceViewWindow = new InvoiceViewSideWindow();
-                            InvoiceViewWindow.DataContext = this;
-                            InvoiceViewWindow.Left = App.Current.MainWindow.Left + App.Current.MainWindow.Width;
-                            InvoiceViewWindow.Top = App.Current.MainWindow.Top;
-                            InvoiceViewWindow.Show();
-                        }
-            */
+            try
+            {
+                await Shell.Current.GoToAsync($"{nameof(InvoiceViewSidePage)}");
+            }
+            catch (Exception ex)
+            {
+
+
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }            
         }
-
-
-        /// <summary>
-        /// Opens the SettingsWindow to Access FileName and Comment
-        /// </summary>
-        public void OpenSettingsWindow()
+        public bool canExecuteInvoiceViewSidePage()
         {
-            /*
-                       var settingsWindow = new settingsWindow();
-                       settingsWindow.DataContext = this;
-                       settingsWindow.Show();
-           */
-        }
+            if (this.Context is null)
+            {
+                return false;
+            }
+            if (this.Context.InvoiceManager.Invoices.Count > 0)
+            {
+                return true;
 
+            }
+            return false;
+
+        }
         /// <summary>
         /// Delets via Context Menue a DataGrid item 
         /// and convays the change down to the Inhabitant object 
         /// </summary>
-        public void DeleteDataGridEntry()
+        [RelayCommand]
+        public async Task DeleteDataGridEntry()
         {
+            
             // delet Entry and updates source
             ListOfExpenses.Remove(SelectedExpenseItem);
             if (InhabitantsSelected == Inhabitant1Name)
@@ -814,8 +812,7 @@ namespace Essensausgleich.ViewModel
         public void NextInvoice()
         {
             this.CurrentInvoice = this.Context.InvoiceManager.Invoices[++CurrentInvoicesIndex];
-        }
-        
+        }       
         public bool canExecuteNextInvoice()
         {
             
@@ -834,7 +831,6 @@ namespace Essensausgleich.ViewModel
             
             return false;
         }
-
         [RelayCommand(CanExecute =nameof(canExecutePreviousInvoice))]
         public void PreviousInvoice()
         {

@@ -4,7 +4,21 @@
              x:Class="Essensausgleich.Views.MainPage"
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
              x:DataType="viewmodel:Anwendung"
+             NavigationPage.HasNavigationBar="True"
+             Shell.NavBarIsVisible="True"
              >
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="&#x2630;">
+            <MenuFlyoutItem Text="New" Command="{Binding MenueSaveCommand}"/>
+            <MenuFlyoutItem Text="Save" Command="{Binding MenueSaveCommand}"/>
+            <MenuFlyoutItem Text="SaveAs" Command="{Binding MenueSaveCommand}"/>
+            <MenuFlyoutItem Text="Open" Command="{Binding MenueSaveCommand}"/>
+            <MenuFlyoutItem Text="Open Folder" Command="{Binding MenueSaveCommand}"/>
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Toolbar"></ToolbarItem>
+    </ContentPage.ToolbarItems>
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="AUTO"/>
@@ -36,21 +50,25 @@
                 Command="{Binding NextInvoiceCommand}"
                 FontFamily="Segoe UI Symbol" 
                 FontSize="14"/>
-            <Button Command="{Binding InvoiceViewSideWindowCommand}" 
+            <Button Command="{Binding OpenInvoiceViewSidePageCommand}" 
                     Text="&#x2338;" 
                     FontFamily="Segoe UI Symbol" 
                     FontSize="16"/>
         </HorizontalStackLayout>
         <!--Stackpanel CommentaryInvoice-->
-        <Grid            
-            Grid.Row="3"
-            Grid.Column="1"
-            MinimumHeightRequest="100"
-            MaximumHeightRequest="300">
-            <Editor               
+
+        <Grid                      
+              Grid.Row="3"
+              Grid.Column="1"
+              MinimumHeightRequest="100"
+              MaximumHeightRequest="300">
+            <Frame Padding="0">
+                <Editor Placeholder="Coment"
                 Text ="{Binding InvoiceCommentary}"                   
                 BackgroundColor="Coral"/>
-        </Grid>
+            </Frame>
+           </Grid>
+        
         <!--Stackpanel Inhabitants Expenses-->
         <Grid  
             Grid.Row="3"
@@ -59,13 +77,15 @@
             Background="Transparent"
             MinimumHeightRequest="100"
             MaximumHeightRequest="300">
-            <Frame                     
+            <Frame     
+                Padding="0" 
+                CornerRadius="20"
                 Background="LightBlue">
                 <VerticalStackLayout >
                     <!--Stackpanel Inhabitant1-->
                     <HorizontalStackLayout                        
                         Background="Transparent">
-                        <Label Text="{Binding Inhabitant1Name}"  
+                        <Label Text="{Binding Inhabitant1Name}" 
                                MinimumWidthRequest="50" 
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
@@ -74,7 +94,7 @@
                                     CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
                             </Label.GestureRecognizers>
                         </Label>
-                        <Label Text="{Binding ExpenseInhabitant1}"  
+                        <Label Text="{Binding ExpenseInhabitant1}" 
                                MinimumWidthRequest="50" 
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
@@ -115,12 +135,12 @@
             MinimumHeightRequest="50"
             HeightRequest="55"
             MaximumHeightRequest="100">
-            <Picker         
-                MinimumWidthRequest="70"
+            <Picker       
+                MinimumWidthRequest="100"
                 SelectedItem="{Binding InhabitantsSelected}" 
                 ItemsSource="{Binding InhabitantsNameList}"/>
-            <Entry 
-                MinimumWidthRequest="70"
+            <Entry Placeholder="UserName"
+                MinimumWidthRequest="90"
                 Text="{Binding txtBoxAddUserContent}"  
                 ReturnCommand="{Binding AddUserCommand}"/>
             <Button Command="{Binding AddUserCommand}" Text="Add User" />
@@ -131,14 +151,14 @@
            Grid.Column="0"
            Grid.ColumnSpan="2"
             MinimumHeightRequest="50"
-HeightRequest="55"
-MaximumHeightRequest="100">
-            <Entry
+            HeightRequest="55"
+            MaximumHeightRequest="100"> 
+            <Entry Placeholder="Categorie"
                 Text="{Binding TxtBoxCategorieText}" 
-                MinimumWidthRequest="80"/>
-            <Entry
+                MinimumWidthRequest="100"/>
+            <Entry Placeholder="Value"
                 Text="{Binding TxtBoxAddBillText}" 
-                MinimumWidthRequest="50"
+                MinimumWidthRequest="100"
                 ReturnCommand="{Binding AddBillCommand}"/>
             <Button Command="{Binding AddBillCommand}" Text="Add Bill"/>
         </HorizontalStackLayout>

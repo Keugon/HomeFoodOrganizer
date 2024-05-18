@@ -9,4 +9,9 @@ public partial class ContributionPage : ContentPage
 		InitializeComponent();
         BindingContext = thisDataContext;
     }
+
+//    private async void TouchBehavior_LongPressCompleted(object sender, CommunityToolkit.Maui.Core.LongPressCompletedEventArgs e)
+//    {
+//        await DisplayAlert("Question?", "Delet or Multiple", "delete", "Multiselect");
+//    }
 }
