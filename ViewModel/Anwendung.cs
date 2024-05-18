@@ -818,6 +818,7 @@ namespace Essensausgleich.ViewModel
         
         public bool canExecuteNextInvoice()
         {
+            /*
             if (CurrentInvoicesIndex < this.Context.InvoiceManager.Invoices.Count - 1)
             {
                 return true;
@@ -826,6 +827,8 @@ namespace Essensausgleich.ViewModel
             {
                 return false;
             }
+            */
+            return false;
         }
 
         [RelayCommand(CanExecute =nameof(canExecutePreviousInvoice))]
@@ -835,6 +838,7 @@ namespace Essensausgleich.ViewModel
         }
         public bool canExecutePreviousInvoice()
         {
+            /*
             if (CurrentInvoicesIndex > 0)
             {
                 return true;
@@ -843,6 +847,8 @@ namespace Essensausgleich.ViewModel
             {
                 return false;
             }
+            */
+            return false;
         }
     }
 }

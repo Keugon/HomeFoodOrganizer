@@ -11,7 +11,6 @@
             <RowDefinition Height="AUTO"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="2*"/>
-            
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -23,8 +22,8 @@
             Grid.Row="0"
             Grid.Column="1"
             MinimumHeightRequest="50"
-HeightRequest="55"
-MaximumHeightRequest="100">
+            HeightRequest="55"
+            MaximumHeightRequest="100">
             <!--Previous Invoice Arrow-->
             <Button
                 Text="&#xE016;" 
@@ -37,20 +36,20 @@ MaximumHeightRequest="100">
                 Command="{Binding NextInvoiceCommand}"
                 FontFamily="Segoe UI Symbol" 
                 FontSize="14"/>
-            <Button Command="{Binding InvoiceViewSideWindowCommand}" Text="&#x2338;" FontFamily="Segoe UI Symbol" FontSize="16"/>
+            <Button Command="{Binding InvoiceViewSideWindowCommand}" 
+                    Text="&#x2338;" 
+                    FontFamily="Segoe UI Symbol" 
+                    FontSize="16"/>
         </HorizontalStackLayout>
         <!--Stackpanel CommentaryInvoice-->
         <Grid            
             Grid.Row="3"
             Grid.Column="1"
             MinimumHeightRequest="100"
-MaximumHeightRequest="300"
-            >
-
+            MaximumHeightRequest="300">
             <Editor               
                 Text ="{Binding InvoiceCommentary}"                   
                 BackgroundColor="Coral"/>
-
         </Grid>
         <!--Stackpanel Inhabitants Expenses-->
         <Grid  
