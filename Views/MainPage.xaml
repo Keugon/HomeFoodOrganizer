@@ -4,9 +4,10 @@
              x:Class="Essensausgleich.Views.MainPage"
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
              x:DataType="viewmodel:Anwendung"
-             NavigationPage.HasNavigationBar="True"
-             Shell.NavBarIsVisible="True"
+                         Shell.NavBarIsVisible="True"
              >
+    <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
+    <!--Only on Windows and Mac -->
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="&#x2630;">
             <MenuFlyoutItem Text="New" Command="{Binding MenueSaveCommand}"/>
@@ -16,8 +17,11 @@
             <MenuFlyoutItem Text="Open Folder" Command="{Binding MenueSaveCommand}"/>
         </MenuBarItem>
     </ContentPage.MenuBarItems>
-    <ContentPage.ToolbarItems>
+
+
+    <ContentPage.ToolbarItems >
         <ToolbarItem Text="Toolbar"></ToolbarItem>
+        <ToolbarItem Text="Toolbar2"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <Grid >
         <Grid.RowDefinitions>

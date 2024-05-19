@@ -7,14 +7,16 @@
     xmlns:views="clr-namespace:Essensausgleich.Views"
     Shell.FlyoutBehavior="Disabled"
     Title="Essensausgleich"
-    NavigationPage.HasNavigationBar="True"
-    Shell.NavBarIsVisible="True"
     >
+    <TabBar>
+        <Tab Title="MainTab">
+        <ShellContent Title="MainPageTitel" ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
+        
+        </Tab>
+        <Tab Title="InvoicesTab">
+           <ShellContent Title="InvoicesTitel" ContentTemplate="{DataTemplate views:StoragePage}" Route="MainPage" /> 
+        </Tab>
+    </TabBar>
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:MainPage}"
-        Route="MainPage" />
-    
 
 </Shell>
