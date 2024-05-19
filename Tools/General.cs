@@ -13,6 +13,7 @@ namespace Essensausgleich.Tools
     /// </summary>
     public static class General : System.Object
     {
+        
         /// <summary>
         /// Get the current Date 
         /// </summary>
@@ -26,6 +27,7 @@ namespace Essensausgleich.Tools
 
             return $"{currentDay}_{currentMonth}_{currentYear}"; ;
         }
+        
 
     }
     public class FilePathToFileNameConverter : IValueConverter

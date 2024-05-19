@@ -60,7 +60,7 @@ public class Infrastructur : System.Object
         // Die Infrastructur an 
         // das neue Objekt übergeben
         newObject.Context = this;
-
+        
         //Nur für die Entwickler
         //einen Protokolleintrag für VisualStudio
         //dass ein Objekt prouziert wurde und einen Fehlerbehandler

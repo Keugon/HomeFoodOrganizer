@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Essensausgleich.Controller;
 using Essensausgleich.Data;
+using Essensausgleich.Tools;
 using Essensausgleich.Views;
 using Microsoft.Win32;
 using System;
@@ -29,7 +30,39 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         public void Initialize()
         {
-
+            //Write Samples to Device
+            Invoice SampleInvoice = new Invoice
+            {
+                DateTimeChanged = DateTime.Now,
+                DateTimeCreation = new DateTime(year: 2024, month: 1, day: 1, hour: 6, minute: 10, second: 58),
+                FileName = Path.Combine(Path.Combine(FileSystem.AppDataDirectory, "Invoices"), "InvoiceSample.json"),
+                InhabitantsNameList = new ObservableCollection<string> { "Florian", "Marion" },
+                Inhabitants = new Inhabitants
+                    {
+                    new Inhabitant
+                    {
+                        Name = "Florian",
+                        TotalExpense = 60,
+                        ListOfExpenses = new List<Expense>
+                        {
+                            new Expense { categorie = "ama", valueExpense = 10 },
+                            new Expense { categorie = "tanken", valueExpense = 50 }
+                        }
+                    },
+                    new Inhabitant
+                    {
+                        Name = "Marion",
+                        TotalExpense = 22,
+                        ListOfExpenses = new List<Expense>
+                        {
+                            new Expense { categorie = "hofa", valueExpense = 20 },
+                            new Expense { categorie = "billa", valueExpense = 2 }
+                        }
+                    }
+                },
+                InvoiceComment = "ReloadNeu"
+            };
+            this.Context.InvoiceManager.Save(SampleInvoice);
         }
         #region Hauptview
         /* AnzeigenMethode
@@ -161,6 +194,24 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
+
+        private ObservableCollection<Invoice> _ListOfInvoicesInStorage = null;
+        public ObservableCollection<Invoice> ListOfInvoicesInStorage
+        {
+            get
+            {
+                if(this._ListOfInvoicesInStorage == null)
+                {
+                    this._ListOfInvoicesInStorage= new ObservableCollection<Invoice>();
+                }
+                return this._ListOfInvoicesInStorage;
+            }
+            set
+            {
+                this._ListOfInvoicesInStorage = value;
+                OnPropertyChanged(nameof(ListOfInvoicesInStorage));
+            }
+        }
         public ObservableCollection<Expense> ListOfExpenses
         {
             get
@@ -209,18 +260,23 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-                decimal result = (this.CurrentInvoice.Inhabitants[0].TotalExpense + this.CurrentInvoice.Inhabitants[1].TotalExpense) / 2;
-                if (this.CurrentInvoice.Inhabitants[0].TotalExpense > this.CurrentInvoice.Inhabitants[1].TotalExpense)
+                if (this.CurrentInvoice.Inhabitants[0].TotalExpense > 0 && this.CurrentInvoice.Inhabitants[1].TotalExpense > 0)
                 {
-                    result = this.CurrentInvoice.Inhabitants[0].TotalExpense - result;
-                }
-                else
-                {
+                    decimal result = (this.CurrentInvoice.Inhabitants[0].TotalExpense + this.CurrentInvoice.Inhabitants[1].TotalExpense) / 2;
+                    if (this.CurrentInvoice.Inhabitants[0].TotalExpense > this.CurrentInvoice.Inhabitants[1].TotalExpense)
+                    {
+                        result = this.CurrentInvoice.Inhabitants[0].TotalExpense - result;
+                    }
+                    else
+                    {
 
-                    result = this.CurrentInvoice.Inhabitants[1].TotalExpense - result;
+                        result = this.CurrentInvoice.Inhabitants[1].TotalExpense - result;
 
+                    }
+
+                    return result.ToString();
                 }
-                return result.ToString();
+                return string.Empty;
             }
             set
             {
@@ -442,6 +498,7 @@ namespace Essensausgleich.ViewModel
                 {
                     if (label.Text.ToString() == Inhabitant1Name)
                     {
+                        InhabitantsSelected = Inhabitant1Name;
                         ListOfExpenses.Clear();
                         foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpenses)
                         {
@@ -452,6 +509,7 @@ namespace Essensausgleich.ViewModel
                     }
                     else if (label.Text.ToString() == Inhabitant2Name)
                     {
+                        InhabitantsSelected = Inhabitant2Name;
                         ListOfExpenses.Clear();
                         foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpenses)
                         {
@@ -518,6 +576,36 @@ namespace Essensausgleich.ViewModel
                             }
                         }
             */
+        }
+        [RelayCommand]
+        public void LoadInvoiseToStoragePage()
+        {
+            string[] AppDirectoryFiles = Directory.GetFiles(FileSystem.AppDataDirectory);
+            string[] AppDirectoryFolders = Directory.GetDirectories(FileSystem.AppDataDirectory);
+            string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
+
+            if (!Directory.Exists(InvoicesFolderPath))
+            {
+
+                System.IO.Directory.CreateDirectory(InvoicesFolderPath);
+            }
+            else
+            {
+                string[] InvoicesFolder = Directory.GetDirectories(InvoicesFolderPath);
+                string[] InvoiceSingle = Directory.GetFiles(InvoicesFolderPath);
+                //Load All Single Invoices to a ObsList
+                this.ListOfInvoicesInStorage.Clear();
+                foreach (string file in InvoiceSingle)
+                {
+                    Invoice i = this.Context.InvoiceManager.Load(file);
+                    if (i != null)
+                    {
+                        i.FileName = file;
+                        this.ListOfInvoicesInStorage.Add(i);
+                    }
+                }
+
+            }
         }
         /// <summary>
         /// Loads a Single Invoice File
@@ -747,7 +835,7 @@ namespace Essensausgleich.ViewModel
         /// <summary>
         /// Opens and Closes a to the Right attached Window to Display a Datagrid with all Loaded Invoices
         /// </summary>
-        [RelayCommand(CanExecute =nameof(canExecuteInvoiceViewSidePage))]
+        [RelayCommand(CanExecute = nameof(canExecuteInvoiceViewSidePage))]
         public async Task OpenInvoiceViewSidePage()
         {
             try
@@ -759,7 +847,7 @@ namespace Essensausgleich.ViewModel
 
 
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-            }            
+            }
         }
         public bool canExecuteInvoiceViewSidePage()
         {
@@ -782,7 +870,7 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public void DeleteDataGridEntry()
         {
-            
+
             // delet Entry and updates source
             ListOfExpenses.Remove(SelectedExpenseItem);
             if (InhabitantsSelected == Inhabitant1Name)
@@ -812,11 +900,11 @@ namespace Essensausgleich.ViewModel
         public void NextInvoice()
         {
             this.CurrentInvoice = this.Context.InvoiceManager.Invoices[++CurrentInvoicesIndex];
-        }       
+        }
         public bool canExecuteNextInvoice()
         {
-            
-            if(this.Context is null)
+
+            if (this.Context is null)
             {
                 return false;
             }
@@ -824,11 +912,11 @@ namespace Essensausgleich.ViewModel
             {
                 return true;
             }
-           
-            
+
+
             return false;
         }
-        [RelayCommand(CanExecute =nameof(canExecutePreviousInvoice))]
+        [RelayCommand(CanExecute = nameof(canExecutePreviousInvoice))]
         public void PreviousInvoice()
         {
 
@@ -839,12 +927,12 @@ namespace Essensausgleich.ViewModel
             if (this.Context is null)
             {
                 return false;
-            }           
+            }
             if (CurrentInvoicesIndex > 0)
             {
                 return true;
             }
-                  
+
             return false;
         }
     }

@@ -17,7 +17,7 @@ x:DataType="viewmodel:Anwendung">
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Grid Padding="2">
-            <CollectionView ItemsSource="{Binding ListOfExpenses}" SelectionMode="Multiple" SelectedItem="{Binding SelectedExpenseItem}">
+            <CollectionView ItemsSource="{Binding ListOfExpenses, Mode=TwoWay}" SelectionMode="Single"  SelectedItem="{Binding SelectedExpenseItem}">
                 <CollectionView.ItemTemplate >
                     <DataTemplate x:DataType="local:Expense" >
                         <Grid >

@@ -83,13 +83,13 @@
             MaximumHeightRequest="300">
             <Frame     
                 Padding="0" 
-                CornerRadius="20"
+                CornerRadius="10"
                 Background="LightBlue">
                 <VerticalStackLayout >
                     <!--Stackpanel Inhabitant1-->
                     <HorizontalStackLayout                        
                         Background="Transparent">
-                        <Label Text="{Binding Inhabitant1Name}" 
+                        <Label Text="{Binding Inhabitant1Name}"                               
                                MinimumWidthRequest="50" 
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
@@ -105,7 +105,7 @@
                     <!--Stackpanel Inhabitant2-->
                     <HorizontalStackLayout
                         Background="Transparent">
-                        <Label Text="{Binding Inhabitant2Name}"  
+                        <Label Text="{Binding Inhabitant2Name}"                              
                                MinimumWidthRequest="50" 
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
@@ -121,7 +121,7 @@
                     <!--Stackpanel Bezahlen-->
                     <HorizontalStackLayout 
                         Background="LightCyan">
-                        <Label Text="{Binding LblpayingInhabitantContent}" 
+                        <Label Text="{Binding LblpayingInhabitantContent}"                               
                                MinimumWidthRequest="50" 
                                MinimumHeightRequest="25"/>
                         <Label Text="{Binding LblBillContent}" 

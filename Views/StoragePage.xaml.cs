@@ -8,9 +8,5 @@ public partial class StoragePage : ContentPage
 		InitializeComponent();
         BindingContext = thisDataContext;
     }
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        
-    }
+   
 }
