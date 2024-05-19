@@ -21,7 +21,7 @@ namespace Essensausgleich
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("Segoe UI Symbol.ttf", "Segoe UI Symbol");
                 });
-            builder.Services.AddSingleton<Anwendung>();
+           // builder.Services.AddSingleton<Anwendung>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<StoragePage>();
             builder.Services.AddTransient<ContributionPage>();

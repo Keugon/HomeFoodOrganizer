@@ -4,10 +4,10 @@ namespace Essensausgleich.Views;
 
 public partial class ContributionPage : ContentPage
 {
-	public ContributionPage(Anwendung thisDataContext)
+	public ContributionPage()
 	{
 		InitializeComponent();
-        BindingContext = thisDataContext;
+       //BindingContext = thisDataContext;
     }
 
 //    private async void TouchBehavior_LongPressCompleted(object sender, CommunityToolkit.Maui.Core.LongPressCompletedEventArgs e)

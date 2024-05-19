@@ -6,10 +6,10 @@ public partial class MainPage : ContentPage
 {
     
 
-    public MainPage(Anwendung thisDataContext)
+    public MainPage()
     {
         InitializeComponent();
-        BindingContext = thisDataContext;
+        BindingContext = this;
     }
 
     private void Entry_Completed(object sender, EventArgs e)

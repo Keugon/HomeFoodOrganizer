@@ -30,6 +30,7 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         public void Initialize()
         {
+            App.Current.BindingContext = this;
             //Write Samples to Device
             Invoice SampleInvoice = new Invoice
             {
@@ -597,7 +598,8 @@ namespace Essensausgleich.ViewModel
                 this.ListOfInvoicesInStorage.Clear();
                 foreach (string file in InvoiceSingle)
                 {
-                    Invoice i = this.Context.InvoiceManager.Load(file);
+                    
+                    Invoice i = Context.InvoiceManager.Load(file);
                     if (i != null)
                     {
                         i.FileName = file;
