@@ -10,7 +10,7 @@ namespace Essensausgleich.Controller
     /// <summary>
     /// Type save JsonController for Invoice Obeject
     /// </summary>
-    public class InvoiceController : Controller.JsonController<Invoice>
+    public class InvoicesController : Controller.JsonController<Invoices>
     {
     }
 }

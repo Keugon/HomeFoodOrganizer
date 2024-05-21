@@ -8,6 +8,9 @@
              x:DataType="viewmodel:Anwendung"
              Title="StoragePage">
     <VerticalStackLayout>
+        <VerticalStackLayout.GestureRecognizers>
+            <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding MenueLoadProjectCommand}" />
+        </VerticalStackLayout.GestureRecognizers>
         <Label 
             Text="Welcome to .NET MAUI!"
             VerticalOptions="Center" 
@@ -15,14 +18,17 @@
         <Button
             Text="TestButton" 
             Command="{Binding LoadInvoiseToStoragePageCommand}"/>
-        <CollectionView ItemsSource="{Binding ListOfInvoicesInStorage}">
+        <CollectionView 
+            ItemsSource="{Binding ListOfInvoicesInStorage}"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedInvoiceItem}">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="data:Invoice">
+                <DataTemplate x:DataType="data:Invoices">
                     <Grid>
                         <HorizontalStackLayout>
                             <Label Text="{Binding DateTimeCreation,StringFormat='&#x270E;{0:dd.MM.yy, HH:mm} | '}"/>
                             <Label Text="{Binding DateTimeChanged,StringFormat='&#x21BB;{0:dd.MM.yy, HH:mm} | '}"/>
-                            <Label Text="{Binding FileName,Converter={StaticResource FilePathToFileNameConverter}}"/>
+                            <Label Text="{Binding InvoicesProjectName}"/>
                         </HorizontalStackLayout>
                     </Grid>
                 </DataTemplate>

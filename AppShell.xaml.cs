@@ -8,6 +8,8 @@ namespace Essensausgleich
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(ContributionPage), typeof(ContributionPage));
+            Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
+            Routing.RegisterRoute(nameof(StoragePage), typeof(StoragePage));
         }
         
     }

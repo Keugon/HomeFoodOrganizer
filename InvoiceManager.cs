@@ -70,17 +70,17 @@ this._Invoices = value;
         }
         #endregion
 
-        private InvoiceController _InvoiceController = null!;
+        private InvoicesController _InvoiceController = null!;
         /// <summary>
         /// Service for Serializing and deserializing of Invoice Obejcts
         /// </summary>
-        public InvoiceController InvoiceController
+        public InvoicesController InvoicesController
         {
             get
             {
                 if(this._InvoiceController == null)
                 {
-                    this._InvoiceController = this.Context.Fabricate<InvoiceController>();
+                    this._InvoiceController = this.Context.Fabricate<InvoicesController>();
                 }
                 return this._InvoiceController;
             }
@@ -88,14 +88,14 @@ this._Invoices = value;
         /// <summary>
         /// Method to save the Inhabits (List) to Jsonfile
         /// </summary>
-        public void Save(Invoice invoiceToSave)
+        public void Save(Invoices invoiceToSave)
         {
             try
             {
-               this.InvoiceController.Save(invoiceToSave.FileName!, invoiceToSave);
+               this.InvoicesController.Save(invoiceToSave.PathAndFileName!, invoiceToSave);
                 
 
-                System.Diagnostics.Debug.WriteLine($"This Invoice got saved to:{invoiceToSave.FileName}") ;
+                System.Diagnostics.Debug.WriteLine($"This Invoice got saved to:{invoiceToSave.PathAndFileName}") ;
             }
             catch (Exception ex)
             {
@@ -109,16 +109,16 @@ this._Invoices = value;
         /// <summary>
         /// Method to Load a Invoice from a give Path
         /// </summary>
-        public Invoice Load(string pathWithFileName)
+        public Invoices Load(string pathWithFileName)
         {
             try
             {
 
                 System.Diagnostics.Debug.WriteLine($"Try load File: {pathWithFileName}");
-                var Invoice = this.InvoiceController.Load(pathWithFileName);
+                var Invoices = this.InvoicesController.Load(pathWithFileName);
 
                 System.Diagnostics.Debug.WriteLine($"Invoice Sucsesfully read from File:{pathWithFileName}");
-                return Invoice;
+                return Invoices;
             }
             catch (Exception ex)
             {

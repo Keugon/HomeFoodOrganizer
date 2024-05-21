@@ -84,4 +84,6 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionHomeFoodOrganizerMAUIHideInfoBar="True" /></VisualStudio></ProjectExtensions>
+
 </Project>

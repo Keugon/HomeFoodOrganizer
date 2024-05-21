@@ -32,38 +32,47 @@ namespace Essensausgleich.ViewModel
         {
             App.Current!.BindingContext = this;
             //Write Samples to Device
-            Invoice SampleInvoice = new Invoice
+            Invoices SampleInvoices = new Invoices
             {
                 DateTimeChanged = DateTime.Now,
                 DateTimeCreation = new DateTime(year: 2024, month: 1, day: 1, hour: 6, minute: 10, second: 58),
-                FileName = Path.Combine(Path.Combine(FileSystem.AppDataDirectory, "Invoices"), "InvoiceSample.json"),
-                InhabitantsNameList = new ObservableCollection<string> { "Florian", "Marion" },
-                Inhabitants = new Inhabitants
+                InvoicesProjectName = "SampleInvoicesProjectName",
+                PathAndFileName = Path.Combine(Path.Combine(FileSystem.AppDataDirectory, "Invoices"), "File.json"),
+                InvoiceList = new ObservableCollection<Invoice>
+                {
+                    new Invoice {
+                    DateTimeChanged = DateTime.Now,
+                    DateTimeCreation = new DateTime(year: 2024, month: 1, day: 1, hour: 6, minute: 10, second: 58),
+                    FileName = Path.Combine(Path.Combine(FileSystem.AppDataDirectory, "Invoices"), "InvoiceSample.json"),
+                    InhabitantsNameList = new ObservableCollection<string> { "Florian", "Marion" },
+                    Inhabitants = new Inhabitants
                     {
-                    new Inhabitant
-                    {
-                        Name = "Florian",
-                        TotalExpense = 60,
-                        ListOfExpenses = new List<Expense>
+                        new Inhabitant
                         {
-                            new Expense { categorie = "ama", valueExpense = 10 },
-                            new Expense { categorie = "tanken", valueExpense = 50 }
-                        }
-                    },
-                    new Inhabitant
-                    {
-                        Name = "Marion",
-                        TotalExpense = 22,
-                        ListOfExpenses = new List<Expense>
+                            Name = "Florian",
+                            TotalExpense = 60,
+                            ListOfExpenses = new List<Expense>
+                            {
+                                new Expense { categorie = "ama", valueExpense = 10 },
+                                new Expense { categorie = "tanken", valueExpense = 50 }
+                            }
+                        },
+                        new Inhabitant
                         {
-                            new Expense { categorie = "hofa", valueExpense = 20 },
-                            new Expense { categorie = "billa", valueExpense = 2 }
-                        }
-                    }
-                },
-                InvoiceComment = "ReloadNeu"
-            };
-            this.Context.InvoiceManager.Save(SampleInvoice);
+                            Name = "Marion",
+                            TotalExpense = 22,
+                            ListOfExpenses = new List<Expense>
+                            {
+                                new Expense { categorie = "hofa", valueExpense = 20 },
+                                new Expense { categorie = "billa", valueExpense = 2 }
+                            }
+                        }                                            },
+                    InvoiceComment = "ReloadNeu"
+                }
+                }
+            }
+            ;
+            this.Context.InvoiceManager.Save(SampleInvoices);
         }
         #region Hauptview
         /* AnzeigenMethode
@@ -195,15 +204,28 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
-
-        private ObservableCollection<Invoice> _ListOfInvoicesInStorage = null!;
-        public ObservableCollection<Invoice> ListOfInvoicesInStorage
+        private Invoices _CurrentInvoices = null!;
+        public Invoices CurrentInvoices
         {
             get
             {
-                if(this._ListOfInvoicesInStorage == null)
+                if (this._CurrentInvoices == null)
                 {
-                    this._ListOfInvoicesInStorage= new ObservableCollection<Invoice>();
+                    this._CurrentInvoices = new Invoices();
+                }
+                return this._CurrentInvoices;
+            }
+            set => this._CurrentInvoices = value;
+        }
+
+        private ObservableCollection<Invoices> _ListOfInvoicesInStorage = null!;
+        public ObservableCollection<Invoices> ListOfInvoicesInStorage
+        {
+            get
+            {
+                if (this._ListOfInvoicesInStorage == null)
+                {
+                    this._ListOfInvoicesInStorage = new ObservableCollection<Invoices>();
                 }
                 return this._ListOfInvoicesInStorage;
             }
@@ -241,6 +263,17 @@ namespace Essensausgleich.ViewModel
             }
         }
         private Expense _SelectedExpenseItem;
+
+        private Invoices _SelectedInvoiceItem = null!;
+        public Invoices SelectedInvoiceItem
+        {
+            get => this._SelectedInvoiceItem;
+            set
+            {
+                this._SelectedInvoiceItem = value;
+                OnPropertyChanged(nameof(this._SelectedInvoiceItem));
+            }
+        }
         /// <summary>
         /// Property to Bound on UI Picker Control
         /// </summary>
@@ -593,25 +626,28 @@ namespace Essensausgleich.ViewModel
             }
             else
             {
-                string[] InvoicesFolder = Directory.GetDirectories(InvoicesFolderPath);
-                string[] InvoiceSingle = Directory.GetFiles(InvoicesFolderPath);
+
+                string[] FileNames = Directory.GetFiles(InvoicesFolderPath);
                 //Load All Single Invoices to a ObsList
                 this.ListOfInvoicesInStorage.Clear();
-                foreach (string file in InvoiceSingle)
+                foreach (string file in FileNames)
                 {
-                    
-                    Invoice i = Context.InvoiceManager.Load(file);
+
+                    Invoices i = Context.InvoiceManager.Load(file);
                     if (i != null)
                     {
-                        i.FileName = file;
-                        this.ListOfInvoicesInStorage.Add(i);
+                        i.PathAndFileName = file;
+                        if (i.InvoiceList.Count > 0)
+                        {
+                            this.ListOfInvoicesInStorage.Add(i);
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"File:{file} is no valid Invoices object");
+                        }
+
                     }
                 }
-                foreach (string folder in InvoicesFolder)
-                {
-
-                }
-
             }
         }
         /// <summary>
@@ -627,13 +663,13 @@ namespace Essensausgleich.ViewModel
             if (dialogResult == true)
             {
 
-                if (!File.Exists(dialog.FileName))
+                if (!File.Exists(dialog.PathAndFileName))
                 {
-                    Log.WriteLine($"{dialog.FileName} not Found");
+                    Log.WriteLine($"{dialog.PathAndFileName} not Found");
                     return;
                 }
-                Invoice i = this.Context.InvoiceManager.Load(dialog.FileName);
-                i.FileName = dialog.FileName;
+                Invoice i = this.Context.InvoiceManager.Load(dialog.PathAndFileName);
+                i.PathAndFileName = dialog.PathAndFileName;
                 CurrentInvoice = i;
 
             }
@@ -647,58 +683,28 @@ namespace Essensausgleich.ViewModel
         /// <summary>
         /// Loads all Fitting Invoice Files of a Choosen Folder via Dialog
         /// </summary>
-        public void MenueLoadProject()
-        {/*
-            var dialog = new OpenFolderDialog();
-            bool? dialogResult = dialog.ShowDialog();
-
-            if (dialogResult == true)
+        [RelayCommand]
+        public async Task MenueLoadProject()
+        {
+            if (!Directory.Exists(SelectedInvoiceItem.PathAndFileName))
             {
-                if (!Directory.Exists(dialog.FolderName))
-                {
-                    Log.WriteLine($"The Directory: {dialog.FolderName} does not exist or cant be accsessd");
-                    return;
-                }
-                string[] FilesInFolder = Directory.GetFiles(dialog.FolderName);
-                if (FilesInFolder.Length == 0)
-                {
-                    Log.WriteLine("EmpfyFolder");
-                    return;
-                }
-                Invoice.FolderPath = dialog.FolderName;
-                string[] files = Directory.GetFiles(dialog.FolderName);
-                Invoices FileLoadList = new Invoices();
-                foreach (string file in files)
-                {
-                    Invoice i = this.Context.InvoiceManager.Load(file);
-                    if (i != null)
-                    {
-                        i.FileName = file;
-                        FileLoadList.Add(i);
-                    }
-                }
-                if (FileLoadList.Count == 0)
-                {
-                    Log.WriteLine("No Invoices Found");
-                    Log.WriteLine($"Files in Folder:");
-                    foreach (var file in files)
-                    {
-                        Log.WriteLine($"{Path.GetFileName(file)}");
-                    }
 
-                    return;
-                }
-                this.Context.InvoiceManager.Invoices = FileLoadList;
-                //To Avoid Index Missmatch on reload
-                CurrentInvoicesIndex = 0;
-                if (this.Context.InvoiceManager.Invoices != null)
-                {
-                    this.CurrentInvoice = this.Context.InvoiceManager.Invoices[CurrentInvoicesIndex];
-                }
+                System.Diagnostics.Debug.WriteLine($"InvoicesFile:{SelectedInvoiceItem.PathAndFileName} seems to not exist");
             }
+            try
+            {
+                await Shell.Current.GoToAsync($"//MainPage");
+            }
+            catch (Exception ex) 
+            {
 
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            CurrentInvoices = this.Context.InvoiceManager.Load(SelectedInvoiceItem.PathAndFileName!);
+            CurrentInvoicesIndex = 0;
+            this.CurrentInvoice = CurrentInvoices.InvoiceList[CurrentInvoicesIndex];
             System.Diagnostics.Debug.WriteLine("MenueLoadProject End");
-            */
+
         }
         /// <summary>
         /// Loads all Fitting Files from a Choosen Folder
@@ -706,6 +712,7 @@ namespace Essensausgleich.ViewModel
         /// <param name="FolderName"></param>
         public void MenueLoadProject(string FolderName)
         {
+            /*
             if (!Directory.Exists(FolderName))
             {
                 Log.WriteLine($"The Directory: {FolderName} does not exist or cant be accsessd");
@@ -719,7 +726,7 @@ namespace Essensausgleich.ViewModel
                 Invoice i = this.Context.InvoiceManager.Load(file);
                 if (i != null)
                 {
-                    i.FileName = file;
+                    i.PathAndFileName = file;
                     FileLoadList.Add(i);
                 }
             }
@@ -738,17 +745,18 @@ namespace Essensausgleich.ViewModel
             //To Avoid Index Missmatch on reload
             CurrentInvoicesIndex = 0;
             this.CurrentInvoice = this.Context.InvoiceManager.Invoices[CurrentInvoicesIndex];
+            */
         }
         /// <summary>
-        /// Saves the Current Invoice Object in the Current FileName if not null else switches to SaveAs()
+        /// Saves the Current Invoice Object in the Current PathAndFileName if not null else switches to SaveAs()
         /// </summary>
         [RelayCommand]
         public void MenueSave()
         {
             /*
-            if (this.CurrentInvoice.FileName != null)
+            if (this.CurrentInvoice.PathAndFileName != null)
             {
-                if (!Path.Exists(this.FileName))
+                if (!Path.Exists(this.PathAndFileName))
                 {
                     {
                         //Only on creation of a invoice to keep the original datetime
@@ -793,12 +801,12 @@ namespace Essensausgleich.ViewModel
             */
         }
         /// <summary>
-        /// Saves the Current Invoice Object per Dialog to a Choosen FileName and Location
+        /// Saves the Current Invoice Object per Dialog to a Choosen PathAndFileName and Location
         /// </summary>
         [RelayCommand]
-        public async Task MenueSaveAs()
+        public void MenueSaveAs()
         {
-
+            /*
             var dialog = await FilePicker.Default.PickAsync(default);
 
 
@@ -807,8 +815,8 @@ namespace Essensausgleich.ViewModel
 
             if (dialog != null)
             {
-                var CurrenInvoiceFolder = Path.GetDirectoryName(this.CurrentInvoice.FileName);
-                this.CurrentInvoice.FileName = dialog.FileName;
+                var CurrenInvoiceFolder = Path.GetDirectoryName(this.CurrentInvoice.PathAndFileName);
+                this.CurrentInvoice.PathAndFileName = dialog.PathAndFileName;
 
                 //Only on creation of a invoice to keep the original datetime
                 if (this.CurrentInvoice.DateTimeCreation == null)
@@ -818,7 +826,7 @@ namespace Essensausgleich.ViewModel
                 this.CurrentInvoice.DateTimeChanged = DateTime.Now;
                 this.Context.InvoiceManager.Save(CurrentInvoice);
 
-                if (this.Context.InvoiceManager.Invoices.Count > 0 && Path.GetDirectoryName(dialog.FileName) == CurrenInvoiceFolder)
+                if (this.Context.InvoiceManager.Invoices.Count > 0 && Path.GetDirectoryName(dialog.PathAndFileName) == CurrenInvoiceFolder)
                 {
                     MenueLoadProject(CurrenInvoiceFolder!);
                     System.Diagnostics.Debug.WriteLine("File Added to current Invoices Folder");
@@ -829,7 +837,7 @@ namespace Essensausgleich.ViewModel
                 Log.WriteLine("OpenFile Dialog cancelt = False");
                 return;
             }
-
+            */
         }
         /// <summary>
         /// Nulls the CurrentInvoice Object to start Fresh over
@@ -862,7 +870,7 @@ namespace Essensausgleich.ViewModel
             {
                 return false;
             }
-            if (this.Context.InvoiceManager.Invoices.Count > 0)
+            if (this.CurrentInvoices.InvoiceList.Count > 0)
             {
                 return true;
 
@@ -906,7 +914,7 @@ namespace Essensausgleich.ViewModel
         [RelayCommand(CanExecute = nameof(canExecuteNextInvoice))]
         public void NextInvoice()
         {
-            this.CurrentInvoice = this.Context.InvoiceManager.Invoices[++CurrentInvoicesIndex];
+            this.CurrentInvoice = this.CurrentInvoices.InvoiceList[++CurrentInvoicesIndex];
         }
         public bool canExecuteNextInvoice()
         {
@@ -915,7 +923,7 @@ namespace Essensausgleich.ViewModel
             {
                 return false;
             }
-            if (CurrentInvoicesIndex < this.Context.InvoiceManager.Invoices.Count - 1)
+            if (CurrentInvoicesIndex < this.CurrentInvoices.InvoiceList.Count - 1)
             {
                 return true;
             }
@@ -927,7 +935,7 @@ namespace Essensausgleich.ViewModel
         public void PreviousInvoice()
         {
 
-            this.CurrentInvoice = this.Context.InvoiceManager.Invoices[--CurrentInvoicesIndex];
+            this.CurrentInvoice = this.CurrentInvoices.InvoiceList[--CurrentInvoicesIndex];
         }
         public bool canExecutePreviousInvoice()
         {

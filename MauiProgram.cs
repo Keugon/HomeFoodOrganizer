@@ -22,10 +22,10 @@ namespace Essensausgleich
                     fonts.AddFont("Segoe UI Symbol.ttf", "Segoe UI Symbol");
                 });
            // builder.Services.AddSingleton<Anwendung>();
-            builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddSingleton<StoragePage>();
-            builder.Services.AddTransient<ContributionPage>();
-            builder.Services.AddTransient<InvoiceViewSidePage>();
+          builder.Services.AddSingleton<MainPage>();
+          builder.Services.AddSingleton<StoragePage>();
+          builder.Services.AddTransient<ContributionPage>();
+          builder.Services.AddTransient<InvoiceViewSidePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
