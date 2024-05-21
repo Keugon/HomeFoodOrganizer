@@ -4,7 +4,7 @@
              x:Class="Essensausgleich.Views.StoragePage"
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
              xmlns:local="clr-namespace:Essensausgleich"
-             xmlns:data="clr-namespace:Essensausgleich.Data"
+             xmlns:data="clr-namespace:Essensausgleich.Data"           
              x:DataType="viewmodel:Anwendung"
              Title="StoragePage">
     <VerticalStackLayout>
@@ -20,8 +20,9 @@
                 <DataTemplate x:DataType="data:Invoice">
                     <Grid>
                         <HorizontalStackLayout>
-                            <Label Text="{Binding DateTimeCreation}"/>
-                            <Label Text="{Binding FileName}"/>
+                            <Label Text="{Binding DateTimeCreation,StringFormat='&#x270E;{0:dd.MM.yy, HH:mm} | '}"/>
+                            <Label Text="{Binding DateTimeChanged,StringFormat='&#x21BB;{0:dd.MM.yy, HH:mm} | '}"/>
+                            <Label Text="{Binding FileName,Converter={StaticResource FilePathToFileNameConverter}}"/>
                         </HorizontalStackLayout>
                     </Grid>
                 </DataTemplate>

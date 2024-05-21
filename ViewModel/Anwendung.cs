@@ -30,7 +30,7 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         public void Initialize()
         {
-            App.Current.BindingContext = this;
+            App.Current!.BindingContext = this;
             //Write Samples to Device
             Invoice SampleInvoice = new Invoice
             {
@@ -196,7 +196,7 @@ namespace Essensausgleich.ViewModel
             }
         }
 
-        private ObservableCollection<Invoice> _ListOfInvoicesInStorage = null;
+        private ObservableCollection<Invoice> _ListOfInvoicesInStorage = null!;
         public ObservableCollection<Invoice> ListOfInvoicesInStorage
         {
             get
@@ -213,6 +213,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged(nameof(ListOfInvoicesInStorage));
             }
         }
+
         public ObservableCollection<Expense> ListOfExpenses
         {
             get
@@ -605,6 +606,10 @@ namespace Essensausgleich.ViewModel
                         i.FileName = file;
                         this.ListOfInvoicesInStorage.Add(i);
                     }
+                }
+                foreach (string folder in InvoicesFolder)
+                {
+
                 }
 
             }
