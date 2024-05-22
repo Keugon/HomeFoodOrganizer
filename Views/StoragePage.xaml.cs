@@ -3,10 +3,12 @@ using Essensausgleich.ViewModel;
 
 public partial class StoragePage : ContentPage
 {
-	public StoragePage()
-	{
-		InitializeComponent();
-		BindingContext = App.Current!.BindingContext;
+    private readonly Anwendung _ViewmodelAnwendung;
+    public StoragePage(Anwendung ViewmodelAnwendung)
+    {
+        InitializeComponent();
+        BindingContext = _ViewmodelAnwendung = ViewmodelAnwendung;
+        
     }
-   
+
 }

@@ -49,6 +49,7 @@ namespace Essensausgleich
         {
 
             base.OnStart();
+            /*
             this.Context = new Essensausgleich.Infra.Infrastructur();
 
             //Das View Model Initialisieren
@@ -57,6 +58,7 @@ namespace Essensausgleich
            
 
             //Log.WriteLine("FilesystemManager Init");
+            */
         }
         
     }
