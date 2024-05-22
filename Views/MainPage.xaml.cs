@@ -9,7 +9,7 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
-        BindingContext = this;
+        BindingContext = App.Current!.BindingContext;
     }
     protected override void OnAppearing()
     {

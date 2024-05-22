@@ -10,7 +10,7 @@
     >
     <TabBar>
         <Tab Title="MainTab">
-        <ShellContent Title="MainPageTitel" ContentTemplate="{DataTemplate views:MainPage}"/>
+        <ShellContent Title="MainPageTitel" ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage"/>
         
         </Tab>
         <Tab Title="InvoicesTab">

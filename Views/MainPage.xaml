@@ -8,6 +8,7 @@
              >
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
     <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
+    <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
   <ContentPage.ToolbarItems >
         <ToolbarItem Text="Toolbar For test"></ToolbarItem>
         <ToolbarItem Text="Toolbar2"></ToolbarItem>
@@ -55,11 +56,11 @@
               Grid.Column="1"
               MinimumHeightRequest="100"
               MaximumHeightRequest="300">
-            <Frame Padding="0">
+            <Border Padding="0">
                 <Editor Placeholder="Coment"
                 Text ="{Binding InvoiceCommentary}"                   
                 BackgroundColor="Coral"/>
-            </Frame>
+            </Border>
            </Grid>
         
         <!--Stackpanel Inhabitants Expenses-->
@@ -70,9 +71,9 @@
             Background="Transparent"
             MinimumHeightRequest="100"
             MaximumHeightRequest="300">
-            <Frame     
+            <Border     
                 Padding="0" 
-                CornerRadius="10"
+
                 Background="LightBlue">
                 <VerticalStackLayout >
                     <!--Stackpanel Inhabitant1-->
@@ -118,7 +119,7 @@
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
         </Grid>
         <!--Stackpanel AddUser And Combox User-->
         <HorizontalStackLayout

@@ -693,7 +693,7 @@ namespace Essensausgleich.ViewModel
             }
             try
             {
-                await Shell.Current.GoToAsync($"//MainPage");
+                await Shell.Current.GoToAsync($"MainPage");
             }
             catch (Exception ex) 
             {
