@@ -7,20 +7,9 @@
                          Shell.NavBarIsVisible="True"
              >
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
-    <!--Only on Windows and Mac -->
-    <ContentPage.MenuBarItems>
-        <MenuBarItem Text="&#x2630;">
-            <MenuFlyoutItem Text="New" Command="{Binding MenueSaveCommand}"/>
-            <MenuFlyoutItem Text="Save" Command="{Binding MenueSaveCommand}"/>
-            <MenuFlyoutItem Text="SaveAs" Command="{Binding MenueSaveCommand}"/>
-            <MenuFlyoutItem Text="Open" Command="{Binding MenueSaveCommand}"/>
-            <MenuFlyoutItem Text="Open Folder" Command="{Binding MenueSaveCommand}"/>
-        </MenuBarItem>
-    </ContentPage.MenuBarItems>
-
-
-    <ContentPage.ToolbarItems >
-        <ToolbarItem Text="Toolbar"></ToolbarItem>
+    <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
+  <ContentPage.ToolbarItems >
+        <ToolbarItem Text="Toolbar For test"></ToolbarItem>
         <ToolbarItem Text="Toolbar2"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <Grid >
