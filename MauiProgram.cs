@@ -26,14 +26,16 @@ namespace Essensausgleich
             builder.Services.AddSingleton(provider =>
             {
                 var context = provider.GetRequiredService<Infra.Infrastructur>();
-                return context.Fabricate<ViewModel.Anwendung>();
+                ViewModel.Anwendung Anwendung = context.Fabricate<ViewModel.Anwendung>();
+                Anwendung.Initialize();
+                return Anwendung;
             });
+            
 
-
-          builder.Services.AddSingleton<MainPage>();
-          builder.Services.AddSingleton<StoragePage>();
-          builder.Services.AddTransient<ContributionPage>();
-          builder.Services.AddTransient<InvoiceViewSidePage>();
+            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<StoragePage>();
+            builder.Services.AddTransient<ContributionPage>();
+            builder.Services.AddTransient<InvoiceViewSidePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
@@ -41,6 +43,6 @@ namespace Essensausgleich
 
             return builder.Build();
         }
-        
+
     }
 }

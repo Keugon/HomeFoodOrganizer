@@ -31,6 +31,8 @@ namespace Essensausgleich.ViewModel
         public void Initialize()
         {
             App.Current!.BindingContext = this;
+            string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
+            System.IO.Directory.CreateDirectory(InvoicesFolderPath);
             //Write Samples to Device
             Invoices SampleInvoices = new Invoices
             {
