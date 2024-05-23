@@ -9,15 +9,12 @@
              Title="StoragePage">
     <VerticalStackLayout>
         <VerticalStackLayout.GestureRecognizers>
-            <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding MenueLoadProjectCommand}" />
+            <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding LoadSelectedInvoiceToCurrentCommand}" />
         </VerticalStackLayout.GestureRecognizers>
         <Label 
             Text="Welcome to .NET MAUI!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Button
-            Text="TestButton" 
-            Command="{Binding LoadInvoiseToStoragePageCommand}"/>
         <CollectionView 
             ItemsSource="{Binding ListOfInvoicesInStorage}"
             SelectionMode="Single"

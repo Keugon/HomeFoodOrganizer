@@ -116,6 +116,7 @@ this._Invoices = value;
 
                 System.Diagnostics.Debug.WriteLine($"Try load File: {pathWithFileName}");
                 var Invoices = this.InvoicesController.Load(pathWithFileName);
+                Invoices.PathAndFileName = pathWithFileName;
 
                 System.Diagnostics.Debug.WriteLine($"Invoice Sucsesfully read from File:{pathWithFileName}");
                 return Invoices;

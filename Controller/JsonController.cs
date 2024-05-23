@@ -40,17 +40,7 @@ namespace Essensausgleich.Controller
                 var jsonDeserializer = JsonSerializer.Deserialize(FileStream,typeof(T),option);
                 return (T)jsonDeserializer!;
             
-        }
-        /*
-        public void Reset(Inhabitant inhabitant1, Inhabitant inhabitant2)
-        {
-            inhabitant1.ResetInhabitantData();
-            inhabitant2.ResetInhabitantData();
-            Log.WriteLine("ResetBewData1,2");
-            // this.Context.InhabitantsManager.InhabitantsController.ClearInhabitants();
-            Log.WriteLine("ClearInhabsMehtod aftr");
-        }
-        */
+        }       
         /// <summary>
         /// Generic mehtod for Saving to Json from a generic object
         /// </summary>

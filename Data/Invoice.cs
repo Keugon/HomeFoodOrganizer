@@ -17,9 +17,9 @@ namespace Essensausgleich.Data
         private string? _InvoicesProjectName;
         public string? InvoicesProjectName
         {
-            get => this._InvoicesProjectName; 
+            get => this._InvoicesProjectName;
             set => this._InvoicesProjectName = value;
-           
+
         }
         private string? _PathAndFileName;
         /// <summary>
@@ -39,7 +39,7 @@ namespace Essensausgleich.Data
         {
             get
             {
-                if(this._InvoiceList == null)
+                if (this._InvoiceList == null)
                 {
                     this._InvoiceList = new ObservableCollection<Invoice>();
                 }
@@ -89,10 +89,17 @@ namespace Essensausgleich.Data
     /// </summary>
     public partial class Invoice : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Path of the Folder where all Invoice Objects get read from
-        /// </summary>
-        public static string? FolderPath { get; set; }
+        private string _InvoiceName = string.Empty;
+        public string InvoiceName
+        {
+            get => this._InvoiceName;
+            set
+            {
+                this._InvoiceName = value;
+                OnPropertyChanged(nameof(InvoiceName));
+            }
+        }
+        
         /// <summary>
         /// Internal Field for Caching
         /// </summary>
@@ -146,19 +153,7 @@ namespace Essensausgleich.Data
                 OnPropertyChanged(nameof(InvoiceComment));
             }
         }
-        private string? _FileName;
-        /// <summary>
-        /// PathAndFileName gets set on load from File
-        /// </summary>
-        public string? FileName
-        {
-        get => this._FileName;
-            set
-            {
-                this._FileName = value;
-                OnPropertyChanged(nameof(FileName));
-            }
-        }
+       
         private DateTime? _DateTimeCreation;
         /// <summary>
         /// Gets or Set the First Time this Invoice was Saved to File
