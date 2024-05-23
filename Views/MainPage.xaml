@@ -5,6 +5,7 @@
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
              x:DataType="viewmodel:Anwendung"
                          Shell.NavBarIsVisible="True"
+             BackgroundColor="Transparent"
              >
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
     <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
