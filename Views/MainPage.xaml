@@ -10,8 +10,7 @@
     <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
     <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
   <ContentPage.ToolbarItems >
-        <ToolbarItem Text="Toolbar For test"></ToolbarItem>
-        <ToolbarItem Text="Toolbar2"></ToolbarItem>
+        <ToolbarItem Text="GoStoragePage" Command="{Binding GotoInvoicesCommand}"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <Grid >
         <Grid.RowDefinitions>

@@ -950,5 +950,19 @@ namespace Essensausgleich.ViewModel
 
             return false;
         }
+        [RelayCommand]
+        public async Task GotoInvoices()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync($"{nameof(StoragePage)}");
+            }
+            catch (Exception ex)
+            {
+
+
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
     }
 }
