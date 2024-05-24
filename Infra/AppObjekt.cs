@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Essensausgleich.Infra;
 /// mit der Infrastructur und 
 /// weiteren Basisfunktionalitäten
 /// </summary>
-public abstract class AppObjekt : System.Object, IAppObjekt
+public abstract class AppObjekt : ObservableObject, IAppObjekt
 {
     #region Infrastruktur
 

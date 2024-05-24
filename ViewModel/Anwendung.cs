@@ -1,8 +1,10 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Essensausgleich.Controller;
 using Essensausgleich.Data;
 using Essensausgleich.Tools;
 using Essensausgleich.Views;
+using Microsoft.Maui.Controls.PlatformConfiguration.TizenSpecific;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,7 @@ namespace Essensausgleich.ViewModel
     /// <summary>
     /// blablablaAnwednung
     /// </summary>
+
     public partial class Anwendung : Essensausgleich.Infra.ViewModel
     {
         /// <summary>
@@ -76,104 +79,26 @@ namespace Essensausgleich.ViewModel
             ;
             this.Context.InvoiceManager.Save(SampleInvoices);
         }
-        #region Hauptview
-        /* AnzeigenMethode
-        
-        /// <summary>
-        /// Opens the &lt;T&gt; Window
-        /// </summary>
-        /// <typeparam name="T">Ein WPF Fenster das als 
-        /// Hauptfenster der Anwendung benutzt werden soll</typeparam>       
-        /// <remarks>Acepts only Obejects of Type Window with an IAppObjekt Interface without a custom Ctor</remarks>
-        public void Anzeigen<T>() where T : System.Windows.Window, new()
-        {
-            var f = new T();
-            Essensausgleich.App.Current.MainWindow = f;
-            //Binds View and Viewmodel (Viewmodel:Anwendung.cs)
-            f.DataContext = this;
-
-            //Attach Context to the new Window (Infrastructur)
-
-            f.Show();
-        }
-        
-        */
-        #endregion
-        private int CurrentInvoicesIndex = 0;
-
-        #region RelayCommand
-
-        /*
-        public RelayCommand DeleteEntry => new RelayCommand(execute => DeleteDataGridEntry());
-        public RelayCommand BtnAddUser => new RelayCommand(execute => AddUser());
-        public RelayCommand OnEnterAddUser => new RelayCommand(execute => AddUser());
-        public RelayCommand BtnAddBill => new(execute => AddBill());
-        public RelayCommand NextInvoice => new RelayCommand(execute =>
-        {
-            this.CurrentInvoice = this.Context.InvoiceManager.Invoices[++CurrentInvoicesIndex];
-        }, canExecute =>
-                        {
-                            if (CurrentInvoicesIndex < this.Context.InvoiceManager.Invoices.Count - 1)
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
-                        });
-        public RelayCommand PreviousInvoice => new RelayCommand(execute =>
-        {
-            this.CurrentInvoice = this.Context.InvoiceManager.Invoices[--CurrentInvoicesIndex];
-        }, canExecute =>
-                        {
-                            if (CurrentInvoicesIndex > 0)
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
-                        });
-        public RelayCommand OpenInvoiceViewSideWindow => new(execute => OpenInvoiceViewSidePage(), canExecute =>
-        {
-            if (this.Context.InvoiceManager.Invoices.Count > 0)
-            {
-                return true;
-
-            }
-            return false;
-
-        });
-        public RelayCommand OnEnterBill => new(execute => AddBill());
-        public RelayCommand MenueWPFNew => new(execute => MenueNew());
-        public RelayCommand MenueWPFLoad => new(execute => MenueLoad());
-        public RelayCommand MenueWPFLoadProject => new(execute => LoadSelectedInvoiceToCurrent());
-        public RelayCommand MenueWPFSave => new(execute => MenueSave());
-        public RelayCommand MenueWPFSaveAs => new(execute => MenueSaveAs());
-        public RelayCommand MenueWPFSettings => new(execute => OpenSettingsWindow());
-        public RelayCommand OpenContributionWindow => new(execute => OpenContributioWindow(execute), canExecute =>
-        {
-            
-            if (canExecute is System.Windows.Controls.Label label)
-            {
-                if (label.Content.ToString() == string.Empty)
-                {
-                    return false;
-                }
-                return true;
-            }
-            
-            return false;
-        });
+        private string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
 
 
-    */
-        #endregion
 
         #region PropertieBinding
 #pragma warning disable 1591
+
+        private int _CurrentInvoicesIndex = 0;
+
+
+        public int CurrentInvoicesIndex
+        {
+            get => this._CurrentInvoicesIndex;
+            set
+            {
+                this._CurrentInvoicesIndex = value;
+                NextInvoiceCommand.NotifyCanExecuteChanged();
+                PreviousInvoiceCommand.NotifyCanExecuteChanged();
+            }
+        }
         private Invoice _CurrentInvoice = null!;
         public Invoice CurrentInvoice
         {
@@ -202,10 +127,15 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged(nameof(InvoiceCommentary));
                 OnPropertyChanged(nameof(LblpayingInhabitantContent));
                 OnPropertyChanged(nameof(LblBillContent));
+                nextInvoiceCommand!.NotifyCanExecuteChanged();
+                previousInvoiceCommand!.NotifyCanExecuteChanged();
+                //openInvoiceViewSidePageCommand!.NotifyCanExecuteChanged();
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
+
         private Invoices _CurrentInvoices = null!;
+
         public Invoices CurrentInvoices
         {
             get
@@ -213,10 +143,15 @@ namespace Essensausgleich.ViewModel
                 if (this._CurrentInvoices == null)
                 {
                     this._CurrentInvoices = new Invoices();
+
                 }
                 return this._CurrentInvoices;
             }
-            set => this._CurrentInvoices = value;
+            set
+            {
+                this._CurrentInvoices = value;
+                openInvoiceViewSidePageCommand!.NotifyCanExecuteChanged();
+            }
         }
 
         private ObservableCollection<Invoices> _ListOfInvoicesInStorage = new ObservableCollection<Invoices>();
@@ -257,7 +192,7 @@ namespace Essensausgleich.ViewModel
                     }
                 }
                 return this._ListOfInvoicesInStorage;
-            }            
+            }
         }
 
         public ObservableCollection<Expense> ListOfExpenses
@@ -437,7 +372,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private string _TxtBoxCategorieText = null!;       
+        private string _TxtBoxCategorieText = null!;
         private string _InvoiceCommentary = string.Empty!;
         /// <summary>
         /// Gets or Sets the Commentary for the CurrentInvoices Object
@@ -623,45 +558,171 @@ namespace Essensausgleich.ViewModel
                             }
                         }
             */
-        }       
+        }
         /// <summary>
         /// Sets the SelectedInvoiceItem from the StoragePage
         /// to the CurrentInvoices
         /// </summary>
         [RelayCommand]
         public async Task LoadSelectedInvoiceToCurrent()
-        {           
+        {
             try
             {
                 await Shell.Current.GoToAsync($"///MainPage");
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
 
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return;
             }
             CurrentInvoices = this.Context.InvoiceManager.Load(SelectedInvoiceItem.PathAndFileName!);
+
             CurrentInvoicesIndex = 0;
             this.CurrentInvoice = CurrentInvoices.InvoiceList[CurrentInvoicesIndex];
+            nextInvoiceCommand!.NotifyCanExecuteChanged();
+            previousInvoiceCommand!.NotifyCanExecuteChanged();
             System.Diagnostics.Debug.WriteLine("LoadSelectedInvoiceToCurrent End");
         }
+        /// <summary>
+        /// This ask if the currentInvoice should be Updated 
+        /// is Yes gets pushed to CurrentInvoices at index
+        /// </summary>
         [RelayCommand]
-        public async void SaveCurrentInvoices()
+        public async Task UpdateCurrentInvoice()
         {
-            string InvoiceNameToSave = await Application.Current!.MainPage!.DisplayPromptAsync(title: "InvoicesName", message: "InputNameToSave or cancel", accept: "Ok", cancel: "Cancel", placeholder: "InvoiceNameHere");
-            if (!string.IsNullOrEmpty(InvoiceNameToSave))
+            //Ask if CurrentInvoices has a Name if it hasent 
+            if (string.IsNullOrEmpty(this.CurrentInvoices.InvoicesProjectName))
             {
-                string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
-                this.CurrentInvoices.InvoicesProjectName = InvoiceNameToSave;
-                this.CurrentInvoices.PathAndFileName = Path.Combine(InvoicesFolderPath, $"{InvoiceNameToSave}.json");
+                string InvoicesName = await AskForInvoiceName("Input Name for New InvoicesProject to save");
+                if (!string.IsNullOrEmpty(InvoicesName))
+                {
+                    this.CurrentInvoices.InvoicesProjectName = InvoicesName;
+                    //Todo Filenames
+                    this.CurrentInvoices.PathAndFileName = Path.Combine(InvoicesFolderPath, InvoicesName);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("Saving cancelt");
+                    return;
+                }
+            }
+            if (await AskIfOverwrite())
+            {
+                this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
                 this.Context.InvoiceManager.Save(this.CurrentInvoices);
-                OnPropertyChanged(nameof(ListOfInvoicesInStorage));
+
+                System.Diagnostics.Debug.WriteLine($"CurrentInvoice{this.CurrentInvoice.InvoiceName} got updated");
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Warning", "Needs a FileName to Save", "Understood");
+
+                System.Diagnostics.Debug.WriteLine("Updating current Invoice cancelt");
             }
+        }
+        /// <summary>
+        /// Sets the Current Invoice and Invoices to null
+        /// </summary>
+        [RelayCommand]
+        public async Task NewInvoices()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync($"///MainPage");
+            }
+            catch (Exception ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return;
+            }
+            this.CurrentInvoices = null!;
+            this.CurrentInvoice = null!;
+
+        }
+        /// <summary>
+        /// Starts a new Invoice gives it via Dialog a Name
+        /// then gets added CurrentInvoices List
+        /// </summary>
+        [RelayCommand]
+        public async Task NewInvoice()
+        {
+            Invoice NewInvoice = new Invoice();
+            string NewInvoiceName = await AskForInvoiceName("Input Name for new Invoice");
+            if (!string.IsNullOrEmpty(NewInvoiceName))
+            {
+                NewInvoice.InvoiceName = NewInvoiceName;
+                this.CurrentInvoice = NewInvoice;
+                this.CurrentInvoices.InvoiceList.Add(NewInvoice);
+                CurrentInvoicesIndex = this.CurrentInvoices.InvoiceList.Count - 1;
+                System.Diagnostics.Debug.WriteLine(
+                    $"New Invoice:{NewInvoice.InvoiceName} created and " +
+                    $"added to:{this.CurrentInvoices.InvoicesProjectName} " +
+                    $"on position:{this.CurrentInvoices.InvoiceList.Count - 1}");
+            }
+        }
+        /// <summary>
+        /// Ask via Dialog if it should Overwrite
+        /// </summary>
+        /// <returns>Return true for Yes, Returns false for Cancel</returns>
+        public async Task<bool> AskIfOverwrite()
+        {
+            return await Microsoft.Maui.Controls.Application.Current!.MainPage!.DisplayAlert(
+                         title: "Warning",
+                         message: "Overwrite this Invoices",
+                         accept: "Yes",
+                         cancel: "Cancel");
+        }
+        /// <summary>
+        /// Ask via Dialog for a InvoiceName
+        /// </summary>
+        /// <returns>returns null if cancel, returns a 
+        /// string on accept can be string.empty</returns>
+        public async Task<string> AskForInvoiceName(string message)
+        {
+
+            return await Microsoft.Maui.Controls.Application.Current!.MainPage!.DisplayPromptAsync(
+                  title: "Warning",
+                  message: message,
+                  accept: "Ok",
+                  cancel: "Cancel",
+                  placeholder: "InvoiceNameHere");
+
+        }
+        /// <summary>
+        /// Checks for the CurrentInvoices List if there is already
+        /// a InvoicesProjectName (therefore it has been loaded and 
+        /// has a PathAndFileName to it)
+        /// </summary>
+        /// <returns>True if has PathAndFileName ready to save or have been given.
+        /// False of has no name to it and got declined given a proper Name</returns>
+        public async Task<bool> IsInvoicesNameAndPathSet()
+        {
+            if (string.IsNullOrEmpty(this.CurrentInvoices.InvoicesProjectName))
+            {
+                string InvoicesNameToSave
+                    = await Microsoft.Maui.Controls.Application.Current!.MainPage!.DisplayPromptAsync(
+                        title: "InvoicesName",
+                        message: "InputNameToSave or cancel",
+                        accept: "Ok",
+                        cancel: "Cancel",
+                        placeholder: "InvoiceNameHere");
+                if (!string.IsNullOrEmpty(InvoicesNameToSave))
+                {
+                    this.CurrentInvoices.InvoicesProjectName = InvoicesNameToSave;
+                    this.CurrentInvoices.PathAndFileName = Path.Combine(InvoicesFolderPath, $"{InvoicesNameToSave}.json");
+                    return true;
+                }
+                else
+                {
+
+                    System.Diagnostics.Debug.WriteLine(
+                        "On Dialog for naming CurrentInvoices got " +
+                        "Cancelt or accept with no entry! Send False for abort");
+                    return false;
+                }
+            }
+            return true;
         }
         /// <summary>
         /// Opens and Closes a to the Right attached Window to Display a Datagrid with all Loaded Invoices
@@ -682,11 +743,8 @@ namespace Essensausgleich.ViewModel
         }
         public bool canExecuteInvoiceViewSidePage()
         {
-            if (this.Context is null)
-            {
-                return false;
-            }
-            if (this.CurrentInvoices.InvoiceList.Count > 0)
+
+            if (this.CurrentInvoices.InvoiceList.Count > 1)
             {
                 return true;
 
@@ -735,10 +793,10 @@ namespace Essensausgleich.ViewModel
         public bool canExecuteNextInvoice()
         {
 
-            if (this.Context is null)
-            {
-                return false;
-            }
+            //if (this.Context is null)
+            //{
+            //    return false;
+            //}
             if (CurrentInvoicesIndex < this.CurrentInvoices.InvoiceList.Count - 1)
             {
                 return true;
@@ -755,10 +813,10 @@ namespace Essensausgleich.ViewModel
         }
         public bool canExecutePreviousInvoice()
         {
-            if (this.Context is null)
-            {
-                return false;
-            }
+            //if (this.Context is null)
+            //{
+            //    return false;
+            //}
             if (CurrentInvoicesIndex > 0)
             {
                 return true;

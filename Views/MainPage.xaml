@@ -10,9 +10,9 @@
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
     <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
     <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
-  <ContentPage.ToolbarItems >
+    <ContentPage.ToolbarItems >
         <ToolbarItem Text="GoStoragePage" Command="{Binding GotoInvoicesCommand}"></ToolbarItem>
-        <ToolbarItem Text="SaveInvoices" Command="{Binding SaveCurrentInvoicesCommand}"></ToolbarItem>
+        <ToolbarItem Text="Save" Command="{Binding UpdateCurrentInvoiceCommand}"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <Grid >
         <Grid.RowDefinitions>
@@ -32,6 +32,7 @@
                 Text="{Binding CurrentInvoice.InvoiceName}"/>
         </HorizontalStackLayout>
         <!--StackPanel Next Previous Invoice Item-->
+
         <HorizontalStackLayout 
             HorizontalOptions="End"
             Grid.Row="1"
@@ -39,6 +40,12 @@
             MinimumHeightRequest="50"
             HeightRequest="55"
             MaximumHeightRequest="100">
+            <!--AddNewInvoiceSingle-->
+            <Button
+                Text="+"
+                Command="{Binding NewInvoiceCommand}"
+                FontFamily="Segoe UI Symbol" 
+                FontSize="14"/>
             <!--Previous Invoice Arrow-->
             <Button
                 Text="&#xE085;" 
@@ -68,8 +75,8 @@
                 Text ="{Binding InvoiceCommentary}"                   
                 BackgroundColor="Coral"/>
             </Border>
-           </Grid>
-        
+        </Grid>
+
         <!--Stackpanel Inhabitants Expenses-->
         <Grid  
             Grid.Row="4"
@@ -152,7 +159,7 @@
            Grid.ColumnSpan="2"
             MinimumHeightRequest="50"
             HeightRequest="55"
-            MaximumHeightRequest="100"> 
+            MaximumHeightRequest="100">
             <Entry Placeholder="Categorie"
                 Text="{Binding TxtBoxCategorieText}" 
                 MinimumWidthRequest="100"/>
@@ -162,7 +169,7 @@
                 ReturnCommand="{Binding AddBillCommand}"/>
             <Button Command="{Binding AddBillCommand}" Text="Add Bill"/>
         </HorizontalStackLayout>
-        
+
     </Grid>
 
 </ContentPage>

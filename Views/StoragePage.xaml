@@ -7,7 +7,15 @@
              xmlns:data="clr-namespace:Essensausgleich.Data"           
              x:DataType="viewmodel:Anwendung"
              Title="StoragePage">
-    <VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+    
+    <!--Invoices in AppDataDirectory-->
+    <VerticalStackLayout
+        Grid.Row="0">
         <VerticalStackLayout.GestureRecognizers>
             <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding LoadSelectedInvoiceToCurrentCommand}" />
         </VerticalStackLayout.GestureRecognizers>
@@ -31,5 +39,17 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        
     </VerticalStackLayout>
+    <!--New Invoices Button on bottom-->
+        <VerticalStackLayout
+            VerticalOptions="End"
+            Grid.Row="1">
+         <Button
+            Text="New Invoices"
+            Command="{Binding NewInvoicesCommand}"/>
+        </VerticalStackLayout>
+    </Grid>
+       
+   
 </ContentPage>

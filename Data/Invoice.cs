@@ -1,8 +1,10 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Log = System.Diagnostics.Debug;
@@ -35,6 +37,7 @@ namespace Essensausgleich.Data
             }
         }
         private ObservableCollection<Invoice> _InvoiceList = null!;
+        
         public ObservableCollection<Invoice> InvoiceList
         {
             get
