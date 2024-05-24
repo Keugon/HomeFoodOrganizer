@@ -572,7 +572,6 @@ namespace Essensausgleich.ViewModel
             }
             catch (Exception ex)
             {
-
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return;
             }
@@ -741,6 +740,10 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
+        /// <summary>
+        /// Checks if there is more then 1 Invoice Listet in CurrentInvoices
+        /// </summary>
+        /// <returns>True if CurrentInvoices > 0</returns>
         public bool canExecuteInvoiceViewSidePage()
         {
 
@@ -785,11 +788,18 @@ namespace Essensausgleich.ViewModel
             OnPropertyChanged(nameof(LblpayingInhabitantContent));
             OnPropertyChanged(nameof(LblBillContent));
         }
+        /// <summary>
+        /// Pulls the Next Invoice in List to Current
+        /// </summary>
         [RelayCommand(CanExecute = nameof(canExecuteNextInvoice))]
         public void NextInvoice()
         {
             this.CurrentInvoice = this.CurrentInvoices.InvoiceList[++CurrentInvoicesIndex];
         }
+        /// <summary>
+        /// Checks if there is an additianal item in the list at the next index
+        /// </summary>
+        /// <returns>true if yes</returns>
         public bool canExecuteNextInvoice()
         {
 
@@ -805,12 +815,19 @@ namespace Essensausgleich.ViewModel
 
             return false;
         }
+        /// <summary>
+        /// Pulls the Previous Invoice in List to Current
+        /// </summary>
         [RelayCommand(CanExecute = nameof(canExecutePreviousInvoice))]
         public void PreviousInvoice()
         {
 
             this.CurrentInvoice = this.CurrentInvoices.InvoiceList[--CurrentInvoicesIndex];
         }
+        /// <summary>
+        /// Checks if there is an additianal item in the list at the previous index
+        /// </summary>
+        /// <returns>true if yes</returns>
         public bool canExecutePreviousInvoice()
         {
             //if (this.Context is null)

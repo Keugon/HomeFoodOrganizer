@@ -13,7 +13,7 @@ namespace Essensausgleich.Infra;
 /// mit der Infrastructur und 
 /// weiteren Basisfunktionalitäten
 /// </summary>
-public abstract class AppObjekt : ObservableObject, IAppObjekt
+public abstract class AppObjekt : System.Object, IAppObjekt
 {
     #region Infrastruktur
 

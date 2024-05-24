@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Essensausgleich.InvoiceManager">
+    <Position X="3.5" Y="4.75" Width="1.5" />
+    <Members>
+      <Field Name="_Invoice" Hidden="true" />
+      <Field Name="_InvoiceController" Hidden="true" />
+      <Field Name="_Invoices" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>ASAAgIAAAAAAAAAAIAAAAAAAgAAAAAABAAAAACAAAQA=</HashCode>
+      <FileName>InvoiceManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Essensausgleich.ViewModel.Anwendung">
+    <Position X="1.25" Y="7.5" Width="1.5" />
+    <Members>
+      <Field Name="_CurrentInvoice" Hidden="true" />
+      <Field Name="_CurrentInvoices" Hidden="true" />
+      <Field Name="_CurrentInvoicesIndex" Hidden="true" />
+      <Field Name="_InhabitansSelected" Hidden="true" />
+      <Field Name="_InhabitantsNameList" Hidden="true" />
+      <Field Name="_InvoiceCommentary" Hidden="true" />
+      <Field Name="_lblBillContent" Hidden="true" />
+      <Field Name="_LblpayingInhabitantContent" Hidden="true" />
+      <Field Name="_lblToolStripContent" Hidden="true" />
+      <Field Name="_ListofExpenses" Hidden="true" />
+      <Field Name="_ListOfInvoicesInStorage" Hidden="true" />
+      <Field Name="_SelectedExpenseItem" Hidden="true" />
+      <Field Name="_SelectedInvoiceItem" Hidden="true" />
+      <Field Name="_TxtBoxAddBillText" Hidden="true" />
+      <Field Name="_txtBoxAddUserContent" Hidden="true" />
+      <Field Name="_TxtBoxCategorieText" Hidden="true" />
+      <Field Name="InvoicesFolderPath" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAYQAUKkQgCAASAAIAAKI0agMAgWAIAgKGJBEIwA8AE=</HashCode>
+      <FileName>ViewModel\Anwendung.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Essensausgleich.Tools.General">
+    <Position X="11.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Tools\General.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Essensausgleich.Tools.FilePathToFileNameConverter" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Tools\General.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Essensausgleich.Infra.AppObjekt">
+    <Position X="2.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Infra\AppObjekt.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Essensausgleich.Infra.Infrastructur">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAEAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Infra\Infrastructur.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Essensausgleich.Infra.ViewModel">
+    <Position X="1.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAgAAAgAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Infra\ViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Essensausgleich.Data.Invoices">
+    <Position X="9.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAABAAAAAAgAAAAIEAAAACAgAAAAiIAAAAQAAQAAAA=</HashCode>
+      <FileName>Data\Invoice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Essensausgleich.Data.Invoice" BaseTypeListCollapsed="true">
+    <Position X="9.5" Y="7.25" Width="1.5" />
+    <Members>
+      <Field Name="_DateTimeChanged" Hidden="true" />
+      <Field Name="_DateTimeCreation" Hidden="true" />
+      <Field Name="_Inhabitants" Hidden="true" />
+      <Field Name="_InhabitantsNameList" Hidden="true" />
+      <Field Name="_InvoiceComment" Hidden="true" />
+      <Field Name="_InvoiceName" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAQAACCAAAoAAAAIAAAAACAgAAEAAAAAABQAQQAAAA=</HashCode>
+      <FileName>Data\Invoice.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Essensausgleich.Data.Inhabitants">
+    <Position X="7.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Inhabitant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Essensausgleich.Data.Inhabitant">
+    <Position X="7.75" Y="5.5" Width="1.5" />
+    <Members>
+      <Field Name="_Name" Hidden="true" />
+      <Field Name="_TotalExpense" Hidden="true" />
+      <Field Name="ListOfExpenses" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEAAAAAGAIAAAAAEACAAIAQAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Inhabitant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Essensausgleich.Expense">
+    <Position X="6" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Expense.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="Essensausgleich.IAppObjekt">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IAppObjekt.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
