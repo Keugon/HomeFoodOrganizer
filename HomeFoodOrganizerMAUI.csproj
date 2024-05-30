@@ -76,6 +76,12 @@
 	  <MauiXaml Update="Views\ContributionPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\EditView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\InvoiceViewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\InvoiceViewSidePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

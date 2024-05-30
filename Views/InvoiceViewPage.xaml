@@ -1,56 +1,46 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Essensausgleich.Views.MainPage"
-             xmlns:local="clr-namespace:Essensausgleich"
-             xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel"
+             x:Class="Essensausgleich.Views.InvoiceViewPage"
              xmlns:data="clr-namespace:Essensausgleich.Data" 
+              xmlns:local="clr-namespace:Essensausgleich"
+ xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel"
              x:DataType="viewmodel:Anwendung"
-                         Shell.NavBarIsVisible="True"
-             BackgroundColor="Transparent"
-             Title="Landing Page">
-    <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
-    <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
-    <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
-
+             Title="InvoiceViewPage">
     <Grid 
-        RowDefinitions="50,*,*"
-        ColumnDefinitions="*">
-        
+    RowDefinitions="50,*,*"
+    ColumnDefinitions="*">
+
         <!--Header-->
         <VerticalStackLayout>
             <Label
-                Text="Header"/>
+            Text="InvoiceViewPage"/>
         </VerticalStackLayout>
         <!--Invoices in AppDataDirectory-->
         <VerticalStackLayout
-            Grid.Row="1">
+        Grid.Row="1">
             <Label 
-                 Text="Invoices"
-                 VerticalOptions="Center" 
-                 HorizontalOptions="Center"/>
+             Text="Invoices"
+             VerticalOptions="Center" 
+             HorizontalOptions="Center"/>
             <CollectionView 
-                 ItemsSource="{Binding ListOfInvoicesInStorage}">
+             ItemsSource="{Binding CurrentInvoices.InvoiceList}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate 
-                        x:DataType="data:Invoices"
-                        >
+                    x:DataType="data:Invoice">
                         <Grid>
-                            
                             <HorizontalStackLayout>
                                 <HorizontalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=LoadSelectedInvoiceToCurrentCommand}"
                                         CommandParameter="{Binding .}"/>
-
                                 </HorizontalStackLayout.GestureRecognizers>
-                                
                                 <Label 
-                                    Text="{Binding DateTimeCreation,StringFormat='&#x270E;{0:dd.MM.yy, HH:mm} | '}"/>
+                                Text="{Binding DateTimeCreation,StringFormat='&#x270E;{0:dd.MM.yy, HH:mm} | '}"/>
                                 <Label 
-                                    Text="{Binding DateTimeChanged,StringFormat='&#x21BB;{0:dd.MM.yy, HH:mm} | '}"/>
+                                Text="{Binding DateTimeChanged,StringFormat='&#x21BB;{0:dd.MM.yy, HH:mm} | '}"/>
                                 <Label 
-                                    Text="{Binding InvoicesProjectName}"/>
+                                Text="{Binding InvoiceName}"/>
                             </HorizontalStackLayout>
                         </Grid>
                     </DataTemplate>
@@ -59,5 +49,4 @@
 
         </VerticalStackLayout>
     </Grid>
-
 </ContentPage>

@@ -28,58 +28,21 @@ namespace Essensausgleich.ViewModel
 
     public partial class Anwendung : Essensausgleich.Infra.ViewModel
     {
+        //Const
+        private string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
         /// <summary>
         /// inits the Viewmodel and pulls object referenzes
         /// </summary>
         public void Initialize()
         {
             App.Current!.BindingContext = this;
-            string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
-            System.IO.Directory.CreateDirectory(InvoicesFolderPath);
-            //Write Samples to Device
-            Invoices SampleInvoices = new Invoices
+            //Check on startup if first time then Create the "Invoices" Folder
+            if (!Directory.Exists(InvoicesFolderPath))
             {
-                DateTimeChanged = DateTime.Now,
-                DateTimeCreation = new DateTime(year: 2024, month: 1, day: 1, hour: 6, minute: 10, second: 58),
-                InvoicesProjectName = "SampleInvoicesProjectName",
-                PathAndFileName = Path.Combine(Path.Combine(FileSystem.AppDataDirectory, "Invoices"), "File.json"),
-                InvoiceList = new ObservableCollection<Invoice>
-                {
-                    new Invoice {
-                    DateTimeChanged = DateTime.Now,
-                    DateTimeCreation = new DateTime(year: 2024, month: 1, day: 1, hour: 6, minute: 10, second: 58),
-                    //FileName = Path.Combine(Path.Combine(FileSystem.AppDataDirectory, "Invoices"), "InvoiceSample.json"),
-                    InhabitantsNameList = new ObservableCollection<string> { "Florian", "Marion" },
-                    Inhabitants = new Inhabitants
-                    {
-                        new Inhabitant
-                        {
-                            Name = "Florian",
-                            TotalExpense = 60,
-                            ListOfExpenses = new List<Expense>
-                            {
-                                new Expense { categorie = "ama", valueExpense = 10 },
-                                new Expense { categorie = "tanken", valueExpense = 50 }
-                            }
-                        },
-                        new Inhabitant
-                        {
-                            Name = "Marion",
-                            TotalExpense = 22,
-                            ListOfExpenses = new List<Expense>
-                            {
-                                new Expense { categorie = "hofa", valueExpense = 20 },
-                                new Expense { categorie = "billa", valueExpense = 2 }
-                            }
-                        }                                            },
-                    InvoiceComment = "ReloadNeu"
-                }
-                }
+                System.IO.Directory.CreateDirectory(InvoicesFolderPath);
             }
-            ;
-            this.Context.InvoiceManager.Save(SampleInvoices);
         }
-        private string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
+
 
 
 
@@ -150,7 +113,7 @@ namespace Essensausgleich.ViewModel
             set
             {
                 this._CurrentInvoices = value;
-                openInvoiceViewSidePageCommand!.NotifyCanExecuteChanged();
+                //openInvoiceViewSidePageCommand!.NotifyCanExecuteChanged();
             }
         }
 
@@ -564,24 +527,29 @@ namespace Essensausgleich.ViewModel
         /// to the CurrentInvoices
         /// </summary>
         [RelayCommand]
-        public async Task LoadSelectedInvoiceToCurrent()
+        public async Task LoadSelectedInvoiceToCurrent(object parameter)
         {
+            //Take the (Selected) Clicked on Item and
+            //set it to CurrentInvoices to work with
+            if (parameter is Invoices SelectedInvoices && SelectedInvoices != null)
+            {
+                this.CurrentInvoices = SelectedInvoices;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Error on Casting CommandParams");
+            }
+
+            //Move to new Page that Displays all the Single Invoices that are in there 
             try
             {
-                await Shell.Current.GoToAsync($"///MainPage");
+                await Shell.Current.GoToAsync($"/{nameof(InvoiceViewPage)}");
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return;
             }
-            CurrentInvoices = this.Context.InvoiceManager.Load(SelectedInvoiceItem.PathAndFileName!);
-
-            CurrentInvoicesIndex = 0;
-            this.CurrentInvoice = CurrentInvoices.InvoiceList[CurrentInvoicesIndex];
-            nextInvoiceCommand!.NotifyCanExecuteChanged();
-            previousInvoiceCommand!.NotifyCanExecuteChanged();
-            System.Diagnostics.Debug.WriteLine("LoadSelectedInvoiceToCurrent End");
         }
         /// <summary>
         /// This ask if the currentInvoice should be Updated 
@@ -598,7 +566,7 @@ namespace Essensausgleich.ViewModel
                 {
                     this.CurrentInvoices.InvoicesProjectName = InvoicesName;
                     //Todo Filenames
-                    this.CurrentInvoices.PathAndFileName = Path.Combine(InvoicesFolderPath, InvoicesName);
+                    this.CurrentInvoices.PathAndFileName = Path.Combine(InvoicesFolderPath, this.CurrentInvoices.Guid!.Value.ToString());
                 }
                 else
                 {

@@ -36,6 +36,7 @@ namespace Essensausgleich
             builder.Services.AddSingleton<StoragePage>();
             builder.Services.AddTransient<ContributionPage>();
             builder.Services.AddTransient<InvoiceViewSidePage>();
+            builder.Services.AddSingleton<InvoiceViewPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
