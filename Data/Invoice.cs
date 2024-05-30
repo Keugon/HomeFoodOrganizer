@@ -14,30 +14,14 @@ namespace Essensausgleich.Data
     /// <summary>
     /// List of Invoices
     /// </summary>
-    public class Invoices
+    public partial class Invoices : GuidDataObject
     {
-        private string? _InvoicesProjectName;
-        public string? InvoicesProjectName
-        {
-            get => this._InvoicesProjectName;
-            set => this._InvoicesProjectName = value;
+        public string? InvoicesProjectName { get; set; }
 
-        }
+        [ObservableProperty]
         private string? _PathAndFileName;
-        /// <summary>
-        /// PathAndFileName gets set on load from File
-        /// </summary>
-        public string? PathAndFileName
-        {
-            get => this._PathAndFileName;
-            set
-            {
-                this._PathAndFileName = value;
-                OnPropertyChanged(nameof(PathAndFileName));
-            }
-        }
         private ObservableCollection<Invoice> _InvoiceList = null!;
-        
+
         public ObservableCollection<Invoice> InvoiceList
         {
             get
@@ -50,43 +34,17 @@ namespace Essensausgleich.Data
             }
             set => this._InvoiceList = value;
         }
-        private DateTime? _DateTimeCreation;
         /// <summary>
         /// Gets or Set the First Time this Invoice was Saved to File
         /// </summary>
-        public DateTime? DateTimeCreation
-        {
-            get => this._DateTimeCreation;
-            set
-            {
-                this._DateTimeCreation = value;
-                OnPropertyChanged(nameof(DateTimeCreation));
-            }
-        }
-        private DateTime? _DateTimeChanged;
+        [ObservableProperty]
+        private DateTime? _DateTimeCreation;
         /// <summary>
         /// Gets or Set the Last Time this Invoice was Saved to File
         /// </summary>
-        public DateTime? DateTimeChanged
-        {
-            get => this._DateTimeChanged;
-            set
-            {
-                this._DateTimeChanged = value;
-                OnPropertyChanged(nameof(DateTimeChanged));
-            }
-        }
-        #region WPF über Änderungen Informieren
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-            System.Diagnostics.Debug.WriteLine($"OnPropertyChanged Called in InvoiceManager:{propertyName}");
-        }
-        #endregion WPF über Änderungen Informieren
-    }
+        [ObservableProperty]
+        private DateTime? _DateTimeChanged;
+                   }
     /// <summary>
     /// Object to handle one Invoice including 2 Inhabitants
     /// </summary>
@@ -102,7 +60,7 @@ namespace Essensausgleich.Data
                 OnPropertyChanged(nameof(InvoiceName));
             }
         }
-        
+
         /// <summary>
         /// Internal Field for Caching
         /// </summary>
@@ -156,7 +114,7 @@ namespace Essensausgleich.Data
                 OnPropertyChanged(nameof(InvoiceComment));
             }
         }
-       
+
         private DateTime? _DateTimeCreation;
         /// <summary>
         /// Gets or Set the First Time this Invoice was Saved to File
