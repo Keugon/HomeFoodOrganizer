@@ -7,6 +7,10 @@
  xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel"
              x:DataType="viewmodel:Anwendung"
              Title="InvoiceViewPage">
+    <ContentPage.ToolbarItems >
+        <ToolbarItem Text="Delete this Project"
+                     Command="{Binding DeleteCurrentProjectCommand}"/>
+    </ContentPage.ToolbarItems>
     <Grid 
     RowDefinitions="50,*,*"
     ColumnDefinitions="*">
@@ -46,6 +50,9 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <Button
+                Text="Add new Invoice"
+                Command="{Binding NewInvoiceCommand}"/>
 
         </VerticalStackLayout>
     </Grid>

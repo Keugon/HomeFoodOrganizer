@@ -2,13 +2,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Essensausgleich.Views.EditView"
+             xmlns:local="clr-namespace:Essensausgleich"
+            xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel"
+            xmlns:data="clr-namespace:Essensausgleich.Data" 
+            x:DataType="viewmodel:Anwendung"
              Title="EditView">
 
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
     <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
     <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
     <ContentPage.ToolbarItems >
-        <ToolbarItem Text="GoStoragePage" Command="{Binding GotoInvoicesCommand}"></ToolbarItem>
         <ToolbarItem Text="Save" Command="{Binding UpdateCurrentInvoiceCommand}"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <Grid >
@@ -26,39 +29,7 @@
         <!--CurrentInvoice Titel-->
         <HorizontalStackLayout>
             <Label
-                Text="{Binding CurrentInvoice.InvoiceName}"/>
-        </HorizontalStackLayout>
-        <!--StackPanel Next Previous Invoice Item-->
-
-        <HorizontalStackLayout 
-            HorizontalOptions="End"
-            Grid.Row="1"
-            Grid.Column="1"
-            MinimumHeightRequest="50"
-            HeightRequest="55"
-            MaximumHeightRequest="100">
-            <!--AddNewInvoiceSingle-->
-            <Button
-                Text="+"
-                Command="{Binding NewInvoiceCommand}"
-                FontFamily="Segoe UI Symbol" 
-                FontSize="14"/>
-            <!--Previous Invoice Arrow-->
-            <Button
-                Text="&#xE085;" 
-                Command="{Binding PreviousInvoiceCommand}"
-                FontFamily="Segoe UI Symbol" 
-                FontSize="14"/>
-            <!--NextInvoiceArrow-->
-            <Button  
-                Text="&#xE086;"
-                Command="{Binding NextInvoiceCommand}"
-                FontFamily="Segoe UI Symbol" 
-                FontSize="14"/>
-            <Button Command="{Binding OpenInvoiceViewSidePageCommand}" 
-                    Text="&#x2338;" 
-                    FontFamily="Segoe UI Symbol" 
-                    FontSize="16"/>
+                Text="{Binding InvoiceName}"/>
         </HorizontalStackLayout>
         <!--Stackpanel CommentaryInvoice-->
 

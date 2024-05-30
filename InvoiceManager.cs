@@ -15,7 +15,7 @@ namespace Essensausgleich
     /// <summary>
     /// Manages Invoices
     /// </summary>
-    public class InvoiceManager :AppObjekt ,INotifyPropertyChanged
+    public class InvoiceManager : AppObjekt, INotifyPropertyChanged
     {
         #region Invoice and List
         /// <summary>
@@ -29,18 +29,18 @@ namespace Essensausgleich
         {
             get
             {
-                if(this._Invoices == null)
+                if (this._Invoices == null)
                 {
                     this._Invoices = new Invoices();
                 }
-                                return this._Invoices;
+                return this._Invoices;
             }
             set
             {
-this._Invoices = value;
-               this.OnPropertyChanged(nameof(this.Invoices));
+                this._Invoices = value;
+                this.OnPropertyChanged(nameof(this.Invoices));
 
-                
+
             }
         }
         /// <summary>
@@ -54,12 +54,12 @@ this._Invoices = value;
         {
             get
             {
-                if(this._Invoice == null)
+                if (this._Invoice == null)
                 {
                     this._Invoice = new Invoice();
                 }
                 return this._Invoice;
-                
+
             }
             set
             {
@@ -78,7 +78,7 @@ this._Invoices = value;
         {
             get
             {
-                if(this._InvoiceController == null)
+                if (this._InvoiceController == null)
                 {
                     this._InvoiceController = this.Context.Fabricate<InvoicesController>();
                 }
@@ -92,10 +92,10 @@ this._Invoices = value;
         {
             try
             {
-               this.InvoicesController.Save(invoiceToSave.PathAndFileName!, invoiceToSave);
-                
+                this.InvoicesController.Save(invoiceToSave.PathAndFileName!, invoiceToSave);
 
-                System.Diagnostics.Debug.WriteLine($"This Invoice got saved to:{invoiceToSave.PathAndFileName}") ;
+
+                System.Diagnostics.Debug.WriteLine($"This Invoice got saved to:{invoiceToSave.PathAndFileName}");
             }
             catch (Exception ex)
             {
@@ -105,7 +105,20 @@ this._Invoices = value;
             }
         }
 
-       
+        public void Delete(Invoices invoiceToDelete)
+        {
+            try
+            {
+                File.Delete(invoiceToDelete.PathAndFileName!);
+                System.Diagnostics.Debug.WriteLine($"Project: {invoiceToDelete.InvoicesProjectName} of with File: {invoiceToDelete.PathAndFileName} got deleted");
+            }
+            catch (Exception ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
+        }
+
         /// <summary>
         /// Method to Load a Invoice from a give Path
         /// </summary>

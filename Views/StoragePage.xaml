@@ -47,7 +47,7 @@
             Grid.Row="1">
          <Button
             Text="New Invoices"
-            Command="{Binding NewInvoicesCommand}"/>
+            Command="{Binding NewProjectCommand}"/>
         </VerticalStackLayout>
     </Grid>
        

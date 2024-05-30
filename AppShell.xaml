@@ -10,8 +10,4 @@
     BackgroundColor="Gray"
     >
     <!--Want to get ride of TabBar-->
-   
-        <ShellContent Title="MainPageTitel" ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage"/>
-       
-
 </Shell>

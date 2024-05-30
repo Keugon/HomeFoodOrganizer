@@ -90,9 +90,8 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged(nameof(InvoiceCommentary));
                 OnPropertyChanged(nameof(LblpayingInhabitantContent));
                 OnPropertyChanged(nameof(LblBillContent));
-                nextInvoiceCommand!.NotifyCanExecuteChanged();
-                previousInvoiceCommand!.NotifyCanExecuteChanged();
-                //openInvoiceViewSidePageCommand!.NotifyCanExecuteChanged();
+                OnPropertyChanged(nameof(InvoiceName));
+
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
@@ -113,7 +112,6 @@ namespace Essensausgleich.ViewModel
             set
             {
                 this._CurrentInvoices = value;
-                //openInvoiceViewSidePageCommand!.NotifyCanExecuteChanged();
             }
         }
 
@@ -122,6 +120,7 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
+                
                 string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
 
                 if (!Directory.Exists(InvoicesFolderPath))
@@ -141,16 +140,7 @@ namespace Essensausgleich.ViewModel
                         Invoices i = Context.InvoiceManager.Load(file);
                         if (i != null)
                         {
-                            i.PathAndFileName = file;
-                            if (i.InvoiceList.Count > 0)
-                            {
-                                this._ListOfInvoicesInStorage.Add(i);
-                            }
-                            else
-                            {
-                                System.Diagnostics.Debug.WriteLine($"File:{file} is no valid Invoices object");
-                            }
-
+                            this._ListOfInvoicesInStorage.Add(i);
                         }
                     }
                 }
@@ -345,6 +335,15 @@ namespace Essensausgleich.ViewModel
             get => this.CurrentInvoice.InvoiceComment;
             set => this.CurrentInvoice.InvoiceComment = value;
         }
+        public string InvoiceName
+        {
+            get => this.CurrentInvoice.InvoiceName!;
+            set
+            {
+                this.CurrentInvoice.InvoiceName = value;
+                OnPropertyChanged();
+            }
+        }
 #pragma warning restore 1591
         #endregion       
         /// <summary>
@@ -523,11 +522,10 @@ namespace Essensausgleich.ViewModel
             */
         }
         /// <summary>
-        /// Sets the SelectedInvoiceItem from the StoragePage
-        /// to the CurrentInvoices
+        /// Sets the Clicked Item to the CurrentInvoices and switches to InvoiceViewPage
         /// </summary>
         [RelayCommand]
-        public async Task LoadSelectedInvoiceToCurrent(object parameter)
+        public async Task LoadSelectedInvoicesToCurrent(object parameter)
         {
             //Take the (Selected) Clicked on Item and
             //set it to CurrentInvoices to work with
@@ -543,13 +541,46 @@ namespace Essensausgleich.ViewModel
             //Move to new Page that Displays all the Single Invoices that are in there 
             try
             {
-                await Shell.Current.GoToAsync($"/{nameof(InvoiceViewPage)}");
+                await Shell.Current.GoToAsync($"{nameof(InvoiceViewPage)}");
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return;
             }
+        }
+        /// <summary>
+        /// Sets the Clicked on Item to the CurrentInvoice and switches to EditView
+        /// </summary>
+        [RelayCommand]
+        public async Task LoadSelectedInvoiceToCurrent(object parameter)
+        {
+            //Take the (Selected) Clicked on Item and
+            //set it to CurrentInvoices to work with
+            if (parameter is Invoice SelectedInvoice && SelectedInvoice != null)
+            {
+                try
+                {
+                    await Shell.Current.GoToAsync($"{nameof(EditView)}");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    return;
+                }
+
+                //find the Index of the given Item in the CurrentInvoices List
+                CurrentInvoicesIndex = this.CurrentInvoices.InvoiceList.IndexOf(SelectedInvoice);
+                this.CurrentInvoice = SelectedInvoice;
+
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Error on Casting CommandParams");
+            }
+
+            //Move to new Page that Displays all the Single Invoices that are in there 
+
         }
         /// <summary>
         /// This ask if the currentInvoice should be Updated 
@@ -558,53 +589,68 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public async Task UpdateCurrentInvoice()
         {
-            //Ask if CurrentInvoices has a Name if it hasent 
-            if (string.IsNullOrEmpty(this.CurrentInvoices.InvoicesProjectName))
-            {
-                string InvoicesName = await AskForInvoiceName("Input Name for New InvoicesProject to save");
-                if (!string.IsNullOrEmpty(InvoicesName))
-                {
-                    this.CurrentInvoices.InvoicesProjectName = InvoicesName;
-                    //Todo Filenames
-                    this.CurrentInvoices.PathAndFileName = Path.Combine(InvoicesFolderPath, this.CurrentInvoices.Guid!.Value.ToString());
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("Saving cancelt");
-                    return;
-                }
-            }
-            if (await AskIfOverwrite())
-            {
-                this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
-                this.Context.InvoiceManager.Save(this.CurrentInvoices);
-
-                System.Diagnostics.Debug.WriteLine($"CurrentInvoice{this.CurrentInvoice.InvoiceName} got updated");
-            }
-            else
-            {
-
-                System.Diagnostics.Debug.WriteLine("Updating current Invoice cancelt");
-            }
-        }
-        /// <summary>
-        /// Sets the Current Invoice and Invoices to null
-        /// </summary>
-        [RelayCommand]
-        public async Task NewInvoices()
-        {
+            //maybe not necessari
+            //this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
+            this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex].DateTimeChanged = DateTime.Now;
+            this.Context.InvoiceManager.Save(this.CurrentInvoices);
             try
             {
-                await Shell.Current.GoToAsync($"///MainPage");
+                await Shell.Current.GoToAsync($"..");
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
 
+        }
+        [RelayCommand]
+        public async Task DeleteCurrentProject(object parameter)
+        {
+            //Delete the CurrentInvoices File and remove it from the ListofInvoicesInStorage List to stay consistant
+            this.Context.InvoiceManager.Delete(this.CurrentInvoices);
+            ListOfInvoicesInStorage.Remove(this.CurrentInvoices);
+            try
+            {
+                await Shell.Current.GoToAsync($"..");
+            }
+            catch (Exception ex)
+            {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return;
             }
-            this.CurrentInvoices = null!;
-            this.CurrentInvoice = null!;
+        }
+        /// <summary>
+        /// Creates a new File for Invoices
+        /// </summary>
+        [RelayCommand]
+        public async Task NewProject()
+        {
+            string NewInvoiceName = await AskForInvoiceName("Input Name for new Project");
+            if (!string.IsNullOrEmpty(NewInvoiceName))
+            {
+                Invoices NewProject = new Invoices
+                {
+                    DateTimeCreation = DateTime.Now,
+                    InvoicesProjectName = NewInvoiceName
+                };
+                NewProject.PathAndFileName = Path.Combine(InvoicesFolderPath, NewProject.Guid!.Value.ToString());
+
+                this.Context.InvoiceManager.Save(NewProject);
+                this.CurrentInvoices = NewProject;
+                try
+                {
+                    await Shell.Current.GoToAsync(nameof(InvoiceViewPage));
+                }
+                catch (Exception ex)
+                {
+
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    return;
+                }
+                //For some reasen on InvoiceManager.Save the ListOfInvoicesInStorage
+                //invokes a get renders the .add unnesesery
+                //this.ListOfInvoicesInStorage.Add(NewProject);
+            }
 
         }
         /// <summary>
@@ -619,6 +665,7 @@ namespace Essensausgleich.ViewModel
             if (!string.IsNullOrEmpty(NewInvoiceName))
             {
                 NewInvoice.InvoiceName = NewInvoiceName;
+                NewInvoice.DateTimeCreation = DateTime.Now;
                 this.CurrentInvoice = NewInvoice;
                 this.CurrentInvoices.InvoiceList.Add(NewInvoice);
                 CurrentInvoicesIndex = this.CurrentInvoices.InvoiceList.Count - 1;
@@ -626,6 +673,15 @@ namespace Essensausgleich.ViewModel
                     $"New Invoice:{NewInvoice.InvoiceName} created and " +
                     $"added to:{this.CurrentInvoices.InvoicesProjectName} " +
                     $"on position:{this.CurrentInvoices.InvoiceList.Count - 1}");
+                try
+                {
+                    await Shell.Current.GoToAsync($"{nameof(EditView)}");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    return;
+                }
             }
         }
         /// <summary>

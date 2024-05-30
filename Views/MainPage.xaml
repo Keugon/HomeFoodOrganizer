@@ -26,7 +26,7 @@
         <VerticalStackLayout
             Grid.Row="1">
             <Label 
-                 Text="Invoices"
+                 Text="Projects"
                  VerticalOptions="Center" 
                  HorizontalOptions="Center"/>
             <CollectionView 
@@ -40,7 +40,7 @@
                             <HorizontalStackLayout>
                                 <HorizontalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=LoadSelectedInvoiceToCurrentCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=LoadSelectedInvoicesToCurrentCommand}"
                                         CommandParameter="{Binding .}"/>
 
                                 </HorizontalStackLayout.GestureRecognizers>
@@ -56,7 +56,9 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
+            <Button
+                Text="New Project"
+                Command="{Binding NewProjectCommand}"/>
         </VerticalStackLayout>
     </Grid>
 

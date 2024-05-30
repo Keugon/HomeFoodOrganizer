@@ -48,19 +48,10 @@ namespace Essensausgleich.Data
     /// <summary>
     /// Object to handle one Invoice including 2 Inhabitants
     /// </summary>
-    public partial class Invoice : INotifyPropertyChanged
+    public partial class Invoice : GuidDataObject, INotifyPropertyChanged
     {
-        private string _InvoiceName = string.Empty;
-        public string InvoiceName
-        {
-            get => this._InvoiceName;
-            set
-            {
-                this._InvoiceName = value;
-                OnPropertyChanged(nameof(InvoiceName));
-            }
-        }
-
+        [ObservableProperty]
+        private string? _InvoiceName;       
         /// <summary>
         /// Internal Field for Caching
         /// </summary>
@@ -149,16 +140,7 @@ namespace Essensausgleich.Data
         {
             this.Inhabitants.Add(inhabitantToAdd);
         }
-        #region WPF über Änderungen Informieren
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-            System.Diagnostics.Debug.WriteLine($"OnPropertyChanged Called in InvoiceManager:{propertyName}");
-        }
-        #endregion WPF über Änderungen Informieren
+       
     }
 
 

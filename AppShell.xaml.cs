@@ -6,13 +6,23 @@ namespace Essensausgleich
     {
         public AppShell()
         {
+            
+
+            //Routing.RegisterRoute($"{nameof(MainPage)}", typeof(MainPage));
+            Routing.RegisterRoute($"{nameof(MainPage)}/{nameof(InvoiceViewPage)}", typeof(InvoiceViewPage));
+            Routing.RegisterRoute($"{nameof(MainPage)}/{nameof(InvoiceViewPage)}/{nameof(EditView)}", typeof(EditView));
+            Routing.RegisterRoute($"{nameof(MainPage)}/{nameof(InvoiceViewPage)}/{nameof(EditView)}/{nameof(ContributionPage)}", typeof(ContributionPage));
+
+            //Routing.RegisterRoute(nameof(StoragePage), typeof(StoragePage));
+            //Routing.RegisterRoute(nameof(InvoiceViewSidePage), typeof(InvoiceViewSidePage));
+            Items.Add(new ShellContent
+            {
+                ContentTemplate = new DataTemplate(typeof(MainPage)),
+                Title = "Main",
+                Route = "MainPage"
+            });
             InitializeComponent();
-            Routing.RegisterRoute(nameof(ContributionPage), typeof(ContributionPage));
-            Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
-            Routing.RegisterRoute(nameof(StoragePage), typeof(StoragePage));
-            Routing.RegisterRoute(nameof(InvoiceViewSidePage), typeof(InvoiceViewSidePage));
-            Routing.RegisterRoute(nameof(InvoiceViewPage), typeof(InvoiceViewPage));
         }
-        
+
     }
 }
