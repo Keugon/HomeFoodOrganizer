@@ -583,6 +583,7 @@ namespace Essensausgleich.ViewModel
             //maybe not necessari
             //this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
             this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex].DateTimeChanged = DateTime.Now;
+            
             this.Context.InvoiceManager.Save(this.CurrentInvoices);
             try
             {
@@ -691,6 +692,10 @@ namespace Essensausgleich.ViewModel
                     $"New Invoice:{NewInvoice.InvoiceName} created and " +
                     $"added to:{this.CurrentInvoices.InvoicesProjectName} " +
                     $"on position:{this.CurrentInvoices.InvoiceList.Count - 1}");
+                //Save The New but not Edited Invoice to File in case of not directly
+                //editing and Save via update there, also makes sure that the File
+                //DateTime Changed gets updated.
+                this.Context.InvoiceManager.Save(this.CurrentInvoices);
                 try
                 {
                     await Shell.Current.GoToAsync($"{nameof(EditView)}");

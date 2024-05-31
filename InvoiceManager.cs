@@ -92,6 +92,8 @@ namespace Essensausgleich
         {
             try
             {
+                //Update DateTime Changed on every Save
+                invoiceToSave.DateTimeChanged = DateTime.Now;
                 this.InvoicesController.Save(invoiceToSave.PathAndFileName!, invoiceToSave);
 
 
