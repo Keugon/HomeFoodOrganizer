@@ -12,8 +12,10 @@
     <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
     <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
     <ContentPage.ToolbarItems >
-        <ToolbarItem Text="Save" Command="{Binding UpdateCurrentInvoiceCommand}"></ToolbarItem>
-        <ToolbarItem Text="Delete" Command="{Binding DeleteCurrentInvoiceInEditCommand}"></ToolbarItem>
+        <ToolbarItem 
+            Text="Save" Command="{Binding UpdateCurrentInvoiceCommand}"></ToolbarItem>
+        <ToolbarItem 
+            Text="Delete" Command="{Binding DeleteCurrentInvoiceInEditCommand}"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <Grid >
         <Grid.RowDefinitions>
@@ -59,8 +61,9 @@
                     <!--Stackpanel Inhabitant1-->
                     <HorizontalStackLayout                        
                         Background="Transparent">
-                        <Label Text="{Binding Inhabitant1Name}"                               
-                               MinimumWidthRequest="50" 
+                        <Label Text="{Binding Inhabitant1Name}"
+                               FontSize="Micro"
+                               MinimumWidthRequest="60" 
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer 
@@ -68,15 +71,17 @@
                                     CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
                             </Label.GestureRecognizers>
                         </Label>
-                        <Label Text="{Binding ExpenseInhabitant1}" 
-                               MinimumWidthRequest="50" 
+                        <Label Text="{Binding ExpenseInhabitant1}"
+                               FontSize="Micro"
+                               MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
                     <!--Stackpanel Inhabitant2-->
                     <HorizontalStackLayout
                         Background="Transparent">
-                        <Label Text="{Binding Inhabitant2Name}"                              
-                               MinimumWidthRequest="50" 
+                        <Label Text="{Binding Inhabitant2Name}"
+                               FontSize="Micro"
+                               MinimumWidthRequest="60" 
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer 
@@ -84,18 +89,21 @@
                                     CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
                             </Label.GestureRecognizers>
                         </Label>
-                        <Label Text="{Binding ExpenseInhabitant2}"  
-                               MinimumWidthRequest="50" 
+                        <Label Text="{Binding ExpenseInhabitant2}"
+                               FontSize="Micro"
+                               MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
                     <!--Stackpanel Bezahlen-->
                     <HorizontalStackLayout 
                         Background="LightCyan">
-                        <Label Text="{Binding LblpayingInhabitantContent}"                               
-                               MinimumWidthRequest="50" 
+                        <Label Text="{Binding LblpayingInhabitantContent}"
+                               FontSize="Micro"
+                               MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
-                        <Label Text="{Binding LblBillContent}" 
-                               MinimumWidthRequest="50" 
+                        <Label Text="{Binding LblBillContent}"
+                               FontSize="Micro"
+                               MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>

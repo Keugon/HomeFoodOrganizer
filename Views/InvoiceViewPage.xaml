@@ -14,7 +14,6 @@
     <Grid 
     RowDefinitions="50,*,*"
     ColumnDefinitions="*">
-
         <!--Header-->
         <VerticalStackLayout>
             <Label
@@ -39,12 +38,15 @@
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=LoadSelectedInvoiceToCurrentCommand}"
                                         CommandParameter="{Binding .}"/>
                                 </HorizontalStackLayout.GestureRecognizers>
-                                <Label 
+                                <VerticalStackLayout>
+                                    <Label 
                                 Text="{Binding DateTimeCreation,StringFormat='&#x270E;{0:dd.MM.yy, HH:mm} | '}"/>
-                                <Label 
+                                    <Label 
                                 Text="{Binding DateTimeChanged,StringFormat='&#x21BB;{0:dd.MM.yy, HH:mm} | '}"/>
+                                </VerticalStackLayout>
                                 <Label 
-                                Text="{Binding InvoiceName}"/>
+                                Text="{Binding InvoiceName}"
+                                    FontSize="Medium"/>
                             </HorizontalStackLayout>
                         </Grid>
                     </DataTemplate>
@@ -53,7 +55,6 @@
             <Button
                 Text="Add new Invoice"
                 Command="{Binding NewInvoiceCommand}"/>
-
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
