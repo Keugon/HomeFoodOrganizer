@@ -28,14 +28,15 @@ namespace Essensausgleich.ViewModel
 
     public partial class Anwendung : Essensausgleich.Infra.ViewModel
     {
-        //Const
-        private string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
+        /// <summary>
+        /// Fixed Path
+        /// </summary>
+        private readonly string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
         /// <summary>
         /// inits the Viewmodel and pulls object referenzes
         /// </summary>
         public void Initialize()
         {
-
             System.Diagnostics.Debug.WriteLine("Initialize Start");
             App.Current!.BindingContext = this;
             //Check on startup if first time then Create the "Invoices" Folder
@@ -43,20 +44,16 @@ namespace Essensausgleich.ViewModel
             {
                 System.IO.Directory.CreateDirectory(InvoicesFolderPath);
             }
-
             System.Diagnostics.Debug.WriteLine("Initialize End");
         }
         #region PropertieBinding
-#pragma warning disable 1591
         private int _CurrentInvoicesIndex = 0;
         public int CurrentInvoicesIndex
         {
             get => this._CurrentInvoicesIndex;
             set
             {
-                this._CurrentInvoicesIndex = value;
-                NextInvoiceCommand.NotifyCanExecuteChanged();
-                PreviousInvoiceCommand.NotifyCanExecuteChanged();
+                this._CurrentInvoicesIndex = value;                
             }
         }
         private Invoice _CurrentInvoice = null!;
@@ -181,10 +178,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private Expense _SelectedExpenseItem;
-        /// <summary>
-        /// Property to Bound on UI Picker Control
-        /// </summary>
+        private Expense _SelectedExpenseItem;       
         public string InhabitantsSelected
         {
             get
@@ -259,7 +253,7 @@ namespace Essensausgleich.ViewModel
             }
         }
         private string _lblToolStripContent = null!;
-        public string txtBoxAddUserContent
+        public string TxtBoxAddUserContent
         {
             get => _txtBoxAddUserContent;
             set
@@ -340,8 +334,9 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-#pragma warning restore 1591
-        #endregion       
+        #endregion
+
+        #region Methods       
         /// <summary>
         /// Adds the Name to the Inhabitant object and Name List
         /// </summary>
@@ -376,7 +371,7 @@ namespace Essensausgleich.ViewModel
                 {
                     LblToolStripContent = $"Maximale User anzahl bereits Angelegt";
                 }
-                txtBoxAddUserContent = string.Empty;
+                TxtBoxAddUserContent = string.Empty;
             }
             else
             {
@@ -599,10 +594,15 @@ namespace Essensausgleich.ViewModel
             }
 
         }
+        /// <summary>
+        /// Asynchronously deletes the current project, removing the associated
+        /// invoices from the storage list and navigating back to the previous page.
+        /// </summary>
         [RelayCommand]
-        public async Task DeleteCurrentProject(object parameter)
+        public async Task DeleteCurrentProject()
         {
-            //Delete the CurrentInvoices File and remove it from the ListofInvoicesInStorage List to stay consistant
+            //Delete the CurrentInvoices File and remove it from the
+            //ListofInvoicesInStorage List to stay consistant
             this.Context.InvoiceManager.Delete(this.CurrentInvoices);
             ListOfInvoicesInStorage.Remove(this.CurrentInvoices);
             try
@@ -615,6 +615,10 @@ namespace Essensausgleich.ViewModel
                 return;
             }
         }
+        /// <summary>
+        /// Asynchronously deletes the current invoice being edited, removes it from the 
+        /// invoice list, saves the updated list, and navigates back to the previous page.
+        /// </summary>
         [RelayCommand]
         public async Task DeleteCurrentInvoiceInEdit()
         {
@@ -697,19 +701,7 @@ namespace Essensausgleich.ViewModel
                     return;
                 }
             }
-        }
-        /// <summary>
-        /// Ask via Dialog if it should Overwrite
-        /// </summary>
-        /// <returns>Return true for Yes, Returns false for Cancel</returns>
-        public async Task<bool> AskIfOverwrite()
-        {
-            return await Microsoft.Maui.Controls.Application.Current!.MainPage!.DisplayAlert(
-                         title: "Warning",
-                         message: "Overwrite this Invoices",
-                         accept: "Yes",
-                         cancel: "Cancel");
-        }
+        }      
         /// <summary>
         /// Ask via Dialog for a InvoiceName
         /// </summary>
@@ -725,57 +717,7 @@ namespace Essensausgleich.ViewModel
                   cancel: "Cancel",
                   placeholder: "InvoiceNameHere");
 
-        }
-        /// <summary>
-        /// Checks for the CurrentInvoices List if there is already
-        /// a InvoicesProjectName (therefore it has been loaded and 
-        /// has a PathAndFileName to it)
-        /// </summary>
-        /// <returns>True if has PathAndFileName ready to save or have been given.
-        /// False of has no name to it and got declined given a proper Name</returns>
-        public async Task<bool> IsInvoicesNameAndPathSet()
-        {
-            if (string.IsNullOrEmpty(this.CurrentInvoices.InvoicesProjectName))
-            {
-                string InvoicesNameToSave
-                    = await Microsoft.Maui.Controls.Application.Current!.MainPage!.DisplayPromptAsync(
-                        title: "InvoicesName",
-                        message: "InputNameToSave or cancel",
-                        accept: "Ok",
-                        cancel: "Cancel",
-                        placeholder: "InvoiceNameHere");
-                if (!string.IsNullOrEmpty(InvoicesNameToSave))
-                {
-                    this.CurrentInvoices.InvoicesProjectName = InvoicesNameToSave;
-                    this.CurrentInvoices.PathAndFileName = Path.Combine(InvoicesFolderPath, $"{InvoicesNameToSave}.json");
-                    return true;
-                }
-                else
-                {
-
-                    System.Diagnostics.Debug.WriteLine(
-                        "On Dialog for naming CurrentInvoices got " +
-                        "Cancelt or accept with no entry! Send False for abort");
-                    return false;
-                }
-            }
-            return true;
-        }       
-        /// <summary>
-        /// Checks if there is more then 1 Invoice Listet in CurrentInvoices
-        /// </summary>
-        /// <returns>True if CurrentInvoices > 0</returns>
-        public bool canExecuteInvoiceViewSidePage()
-        {
-
-            if (this.CurrentInvoices.InvoiceList.Count > 1)
-            {
-                return true;
-
-            }
-            return false;
-
-        }
+        }              
         /// <summary>
         /// Delets via Context Menue a DataGrid item 
         /// and convays the change down to the Inhabitant object 
@@ -809,58 +751,6 @@ namespace Essensausgleich.ViewModel
             OnPropertyChanged(nameof(LblpayingInhabitantContent));
             OnPropertyChanged(nameof(LblBillContent));
         }
-        /// <summary>
-        /// Pulls the Next Invoice in List to Current
-        /// </summary>
-        [RelayCommand(CanExecute = nameof(canExecuteNextInvoice))]
-        public void NextInvoice()
-        {
-            this.CurrentInvoice = this.CurrentInvoices.InvoiceList[++CurrentInvoicesIndex];
-        }
-        /// <summary>
-        /// Checks if there is an additianal item in the list at the next index
-        /// </summary>
-        /// <returns>true if yes</returns>
-        public bool canExecuteNextInvoice()
-        {
-
-            //if (this.Context is null)
-            //{
-            //    return false;
-            //}
-            if (CurrentInvoicesIndex < this.CurrentInvoices.InvoiceList.Count - 1)
-            {
-                return true;
-            }
-
-
-            return false;
-        }
-        /// <summary>
-        /// Pulls the Previous Invoice in List to Current
-        /// </summary>
-        [RelayCommand(CanExecute = nameof(canExecutePreviousInvoice))]
-        public void PreviousInvoice()
-        {
-
-            this.CurrentInvoice = this.CurrentInvoices.InvoiceList[--CurrentInvoicesIndex];
-        }
-        /// <summary>
-        /// Checks if there is an additianal item in the list at the previous index
-        /// </summary>
-        /// <returns>true if yes</returns>
-        public bool canExecutePreviousInvoice()
-        {
-            //if (this.Context is null)
-            //{
-            //    return false;
-            //}
-            if (CurrentInvoicesIndex > 0)
-            {
-                return true;
-            }
-
-            return false;
-        }       
+        #endregion Methods
     }
 }

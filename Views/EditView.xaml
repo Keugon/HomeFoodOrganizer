@@ -115,7 +115,7 @@
                 ItemsSource="{Binding InhabitantsNameList}"/>
             <Entry Placeholder="UserName"
                 MinimumWidthRequest="90"
-                Text="{Binding txtBoxAddUserContent}"  
+                Text="{Binding TxtBoxAddUserContent}"  
                 ReturnCommand="{Binding AddUserCommand}"/>
             <Button Command="{Binding AddUserCommand}" Text="Add User" />
         </HorizontalStackLayout>
