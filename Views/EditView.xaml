@@ -13,6 +13,7 @@
     <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
     <ContentPage.ToolbarItems >
         <ToolbarItem Text="Save" Command="{Binding UpdateCurrentInvoiceCommand}"></ToolbarItem>
+        <ToolbarItem Text="Delete" Command="{Binding DeleteCurrentInvoiceInEditCommand}"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <Grid >
         <Grid.RowDefinitions>
@@ -32,7 +33,6 @@
                 Text="{Binding InvoiceName}"/>
         </HorizontalStackLayout>
         <!--Stackpanel CommentaryInvoice-->
-
         <Grid                      
               Grid.Row="4"
               Grid.Column="1"
@@ -44,7 +44,6 @@
                 BackgroundColor="Coral"/>
             </Border>
         </Grid>
-
         <!--Stackpanel Inhabitants Expenses-->
         <Grid  
             Grid.Row="4"

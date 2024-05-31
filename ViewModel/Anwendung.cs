@@ -35,23 +35,20 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         public void Initialize()
         {
+
+            System.Diagnostics.Debug.WriteLine("Initialize Start");
             App.Current!.BindingContext = this;
             //Check on startup if first time then Create the "Invoices" Folder
             if (!Directory.Exists(InvoicesFolderPath))
             {
                 System.IO.Directory.CreateDirectory(InvoicesFolderPath);
             }
+
+            System.Diagnostics.Debug.WriteLine("Initialize End");
         }
-
-
-
-
         #region PropertieBinding
 #pragma warning disable 1591
-
         private int _CurrentInvoicesIndex = 0;
-
-
         public int CurrentInvoicesIndex
         {
             get => this._CurrentInvoicesIndex;
@@ -95,9 +92,7 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
-
         private Invoices _CurrentInvoices = null!;
-
         public Invoices CurrentInvoices
         {
             get
@@ -114,40 +109,52 @@ namespace Essensausgleich.ViewModel
                 this._CurrentInvoices = value;
             }
         }
-
-        private ObservableCollection<Invoices> _ListOfInvoicesInStorage = new ObservableCollection<Invoices>();
+        /// <summary>
+        /// Cache for the Propertie
+        /// </summary>
+        private ObservableCollection<Invoices> _ListOfInvoicesInStorage = null!;
+        /// <summary>
+        /// Gets the List of Files in Storage, on First Time Readout 
+        /// </summary>
         public ObservableCollection<Invoices> ListOfInvoicesInStorage
         {
             get
             {
-                
-                string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
-
-                if (!Directory.Exists(InvoicesFolderPath))
-                {
-
-                    System.IO.Directory.CreateDirectory(InvoicesFolderPath);
-                }
-                else
-                {
-
-                    string[] FileNames = Directory.GetFiles(InvoicesFolderPath);
-                    //Load All Single Invoices to a ObsList
-                    this._ListOfInvoicesInStorage.Clear();
-                    foreach (string file in FileNames)
-                    {
-
-                        Invoices i = Context.InvoiceManager.Load(file);
-                        if (i != null)
-                        {
-                            this._ListOfInvoicesInStorage.Add(i);
-                        }
-                    }
+                if (this._ListOfInvoicesInStorage == null)
+                {                  
+                   this._ListOfInvoicesInStorage = ReadInvoiceFilesFromFolder(InvoicesFolderPath);
                 }
                 return this._ListOfInvoicesInStorage;
             }
         }
+        /// <summary>
+        /// Deserialize all Files that suits a Invoices Object to a ObsColletion
+        /// </summary>
+        /// <param name="folderToReadFrom"></param>
+        /// <returns>ObserveableCollection of Invoices</returns>
+        private ObservableCollection<Invoices> ReadInvoiceFilesFromFolder(string folderToReadFrom)
+        {
+                        var ObsListe = new ObservableCollection<Invoices>();
+            if (!Directory.Exists(folderToReadFrom))
+            {
+                System.IO.Directory.CreateDirectory(folderToReadFrom);
+            }
+            else
+            {
+                string[] FileNames = Directory.GetFiles(folderToReadFrom);
+                //Load All Single Invoices to a ObsList
+                foreach (string file in FileNames)
+                {
 
+                    Invoices i = Context.InvoiceManager.Load(file);
+                    if (i != null)
+                    {
+                        ObsListe.Add(i);
+                    }
+                }
+            }
+            return ObsListe;
+        }
         public ObservableCollection<Expense> ListOfExpenses
         {
             get
@@ -175,17 +182,6 @@ namespace Essensausgleich.ViewModel
             }
         }
         private Expense _SelectedExpenseItem;
-
-        private Invoices _SelectedInvoiceItem = null!;
-        public Invoices SelectedInvoiceItem
-        {
-            get => this._SelectedInvoiceItem;
-            set
-            {
-                this._SelectedInvoiceItem = value;
-                OnPropertyChanged(nameof(this._SelectedInvoiceItem));
-            }
-        }
         /// <summary>
         /// Property to Bound on UI Picker Control
         /// </summary>
@@ -619,6 +615,22 @@ namespace Essensausgleich.ViewModel
                 return;
             }
         }
+        [RelayCommand]
+        public async Task DeleteCurrentInvoiceInEdit()
+        {
+            //Delete the CurrentInvoice Item from the Invoices and save it
+            this.CurrentInvoices.InvoiceList.Remove(this.CurrentInvoice);
+            this.Context.InvoiceManager.Save(this.CurrentInvoices);
+            try
+            {
+                await Shell.Current.GoToAsync($"..");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return;
+            }
+        }
         /// <summary>
         /// Creates a new File for Invoices
         /// </summary>
@@ -635,7 +647,9 @@ namespace Essensausgleich.ViewModel
                 };
                 NewProject.PathAndFileName = Path.Combine(InvoicesFolderPath, NewProject.Guid!.Value.ToString());
 
+                System.Diagnostics.Debug.WriteLine($"Pre Save Count:{this.ListOfInvoicesInStorage.Count}");
                 this.Context.InvoiceManager.Save(NewProject);
+                System.Diagnostics.Debug.WriteLine($"Aft Save Count:{this.ListOfInvoicesInStorage.Count}");
                 this.CurrentInvoices = NewProject;
                 try
                 {
@@ -649,7 +663,7 @@ namespace Essensausgleich.ViewModel
                 }
                 //For some reasen on InvoiceManager.Save the ListOfInvoicesInStorage
                 //invokes a get renders the .add unnesesery
-                //this.ListOfInvoicesInStorage.Add(NewProject);
+                this.ListOfInvoicesInStorage.Add(NewProject);
             }
 
         }
@@ -746,24 +760,7 @@ namespace Essensausgleich.ViewModel
                 }
             }
             return true;
-        }
-        /// <summary>
-        /// Opens and Closes a to the Right attached Window to Display a Datagrid with all Loaded Invoices
-        /// </summary>
-        [RelayCommand(CanExecute = nameof(canExecuteInvoiceViewSidePage))]
-        public async Task OpenInvoiceViewSidePage()
-        {
-            try
-            {
-                await Shell.Current.GoToAsync($"{nameof(InvoiceViewSidePage)}");
-            }
-            catch (Exception ex)
-            {
-
-
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-        }
+        }       
         /// <summary>
         /// Checks if there is more then 1 Invoice Listet in CurrentInvoices
         /// </summary>
@@ -864,20 +861,6 @@ namespace Essensausgleich.ViewModel
             }
 
             return false;
-        }
-        [RelayCommand]
-        public async Task GotoInvoices()
-        {
-            try
-            {
-                await Shell.Current.GoToAsync($"{nameof(StoragePage)}");
-            }
-            catch (Exception ex)
-            {
-
-
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-        }
+        }       
     }
 }

@@ -27,15 +27,15 @@ namespace Essensausgleich
             {
                 var context = provider.GetRequiredService<Infra.Infrastructur>();
                 ViewModel.Anwendung Anwendung = context.Fabricate<ViewModel.Anwendung>();
+
+                System.Diagnostics.Debug.WriteLine("Pre Initialze");
                 Anwendung.Initialize();
                 return Anwendung;
             });
             
 
             builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddSingleton<StoragePage>();
             builder.Services.AddTransient<ContributionPage>();
-            builder.Services.AddTransient<InvoiceViewSidePage>();
             builder.Services.AddSingleton<InvoiceViewPage>();
             builder.Services.AddSingleton<EditView>();
 
