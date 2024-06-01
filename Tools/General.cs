@@ -13,7 +13,7 @@ namespace Essensausgleich.Tools
     /// </summary>
     public static class General : System.Object
     {
-        
+
         /// <summary>
         /// Get the current Date 
         /// </summary>
@@ -27,7 +27,7 @@ namespace Essensausgleich.Tools
 
             return $"{currentDay}_{currentMonth}_{currentYear}"; ;
         }
-        
+
 
     }
     public class FilePathToFileNameConverter : IValueConverter
@@ -42,6 +42,24 @@ namespace Essensausgleich.Tools
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class TwoValueMustEqualMultiConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        { 
+            if (values == null || values.Length < 2)
+                return false;
+
+            string value1 = values[0]?.ToString()!;
+            string value2 = values[1]?.ToString()!;
+
+            return value1 == value2;    
+    }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

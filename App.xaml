@@ -7,6 +7,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <tools:FilePathToFileNameConverter x:Key="FilePathToFileNameConverter"/>
+            <!--Style for the collectionViewItems on MainPage and InvoiceViewPage-->
+            <Style x:Key="ItemBorder"
+                   TargetType="Border">
+                <Setter Property="StrokeThickness" Value="3"/>
+                <Setter Property="Stroke" Value="BlueViolet"/>
+            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />

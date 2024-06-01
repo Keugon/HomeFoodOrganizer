@@ -6,26 +6,56 @@
              Title="Contribution Page"
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
              xmlns:local="clr-namespace:Essensausgleich"
+             xmlns:tools="clr-namespace:Essensausgleich.Tools"
 x:DataType="viewmodel:Anwendung">
-    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <tools:TwoValueMustEqualMultiConverter x:Key="TwoValueMustEqualMultiConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <VerticalStackLayout>
-        <VerticalStackLayout.GestureRecognizers>
-            <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding DeleteDataGridEntryCommand}" />
-        </VerticalStackLayout.GestureRecognizers>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Grid Padding="2">
-            <CollectionView 
-                ItemsSource="{Binding ListOfExpenses, Mode=TwoWay}" 
+        <StackLayout
+            Orientation="Horizontal">
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer  Command="{Binding DeleteDataGridEntryCommand}" />
+            </StackLayout.GestureRecognizers>
+            <Label
+            Text="Contributions"
+            FontSize="Large"
+HorizontalOptions="StartAndExpand" />
+            <Label HorizontalOptions="EndAndExpand"
+                Text="Delet Entry"/>
+        </StackLayout>
+
+        <Grid Padding="10">
+            <CollectionView  
                 SelectionMode="Single"  
-                SelectedItem="{Binding SelectedExpenseItem}"
-                >
+                SelectedItem="{Binding SelectedExpenseItem}">
+                <CollectionView.Triggers>
+                    <!--If Inhabitant1 Selected use ListOfExpensesInhabitant1-->
+                    <DataTrigger TargetType="CollectionView" Value="true">
+                        <DataTrigger.Binding >
+                            <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
+                                <Binding Path="InhabitantsSelected"/>
+                                <Binding Path="Inhabitant1Name"/>
+                            </MultiBinding>
+                        </DataTrigger.Binding>
+                        <Setter Property="ItemsSource" Value="{Binding ListOfExpensesInhabitant1,Mode=OneWay}"/>
+                    </DataTrigger>
+                    <!--If Inhabitant1 Selected use ListOfExpensesInhabitant2-->
+                    <DataTrigger TargetType="CollectionView" Value="true">
+                        <DataTrigger.Binding >
+                            <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
+                                <Binding Path="InhabitantsSelected"/>
+                                <Binding Path="Inhabitant2Name"/>
+                            </MultiBinding>
+                        </DataTrigger.Binding>
+                        <Setter Property="ItemsSource" Value="{Binding ListOfExpensesInhabitant2,Mode=OneWay}"/>
+                    </DataTrigger>
+                </CollectionView.Triggers>
                 <CollectionView.ItemTemplate >
                     <DataTemplate x:DataType="local:Expense" >
-                        
-                        <Grid >
+                        <Grid>
                             <Border>
                                 <HorizontalStackLayout>
                                     <Label Text="Categorie: " />
@@ -33,11 +63,11 @@ x:DataType="viewmodel:Anwendung">
                                     <Label Text="  Value: "/>
                                     <Label Text="{Binding valueExpense}" />
                                 </HorizontalStackLayout>
-                        </Border>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-            </Grid>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>

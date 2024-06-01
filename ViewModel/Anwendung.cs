@@ -53,7 +53,7 @@ namespace Essensausgleich.ViewModel
             get => this._CurrentInvoicesIndex;
             set
             {
-                this._CurrentInvoicesIndex = value;                
+                this._CurrentInvoicesIndex = value;
             }
         }
         private Invoice _CurrentInvoice = null!;
@@ -118,8 +118,8 @@ namespace Essensausgleich.ViewModel
             get
             {
                 if (this._ListOfInvoicesInStorage == null)
-                {                  
-                   this._ListOfInvoicesInStorage = ReadInvoiceFilesFromFolder(InvoicesFolderPath);
+                {
+                    this._ListOfInvoicesInStorage = ReadInvoiceFilesFromFolder(InvoicesFolderPath);
                 }
                 return this._ListOfInvoicesInStorage;
             }
@@ -131,7 +131,7 @@ namespace Essensausgleich.ViewModel
         /// <returns>ObserveableCollection of Invoices</returns>
         private ObservableCollection<Invoices> ReadInvoiceFilesFromFolder(string folderToReadFrom)
         {
-                        var ObsListe = new ObservableCollection<Invoices>();
+            var ObsListe = new ObservableCollection<Invoices>();
             if (!Directory.Exists(folderToReadFrom))
             {
                 System.IO.Directory.CreateDirectory(folderToReadFrom);
@@ -152,23 +152,17 @@ namespace Essensausgleich.ViewModel
             }
             return ObsListe;
         }
-        public ObservableCollection<Expense> ListOfExpenses
+        public ObservableCollection<Expense> ListOfExpensesInhabitant1
         {
-            get
-            {
-                if (this._ListofExpenses == null)
-                {
-                    this._ListofExpenses = new ObservableCollection<Expense>();
-                }
-                return this._ListofExpenses;
-            }
-            set
-            {
-                this._ListofExpenses = value;
-                Log.WriteLine($"{ListOfExpenses.GetType().Name} has changed");
-            }
+            get => this.CurrentInvoice.Inhabitants[0].ListOfExpenses;
+            set => this.CurrentInvoice.Inhabitants[0].ListOfExpenses = value;
         }
-        private ObservableCollection<Expense>? _ListofExpenses;
+        public ObservableCollection<Expense> ListOfExpensesInhabitant2
+        {
+            get => this.CurrentInvoice.Inhabitants[1].ListOfExpenses;
+            set => this.CurrentInvoice.Inhabitants[1].ListOfExpenses = value;
+        }
+
         public Expense SelectedExpenseItem
         {
             get => _SelectedExpenseItem;
@@ -178,7 +172,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private Expense _SelectedExpenseItem;       
+        private Expense _SelectedExpenseItem;
         public string InhabitantsSelected
         {
             get
@@ -425,50 +419,22 @@ namespace Essensausgleich.ViewModel
         /// selectedInhabitant to display the total Expenses
         /// </summary>
         [RelayCommand]
-        public async Task OpenContributioWindow(object parameter)
+        public void FillContributioWindow(object parameter)
         {
             if (parameter is Microsoft.Maui.Controls.Label label)
             {
-                if (label.Text == Inhabitant1Name || label.Text == Inhabitant2Name)
+
+                if (label.Text == Inhabitant1Name)
                 {
-                    if (label.Text.ToString() == Inhabitant1Name)
-                    {
-                        InhabitantsSelected = Inhabitant1Name;
-                        ListOfExpenses.Clear();
-                        foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpenses)
-                        {
-                            ListOfExpenses.Add(item);
-                        }
-                        this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpenses);
-
-                    }
-                    else if (label.Text.ToString() == Inhabitant2Name)
-                    {
-                        InhabitantsSelected = Inhabitant2Name;
-                        ListOfExpenses.Clear();
-                        foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpenses)
-                        {
-                            ListOfExpenses.Add(item);
-                        }
-                        this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpenses);
-
-                    }
-                    try
-                    {
-                        await Shell.Current.GoToAsync($"{nameof(ContributionPage)}");
-                    }
-                    catch (Exception ex)
-                    {
-
-
-                        System.Diagnostics.Debug.WriteLine(ex.Message);
-                    }
+                    InhabitantsSelected = Inhabitant1Name;
 
                 }
-                else
+                else if (label.Text == Inhabitant2Name)
                 {
-                    Log.WriteLine($"No Inhabitant selected or not found, Selcted:{InhabitantsSelected}");
+                    InhabitantsSelected = Inhabitant2Name;
+
                 }
+
             }
 
             /*
@@ -484,23 +450,23 @@ namespace Essensausgleich.ViewModel
                             {
                                 if (label.Content.ToString() == Inhabitant1Name)
                                 {
-                                    ListOfExpenses.Clear();
-                                    foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpenses)
+                                    ListOfExpensesInhabitant1.Clear();
+                                    foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpensesInhabitant1)
                                     {
-                                        ListOfExpenses.Add(item);
+                                        ListOfExpensesInhabitant1.Add(item);
                                     }
-                                    this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpenses);
+                                    this.ListOfExpensesInhabitant1 = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpensesInhabitant1);
                                     contributionWindow.Show();
                                     contributionWindow.SizeToContent = SizeToContent.Height;
                                 }
                                 else if (label.Content.ToString() == Inhabitant2Name)
                                 {
-                                    ListOfExpenses.Clear();
-                                    foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpenses)
+                                    ListOfExpensesInhabitant1.Clear();
+                                    foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpensesInhabitant1)
                                     {
-                                        ListOfExpenses.Add(item);
+                                        ListOfExpensesInhabitant1.Add(item);
                                     }
-                                    this.ListOfExpenses = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpenses);
+                                    this.ListOfExpensesInhabitant1 = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpensesInhabitant1);
                                     contributionWindow.Show();
                                     contributionWindow.SizeToContent = SizeToContent.Height;
                                 }
@@ -583,7 +549,7 @@ namespace Essensausgleich.ViewModel
             //maybe not necessari
             //this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
             this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex].DateTimeChanged = DateTime.Now;
-            
+
             this.Context.InvoiceManager.Save(this.CurrentInvoices);
             try
             {
@@ -642,7 +608,11 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public async Task NewProject()
         {
-            string NewInvoiceName = await AskForInvoiceName("Input Name for new Project");
+            string NewInvoiceName = await AskForDialogOkCancel(
+                titel: "Input",
+                message: "Input Name for new Project",
+                placeholder: "Projectname here");
+
             if (!string.IsNullOrEmpty(NewInvoiceName))
             {
                 Invoices NewProject = new Invoices
@@ -671,6 +641,7 @@ namespace Essensausgleich.ViewModel
                 this.ListOfInvoicesInStorage.Add(NewProject);
             }
 
+
         }
         /// <summary>
         /// Starts a new Invoice gives it via Dialog a Name
@@ -679,12 +650,44 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public async Task NewInvoice()
         {
-            Invoice NewInvoice = new Invoice();
-            string NewInvoiceName = await AskForInvoiceName("Input Name for new Invoice");
-            if (!string.IsNullOrEmpty(NewInvoiceName))
+            //Ask for All Inputs First!
+            string NewInvoiceName = await AskForDialogOkCancel(
+                titel: "Input",
+                message: "Input Name for new Invoice",
+                placeholder: "Invoice Name here");
+            string InhabitantName1 = await AskForDialogOkCancel(
+               titel: "Input",
+               message: "Input First Username",
+               placeholder: "1st Username");
+            string InhabitantName2 = await AskForDialogOkCancel(
+                titel: "Input",
+                message: "Input Second Username",
+                placeholder: "2nd Username");
+            //Check if every input is not null or empty to proceed
+            if (!string.IsNullOrEmpty(NewInvoiceName) &&
+                !string.IsNullOrEmpty(InhabitantName1) &&
+                !string.IsNullOrEmpty(InhabitantName2) &&
+                //Checks if the Name only Consists of Letters 
+                Regex.IsMatch(InhabitantName1, @"^[a-zA-Z]+$") &&
+                Regex.IsMatch(InhabitantName1, @"^[a-zA-Z]+$"))
             {
-                NewInvoice.InvoiceName = NewInvoiceName;
-                NewInvoice.DateTimeCreation = DateTime.Now;
+                Invoice NewInvoice = new Invoice
+                {
+                    InvoiceName = NewInvoiceName,
+                    DateTimeCreation = DateTime.Now,
+                    InhabitantsNameList = new ObservableCollection<string> { InhabitantName1, InhabitantName2 },
+                    Inhabitants = new Inhabitants
+                    {
+                        new Inhabitant
+                        {
+                            Name = InhabitantName1,
+                        },
+                        new Inhabitant
+                        {
+                            Name = InhabitantName2
+                        }
+                    }
+                };
                 this.CurrentInvoice = NewInvoice;
                 this.CurrentInvoices.InvoiceList.Add(NewInvoice);
                 CurrentInvoicesIndex = this.CurrentInvoices.InvoiceList.Count - 1;
@@ -706,23 +709,32 @@ namespace Essensausgleich.ViewModel
                     return;
                 }
             }
-        }      
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Inputs Wrongt " +
+                    $"InvoiceName:{NewInvoiceName}," +
+                    $" Inhab1:{InhabitantName1}, Inhab2:{InhabitantName2}");
+            }
+        }
         /// <summary>
-        /// Ask via Dialog for a InvoiceName
+        /// Ask via Dialog for Information
         /// </summary>
+        /// <param name="message">The Message to Display</param>
+        /// <param name="placeholder">Text in the Entryfield for additional Information</param>
+        /// <param name="titel">Titel of the DialogBox</param>
         /// <returns>returns null if cancel, returns a 
         /// string on accept can be string.empty</returns>
-        public async Task<string> AskForInvoiceName(string message)
+        public async Task<string> AskForDialogOkCancel(string titel, string message, string placeholder)
         {
 
             return await Microsoft.Maui.Controls.Application.Current!.MainPage!.DisplayPromptAsync(
-                  title: "Warning",
+                  title: titel,
                   message: message,
                   accept: "Ok",
                   cancel: "Cancel",
-                  placeholder: "InvoiceNameHere");
+                  placeholder: placeholder);
 
-        }              
+        }
         /// <summary>
         /// Delets via Context Menue a DataGrid item 
         /// and convays the change down to the Inhabitant object 
@@ -732,26 +744,18 @@ namespace Essensausgleich.ViewModel
         {
 
             // delet Entry and updates source
-            ListOfExpenses.Remove(SelectedExpenseItem);
+            ListOfExpensesInhabitant1.Remove(SelectedExpenseItem);
             if (InhabitantsSelected == Inhabitant1Name)
             {
-                this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Clear();
-                foreach (var item in ListOfExpenses)
-                {
-                    this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Add(item);
-                }
+                this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Remove(SelectedExpenseItem);
                 OnPropertyChanged(nameof(ExpenseInhabitant1));
-                OnPropertyChanged(nameof(ListOfExpenses));
+                OnPropertyChanged(nameof(ListOfExpensesInhabitant1));
             }
             else if (InhabitantsSelected == Inhabitant2Name)
             {
-                this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Clear();
-                foreach (var item in ListOfExpenses)
-                {
-                    this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Add(item);
-                }
+                this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Remove(SelectedExpenseItem);
                 OnPropertyChanged(nameof(ExpenseInhabitant2));
-                OnPropertyChanged(nameof(ListOfExpenses));
+                OnPropertyChanged(nameof(ListOfExpensesInhabitant2));
             }
             OnPropertyChanged(nameof(LblpayingInhabitantContent));
             OnPropertyChanged(nameof(LblBillContent));

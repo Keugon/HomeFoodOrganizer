@@ -34,7 +34,9 @@
                     <DataTemplate 
                         x:DataType="data:Invoices">
                         <Grid>
-                            <HorizontalStackLayout>
+                            <Border
+                               Style="{StaticResource Key=ItemBorder}">
+                                <HorizontalStackLayout>
                                 <HorizontalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=LoadSelectedInvoicesToCurrentCommand}"
@@ -49,7 +51,9 @@
                                 <Label 
                                     Text="{Binding InvoicesProjectName}"
                                     FontSize="Medium"/>
-                            </HorizontalStackLayout>
+                            </HorizontalStackLayout>  
+                            </Border>
+                           
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

@@ -3,11 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Essensausgleich.Views.EditView"
              xmlns:local="clr-namespace:Essensausgleich"
+             xmlns:tools="clr-namespace:Essensausgleich.Tools"
+             xmlns:views="clr-namespace:Essensausgleich.Views"
             xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel"
             xmlns:data="clr-namespace:Essensausgleich.Data" 
             x:DataType="viewmodel:Anwendung"
              Title="EditView">
-
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <tools:TwoValueMustEqualMultiConverter x:Key="TwoValueMustEqualMultiConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
     <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
     <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
@@ -19,41 +25,106 @@
     </ContentPage.ToolbarItems>
     <Grid >
         <Grid.RowDefinitions>
-            <RowDefinition Height="AUTO"/>
-            <RowDefinition Height="AUTO"/>
-            <RowDefinition Height="AUTO"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <!--CurrentInvoice Titel-->
-        <HorizontalStackLayout>
-            <Label
-                Text="{Binding InvoiceName}"/>
-        </HorizontalStackLayout>
-        <!--Stackpanel CommentaryInvoice-->
-        <Grid                      
-              Grid.Row="4"
-              Grid.Column="1"
-              MinimumHeightRequest="100"
-              MaximumHeightRequest="300">
-            <Border Padding="0">
-                <Editor Placeholder="Coment"
-                Text ="{Binding InvoiceCommentary}"                   
-                BackgroundColor="Coral"/>
-            </Border>
-        </Grid>
-        <!--Stackpanel Inhabitants Expenses-->
-        <Grid  
-            Grid.Row="4"
-            Grid.RowSpan="1"
+
+        <!--Row 0-->
+        <VerticalStackLayout
+            Grid.Row="0" 
             Grid.Column="0"
-            Background="Transparent"
-            MinimumHeightRequest="100"
-            MaximumHeightRequest="300">
+            Grid.ColumnSpan="2">
+            <!--CurrentInvoice Titel-->
+            <Label
+                Text="{Binding InvoiceName}"
+                FontSize="Header"/>
+            <!--Stack Pannel Add Bill-->
+            <HorizontalStackLayout>
+                <Entry 
+                    Placeholder="Categorie"
+                    Text="{Binding TxtBoxCategorieText}" 
+                    MinimumWidthRequest="100"/>
+                <Entry Placeholder="Value"
+                    Text="{Binding TxtBoxAddBillText}" 
+                    MinimumWidthRequest="100"
+                    ReturnCommand="{Binding AddBillCommand}"/>
+                <Button 
+                    Command="{Binding AddBillCommand}" 
+                    Text="Add Bill"/>
+            </HorizontalStackLayout>
+            <!--Inhabitants Names to Choose for Input and Display of Contributions-->
+            <HorizontalStackLayout>
+                <Label Text="{Binding Inhabitant1Name}"
+                       FontSize="Large"
+                       MinimumWidthRequest="60" 
+                       MinimumHeightRequest="25">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Style.Triggers>
+                                <DataTrigger TargetType="Label" Value="true">
+                                    <DataTrigger.Binding >
+                                        <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
+                                            <Binding Path="InhabitantsSelected"/>
+                                            <Binding Path="Inhabitant1Name"/>
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter Property="TextDecorations" Value="Underline"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                Command="{Binding FillContributioWindowCommand}" 
+                                CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Text="{Binding Inhabitant2Name}"
+                       FontSize="Large"
+                       MinimumWidthRequest="60" 
+                       MinimumHeightRequest="25">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Style.Triggers>
+                                <DataTrigger TargetType="Label" Value="true">
+                                    <DataTrigger.Binding >
+                                        <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
+                                            <Binding Path="InhabitantsSelected"/>
+                                            <Binding Path="Inhabitant2Name"/>
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter Property="TextDecorations" Value="Underline"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer 
+                                Command="{Binding FillContributioWindowCommand}" 
+                                CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+        <!--Row 1-->       
+           <views:ContributionPage 
+            Background="Aqua"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"/>  
+        <!--Row 2-->
+        <!--Inhabitants Expense and Commentary on the bottom-->
+        <HorizontalStackLayout
+             Grid.Row="2"
+              Grid.Column="0"
+            Grid.ColumnSpan="2"
+            HorizontalOptions="CenterAndExpand">
+            <!--Stackpanel Inhabitants Expenses-->
             <Border     
                 Padding="0" 
                 Background="LightBlue">
@@ -62,17 +133,17 @@
                     <HorizontalStackLayout                        
                         Background="Transparent">
                         <Label Text="{Binding Inhabitant1Name}"
-                               FontSize="Micro"
+                               FontSize="Default"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer 
-                                    Command="{Binding OpenContributioWindowCommand}" 
+                                    Command="{Binding FillContributioWindowCommand}" 
                                     CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
                             </Label.GestureRecognizers>
                         </Label>
                         <Label Text="{Binding ExpenseInhabitant1}"
-                               FontSize="Micro"
+                               FontSize="Default"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
@@ -80,17 +151,17 @@
                     <HorizontalStackLayout
                         Background="Transparent">
                         <Label Text="{Binding Inhabitant2Name}"
-                               FontSize="Micro"
+                               FontSize="Default"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer 
-                                    Command="{Binding OpenContributioWindowCommand}" 
+                                    Command="{Binding FillContributioWindowCommand}" 
                                     CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
                             </Label.GestureRecognizers>
                         </Label>
                         <Label Text="{Binding ExpenseInhabitant2}"
-                               FontSize="Micro"
+                               FontSize="Default"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
@@ -98,51 +169,26 @@
                     <HorizontalStackLayout 
                         Background="LightCyan">
                         <Label Text="{Binding LblpayingInhabitantContent}"
-                               FontSize="Micro"
+                               FontSize="Default"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                         <Label Text="{Binding LblBillContent}"
-                               FontSize="Micro"
+                               FontSize="Default"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Border>
-        </Grid>
-        <!--Stackpanel AddUser And Combox User-->
-        <HorizontalStackLayout
-            Grid.Row="2"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            MinimumHeightRequest="50"
-            HeightRequest="55"
-            MaximumHeightRequest="100">
-            <Picker       
-                MinimumWidthRequest="100"
-                SelectedItem="{Binding InhabitantsSelected}" 
-                ItemsSource="{Binding InhabitantsNameList}"/>
-            <Entry Placeholder="UserName"
-                MinimumWidthRequest="90"
-                Text="{Binding TxtBoxAddUserContent}"  
-                ReturnCommand="{Binding AddUserCommand}"/>
-            <Button Command="{Binding AddUserCommand}" Text="Add User" />
-        </HorizontalStackLayout>
-        <!--Stack Pannel Add Bill-->
-        <HorizontalStackLayout
-           Grid.Row="3"
-           Grid.Column="0"
-           Grid.ColumnSpan="2"
-            MinimumHeightRequest="50"
-            HeightRequest="55"
-            MaximumHeightRequest="100">
-            <Entry Placeholder="Categorie"
-                Text="{Binding TxtBoxCategorieText}" 
-                MinimumWidthRequest="100"/>
-            <Entry Placeholder="Value"
-                Text="{Binding TxtBoxAddBillText}" 
-                MinimumWidthRequest="100"
-                ReturnCommand="{Binding AddBillCommand}"/>
-            <Button Command="{Binding AddBillCommand}" Text="Add Bill"/>
+            <!--Stackpanel CommentaryInvoice-->
+            <Border 
+                Padding="0"
+                >
+                <Editor 
+                    Placeholder="Coment"
+                Text ="{Binding InvoiceCommentary}"                   
+                BackgroundColor="Coral"
+                    />
+            </Border>
         </HorizontalStackLayout>
 
     </Grid>
