@@ -503,6 +503,7 @@ namespace Essensausgleich.ViewModel
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                LogToFile(ex.Message);
                 return;
             }
         }
@@ -523,6 +524,7 @@ namespace Essensausgleich.ViewModel
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine(ex.Message);
+                    LogToFile(ex.Message);
                     return;
                 }
 
@@ -655,14 +657,25 @@ namespace Essensausgleich.ViewModel
                 titel: "Input",
                 message: "Input Name for new Invoice",
                 placeholder: "Invoice Name here");
+            if (string.IsNullOrEmpty(NewInvoiceName)){
+                return;
+            }
             string InhabitantName1 = await AskForDialogOkCancel(
                titel: "Input",
                message: "Input First Username",
                placeholder: "1st Username");
+            if (string.IsNullOrEmpty(InhabitantName1))
+            {
+                return;
+            }
             string InhabitantName2 = await AskForDialogOkCancel(
                 titel: "Input",
                 message: "Input Second Username",
                 placeholder: "2nd Username");
+            if (string.IsNullOrEmpty(InhabitantName2))
+            {
+                return;
+            }
             //Check if every input is not null or empty to proceed
             if (!string.IsNullOrEmpty(NewInvoiceName) &&
                 !string.IsNullOrEmpty(InhabitantName1) &&
@@ -759,6 +772,15 @@ namespace Essensausgleich.ViewModel
             }
             OnPropertyChanged(nameof(LblpayingInhabitantContent));
             OnPropertyChanged(nameof(LblBillContent));
+        }
+        public void LogToFile(string message)
+        {
+            //folder
+            string LogName = "LogFile";
+            
+            File.AppendAllText(Path.Combine(InvoicesFolderPath,LogName), $"Protocol LogTime {DateTime.Now}, Message:{message} ");
+
+            System.Diagnostics.Debug.WriteLine("Writen to LogFile");
         }
         #endregion Methods
     }

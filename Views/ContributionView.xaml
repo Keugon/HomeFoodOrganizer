@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Essensausgleich.Views.ContributionPage"
-             Title="Contribution Page"
+             x:Class="Essensausgleich.Views.ContributionView"
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
              xmlns:local="clr-namespace:Essensausgleich"
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
 x:DataType="viewmodel:Anwendung">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <tools:TwoValueMustEqualMultiConverter x:Key="TwoValueMustEqualMultiConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <VerticalStackLayout>
         <StackLayout
             Orientation="Horizontal">
@@ -26,7 +20,6 @@ HorizontalOptions="StartAndExpand" />
             <Label HorizontalOptions="EndAndExpand"
                 Text="Delet Entry"/>
         </StackLayout>
-
         <Grid Padding="10">
             <CollectionView  
                 SelectionMode="Single"  
@@ -70,4 +63,4 @@ HorizontalOptions="StartAndExpand" />
             </CollectionView>
         </Grid>
     </VerticalStackLayout>
-</ContentPage>
+</ContentView>

@@ -73,7 +73,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\ContributionPage.xaml">
+	  <Compile Update="Views\ContributionView.xaml.cs">
+	    <DependentUpon>ContributionView.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\ContributionView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EditView.xaml">

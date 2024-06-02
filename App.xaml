@@ -7,11 +7,18 @@
     <Application.Resources>
         <ResourceDictionary>
             <tools:FilePathToFileNameConverter x:Key="FilePathToFileNameConverter"/>
+            <tools:TwoValueMustEqualMultiConverter x:Key="TwoValueMustEqualMultiConverter"/>
             <!--Style for the collectionViewItems on MainPage and InvoiceViewPage-->
             <Style x:Key="ItemBorder"
                    TargetType="Border">
                 <Setter Property="StrokeThickness" Value="3"/>
                 <Setter Property="Stroke" Value="BlueViolet"/>
+            </Style>
+            <!--LabelSize for EditView-->
+            <Style 
+                x:Key="EditViewExpense"
+                TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
             </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />

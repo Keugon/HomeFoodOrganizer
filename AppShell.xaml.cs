@@ -11,7 +11,7 @@ namespace Essensausgleich
             //Routing.RegisterRoute($"{nameof(MainPage)}", typeof(MainPage));
             Routing.RegisterRoute($"{nameof(MainPage)}/{nameof(InvoiceViewPage)}", typeof(InvoiceViewPage));
             Routing.RegisterRoute($"{nameof(MainPage)}/{nameof(InvoiceViewPage)}/{nameof(EditView)}", typeof(EditView));
-            Routing.RegisterRoute($"{nameof(MainPage)}/{nameof(InvoiceViewPage)}/{nameof(EditView)}/{nameof(ContributionPage)}", typeof(ContributionPage));
+            Routing.RegisterRoute($"{nameof(MainPage)}/{nameof(InvoiceViewPage)}/{nameof(EditView)}/{nameof(ContributionView)}", typeof(ContributionView));
 
             //Routing.RegisterRoute(nameof(StoragePage), typeof(StoragePage));
             //Routing.RegisterRoute(nameof(InvoiceViewSidePage), typeof(InvoiceViewSidePage));

@@ -9,11 +9,7 @@
             xmlns:data="clr-namespace:Essensausgleich.Data" 
             x:DataType="viewmodel:Anwendung"
              Title="EditView">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <tools:TwoValueMustEqualMultiConverter x:Key="TwoValueMustEqualMultiConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+   
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
     <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
     <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
@@ -23,11 +19,12 @@
         <ToolbarItem 
             Text="Delete" Command="{Binding DeleteCurrentInvoiceInEditCommand}"></ToolbarItem>
     </ContentPage.ToolbarItems>
+    <!--DefineMainGridStructur-->
     <Grid >
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="0.3*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -111,29 +108,34 @@
                 </Label>
             </HorizontalStackLayout>
         </VerticalStackLayout>
-        <!--Row 1-->       
-           <views:ContributionPage 
-            Background="Aqua"
+        <!--Row 1-->
+        <!--Bind the Nestet Page in a ContentView if not it only works in DebugMode-->
+        <views:ContributionView
             Grid.Row="1"
             Grid.Column="0"
-            Grid.ColumnSpan="2"/>  
+            Grid.ColumnSpan="2"
+            Background="Aqua"/>
         <!--Row 2-->
         <!--Inhabitants Expense and Commentary on the bottom-->
         <HorizontalStackLayout
              Grid.Row="2"
               Grid.Column="0"
             Grid.ColumnSpan="2"
-            HorizontalOptions="CenterAndExpand">
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
             <!--Stackpanel Inhabitants Expenses-->
-            <Border     
+            <Border 
+                StrokeThickness="3"
                 Padding="0" 
-                Background="LightBlue">
-                <VerticalStackLayout >
+                Background="LightBlue"
+                HorizontalOptions="FillAndExpand">
+                <VerticalStackLayout 
+                    HorizontalOptions="FillAndExpand">
                     <!--Stackpanel Inhabitant1-->
-                    <HorizontalStackLayout                        
+                    <HorizontalStackLayout          HorizontalOptions="FillAndExpand"              
                         Background="Transparent">
                         <Label Text="{Binding Inhabitant1Name}"
-                               FontSize="Default"
+                               Style="{StaticResource EditViewExpense}"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
@@ -143,15 +145,15 @@
                             </Label.GestureRecognizers>
                         </Label>
                         <Label Text="{Binding ExpenseInhabitant1}"
-                               FontSize="Default"
+                               Style="{StaticResource EditViewExpense}"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
                     <!--Stackpanel Inhabitant2-->
-                    <HorizontalStackLayout
+                    <HorizontalStackLayout HorizontalOptions="FillAndExpand"
                         Background="Transparent">
                         <Label Text="{Binding Inhabitant2Name}"
-                               FontSize="Default"
+                               Style="{StaticResource EditViewExpense}"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25">
                             <Label.GestureRecognizers>
@@ -161,7 +163,7 @@
                             </Label.GestureRecognizers>
                         </Label>
                         <Label Text="{Binding ExpenseInhabitant2}"
-                               FontSize="Default"
+                               Style="{StaticResource EditViewExpense}"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
@@ -169,11 +171,11 @@
                     <HorizontalStackLayout 
                         Background="LightCyan">
                         <Label Text="{Binding LblpayingInhabitantContent}"
-                               FontSize="Default"
+                               Style="{StaticResource EditViewExpense}"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                         <Label Text="{Binding LblBillContent}"
-                               FontSize="Default"
+                               Style="{StaticResource EditViewExpense}"
                                MinimumWidthRequest="60" 
                                MinimumHeightRequest="25"/>
                     </HorizontalStackLayout>
@@ -181,15 +183,18 @@
             </Border>
             <!--Stackpanel CommentaryInvoice-->
             <Border 
+                StrokeThickness="3"
                 Padding="0"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
                 >
                 <Editor 
                     Placeholder="Coment"
-                Text ="{Binding InvoiceCommentary}"                   
-                BackgroundColor="Coral"
-                    />
+                    Text ="{Binding InvoiceCommentary}"                   
+                    BackgroundColor="Coral"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"/>
             </Border>
         </HorizontalStackLayout>
-
     </Grid>
 </ContentPage>
