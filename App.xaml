@@ -20,6 +20,12 @@
                 TargetType="Label">
                 <Setter Property="FontSize" Value="20"/>
             </Style>
+            <!--LabelSize for Contribution-->
+            <Style 
+                x:Key="ContributionSize"
+                TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />

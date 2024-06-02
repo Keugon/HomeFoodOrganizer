@@ -7,17 +7,22 @@
              xmlns:local="clr-namespace:Essensausgleich"
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
 x:DataType="viewmodel:Anwendung">
-    <VerticalStackLayout>
+    <ScrollView
+        Orientation="Both"
+        HorizontalScrollBarVisibility="Default">
+       <VerticalStackLayout>
         <StackLayout
             Orientation="Horizontal">
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer  Command="{Binding DeleteDataGridEntryCommand}" />
             </StackLayout.GestureRecognizers>
             <Label
-            Text="Contributions"
-            FontSize="Large"
-HorizontalOptions="StartAndExpand" />
-            <Label HorizontalOptions="EndAndExpand"
+                Text="Contributions"
+                FontSize="Large"
+                FontAttributes="Bold"
+                HorizontalOptions="StartAndExpand" />
+            <Label 
+                HorizontalOptions="EndAndExpand"
                 Text="Delet Entry"/>
         </StackLayout>
         <Grid Padding="10">
@@ -51,10 +56,14 @@ HorizontalOptions="StartAndExpand" />
                         <Grid>
                             <Border>
                                 <HorizontalStackLayout>
-                                    <Label Text="Categorie: " />
-                                    <Label Text="{Binding categorie}" />
-                                    <Label Text="  Value: "/>
-                                    <Label Text="{Binding valueExpense}" />
+                                    <Label Text="Categorie: "
+                                           Style="{StaticResource ContributionSize}"/>
+                                    <Label Text="{Binding categorie}" 
+                                           Style="{StaticResource ContributionSize}"/>
+                                    <Label Text="  Value: "
+                                           Style="{StaticResource ContributionSize}"/>
+                                    <Label Text="{Binding valueExpense}" 
+                                           Style="{StaticResource ContributionSize}"/>
                                 </HorizontalStackLayout>
                             </Border>
                         </Grid>
@@ -62,5 +71,7 @@ HorizontalOptions="StartAndExpand" />
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Grid>
-    </VerticalStackLayout>
+    </VerticalStackLayout>  
+    </ScrollView>
+   
 </ContentView>

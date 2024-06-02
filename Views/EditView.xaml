@@ -22,7 +22,7 @@
     <!--DefineMainGridStructur-->
     <Grid >
         <Grid.RowDefinitions>
-            <RowDefinition Height="120"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="0.3*"/>
         </Grid.RowDefinitions>
@@ -49,17 +49,18 @@
                 <Entry Placeholder="Value"
                     Text="{Binding TxtBoxAddBillText}" 
                     MinimumWidthRequest="100"
-                    ReturnCommand="{Binding AddBillCommand}"/>
+                    ReturnCommand="{Binding AddBillCommand}"
+                       Keyboard="Numeric"/>
                 <Button 
                     Command="{Binding AddBillCommand}" 
                     Text="Add Bill"/>
             </HorizontalStackLayout>
             <!--Inhabitants Names to Choose for Input and Display of Contributions-->
             <HorizontalStackLayout>
-                <Label Text="{Binding Inhabitant1Name}"
-                       FontSize="Large"
-                       MinimumWidthRequest="60" 
-                       MinimumHeightRequest="25">
+                <Border
+                    BackgroundColor="LightGray">
+                  <Label Text="{Binding Inhabitant1Name}"
+                       FontSize="Large">
                     <Label.Style>
                         <Style TargetType="Label">
                             <Style.Triggers>
@@ -80,11 +81,14 @@
                                 Command="{Binding FillContributioWindowCommand}" 
                                 CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
                     </Label.GestureRecognizers>
-                </Label>
-                <Label Text="{Binding Inhabitant2Name}"
-                       FontSize="Large"
-                       MinimumWidthRequest="60" 
-                       MinimumHeightRequest="25">
+                </Label>  
+                </Border>
+                
+                <Border
+                    BackgroundColor="LightGray"
+                    Margin="5,0,0,0">
+                    <Label Text="{Binding Inhabitant2Name}"
+                       FontSize="Large">
                     <Label.Style>
                         <Style TargetType="Label">
                             <Style.Triggers>
@@ -106,7 +110,8 @@
                                 CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
                     </Label.GestureRecognizers>
                 </Label>
-            </HorizontalStackLayout>
+                </Border>
+                            </HorizontalStackLayout>
         </VerticalStackLayout>
         <!--Row 1-->
         <!--Bind the Nestet Page in a ContentView if not it only works in DebugMode-->
@@ -117,84 +122,57 @@
             Background="Aqua"/>
         <!--Row 2-->
         <!--Inhabitants Expense and Commentary on the bottom-->
-        <HorizontalStackLayout
-             Grid.Row="2"
-              Grid.Column="0"
+        <StackLayout
+            Orientation="Horizontal"
+            Grid.Row="2"
+            Grid.Column="0"
             Grid.ColumnSpan="2"
-            HorizontalOptions="FillAndExpand"
-            VerticalOptions="FillAndExpand">
+            BackgroundColor="Gray"
+            HorizontalOptions="FillAndExpand">
             <!--Stackpanel Inhabitants Expenses-->
             <Border 
                 StrokeThickness="3"
                 Padding="0" 
                 Background="LightBlue"
                 HorizontalOptions="FillAndExpand">
-                <VerticalStackLayout 
-                    HorizontalOptions="FillAndExpand">
-                    <!--Stackpanel Inhabitant1-->
-                    <HorizontalStackLayout          HorizontalOptions="FillAndExpand"              
+                <HorizontalStackLayout>
+                    <!--Stackpanel vertical Inhabs-->
+                    <VerticalStackLayout
                         Background="Transparent">
                         <Label Text="{Binding Inhabitant1Name}"
-                               Style="{StaticResource EditViewExpense}"
-                               MinimumWidthRequest="60" 
-                               MinimumHeightRequest="25">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer 
-                                    Command="{Binding FillContributioWindowCommand}" 
-                                    CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label Text="{Binding ExpenseInhabitant1}"
-                               Style="{StaticResource EditViewExpense}"
-                               MinimumWidthRequest="60" 
-                               MinimumHeightRequest="25"/>
-                    </HorizontalStackLayout>
-                    <!--Stackpanel Inhabitant2-->
-                    <HorizontalStackLayout HorizontalOptions="FillAndExpand"
-                        Background="Transparent">
+                               Style="{StaticResource EditViewExpense}"/>
                         <Label Text="{Binding Inhabitant2Name}"
                                Style="{StaticResource EditViewExpense}"
-                               MinimumWidthRequest="60" 
-                               MinimumHeightRequest="25">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer 
-                                    Command="{Binding FillContributioWindowCommand}" 
-                                    CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label Text="{Binding ExpenseInhabitant2}"
-                               Style="{StaticResource EditViewExpense}"
-                               MinimumWidthRequest="60" 
-                               MinimumHeightRequest="25"/>
-                    </HorizontalStackLayout>
-                    <!--Stackpanel Bezahlen-->
-                    <HorizontalStackLayout 
-                        Background="LightCyan">
+                                TextDecorations="Underline"/>
                         <Label Text="{Binding LblpayingInhabitantContent}"
                                Style="{StaticResource EditViewExpense}"
-                               MinimumWidthRequest="60" 
-                               MinimumHeightRequest="25"/>
-                        <Label Text="{Binding LblBillContent}"
+                                TextColor="Chocolate"/>
+                    </VerticalStackLayout>
+                    <!--Stackpanel vertical Values-->
+                    <VerticalStackLayout 
+                        Background="Transparent"
+                        Margin="5,0,0,0">
+                        <Label Text="{Binding ExpenseInhabitant1}"
+                               Style="{StaticResource EditViewExpense}"/>
+                        <Label Text="{Binding ExpenseInhabitant2}"
                                Style="{StaticResource EditViewExpense}"
-                               MinimumWidthRequest="60" 
-                               MinimumHeightRequest="25"/>
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
+                               TextDecorations="Underline"/>
+                         <Label Text="{Binding LblBillContent}"
+                               Style="{StaticResource EditViewExpense}"
+                                TextColor="Chocolate"/>
+                    </VerticalStackLayout>
+               </HorizontalStackLayout>
             </Border>
             <!--Stackpanel CommentaryInvoice-->
             <Border 
                 StrokeThickness="3"
                 Padding="0"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand"
-                >
+                HorizontalOptions="FillAndExpand">
                 <Editor 
                     Placeholder="Coment"
                     Text ="{Binding InvoiceCommentary}"                   
-                    BackgroundColor="Coral"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="FillAndExpand"/>
+                    BackgroundColor="Coral"/>
             </Border>
-        </HorizontalStackLayout>
+        </StackLayout>
     </Grid>
 </ContentPage>
