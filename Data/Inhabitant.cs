@@ -78,33 +78,5 @@ namespace Essensausgleich.Data
                 _TotalExpense += valueExpense;
             }
         }
-        /// <summary>
-        /// Adds the all Items of List to the TotalExpense variable
-        /// </summary>
-        public void RefreshExpense()
-        {
-            foreach (var Betrag in ListOfExpenses)
-            {
-                _TotalExpense += Betrag.ValueExpense;
-            }
-        }
-        /// <summary>
-        /// Resets Name, List and Ausgabe to Zero
-        /// </summary>
-        public void ResetInhabitantData()
-        {
-            _Name = string.Empty;
-            ListOfExpenses.Clear();
-            _TotalExpense = 0;
-            //OnPropertyChanged();
-        }
-        /// <summary>
-        /// Outputs All Items in List of Expense to String
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return base.ToString()!;
-        }
     }
 }
