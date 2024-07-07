@@ -16,12 +16,19 @@ namespace Essensausgleich.Data
     /// </summary>
     public partial class Invoices : GuidDataObject
     {
+        /// <summary>
+        /// Gets or sets the InvoiceProject Name for Disyplay
+        /// </summary>
         public string? InvoicesProjectName { get; set; }
-
+        /// <summary>
+        /// Gets or sets the Path inclusiv Filename.ending
+        /// </summary>
         [ObservableProperty]
         private string? _PathAndFileName;
         private ObservableCollection<Invoice> _InvoiceList = null!;
-
+        /// <summary>
+        /// Gets or sets the List of Individual Invoices 
+        /// </summary>
         public ObservableCollection<Invoice> InvoiceList
         {
             get
@@ -44,14 +51,14 @@ namespace Essensausgleich.Data
         /// </summary>
         [ObservableProperty]
         private DateTime? _DateTimeChanged;
-                   }
+    }
     /// <summary>
     /// Object to handle one Invoice including 2 Inhabitants
     /// </summary>
     public partial class Invoice : GuidDataObject, INotifyPropertyChanged
     {
         [ObservableProperty]
-        private string? _InvoiceName;       
+        private string? _InvoiceName;
         /// <summary>
         /// Internal Field for Caching
         /// </summary>
@@ -91,8 +98,10 @@ namespace Essensausgleich.Data
                 this._Inhabitants = value;
             }
         }
-
-        private string _InvoiceComment = "";
+        /// <summary>
+        /// Internal Field
+        /// </summary>
+        private string _InvoiceComment = string.Empty;
         /// <summary>
         /// Text Commentary for this Invoice
         /// </summary>
@@ -105,7 +114,9 @@ namespace Essensausgleich.Data
                 OnPropertyChanged(nameof(InvoiceComment));
             }
         }
-
+        /// <summary>
+        /// Internal Field
+        /// </summary>
         private DateTime? _DateTimeCreation;
         /// <summary>
         /// Gets or Set the First Time this Invoice was Saved to File
@@ -119,6 +130,9 @@ namespace Essensausgleich.Data
                 OnPropertyChanged(nameof(DateTimeCreation));
             }
         }
+        /// <summary>
+        /// Internal Field
+        /// </summary>
         private DateTime? _DateTimeChanged;
         /// <summary>
         /// Gets or Set the Last Time this Invoice was Saved to File
@@ -140,7 +154,7 @@ namespace Essensausgleich.Data
         {
             this.Inhabitants.Add(inhabitantToAdd);
         }
-       
+
     }
 
 

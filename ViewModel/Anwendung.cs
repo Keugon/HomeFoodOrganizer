@@ -47,10 +47,13 @@ namespace Essensausgleich.ViewModel
             System.Diagnostics.Debug.WriteLine("Initialize End");
         }
         #region PropertieBinding
-
-        public int CurrentInvoicesIndex { get; set; }
-
+        /// <summary>
+        /// Internal Field
+        /// </summary>
         private Invoice _CurrentInvoice = null!;
+        /// <summary>
+        /// Gets or sets the CurrentInvoice displayed on EditView to modify
+        /// </summary>
         public Invoice CurrentInvoice
         {
             get
@@ -77,7 +80,13 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
+        /// <summary>
+        /// Internal Field
+        /// </summary>
         private Invoices _CurrentInvoices = null!;
+        /// <summary>
+        /// Gets or Sets the List of Invoices aka Projects that are saved on the Device 
+        /// </summary>
         public Invoices CurrentInvoices
         {
             get
@@ -139,16 +148,6 @@ namespace Essensausgleich.ViewModel
                 }
             }
             return ObsListe;
-        }
-        private Expense _SelectedExpenseItem = null!;
-        public Expense SelectedExpenseItem
-        {
-            get => _SelectedExpenseItem;
-            set
-            {
-                _SelectedExpenseItem = value;
-                OnPropertyChanged();
-            }
         }
         private string _InhabitansSelected = null!;
         public string InhabitantsSelected
@@ -230,7 +229,7 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-                if(this._ExpenseToAdd == null)
+                if (this._ExpenseToAdd == null)
                 {
                     this._ExpenseToAdd = new Expense();
                 }
@@ -241,11 +240,10 @@ namespace Essensausgleich.ViewModel
                 this._ExpenseToAdd = value;
                 OnPropertyChanged();
             }
-        }        
+        }
         #endregion PropertieBinding
 
         #region Methods       
-
         /// <summary>
         /// Adds a Expens struct to the dedicated Inhabitant object
         /// </summary>
@@ -254,7 +252,7 @@ namespace Essensausgleich.ViewModel
         {
             if (InhabitantsSelected != string.Empty)
             {
-               
+
 
                 if (ExpenseToAdd.ValueExpense > 0)
                 {
@@ -284,7 +282,7 @@ namespace Essensausgleich.ViewModel
             else LblToolStripContent = $"Missing Username";
             //Null after adding the bill to clear the UI
             ExpenseToAdd = null!;
-            
+
             OnPropertyChanged(nameof(LblpayingInhabitantContent));
             OnPropertyChanged(nameof(LblBillContent));
         }
@@ -392,7 +390,6 @@ namespace Essensausgleich.ViewModel
             if (parameter is Invoice SelectedInvoice && SelectedInvoice != null)
             {
                 //find the Index of the given Item in the CurrentInvoices List
-                CurrentInvoicesIndex = this.CurrentInvoices.InvoiceList.IndexOf(SelectedInvoice);
                 this.CurrentInvoice = SelectedInvoice;
                 try
                 {
@@ -425,8 +422,6 @@ namespace Essensausgleich.ViewModel
         {
             //maybe not necessari
             //this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
-            this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex].DateTimeChanged = DateTime.Now;
-
             this.Context.InvoiceManager.Save(this.CurrentInvoices);
             try
             {
@@ -579,7 +574,6 @@ namespace Essensausgleich.ViewModel
                 };
                 this.CurrentInvoice = NewInvoice;
                 this.CurrentInvoices.InvoiceList.Add(NewInvoice);
-                CurrentInvoicesIndex = this.CurrentInvoices.InvoiceList.Count - 1;
                 System.Diagnostics.Debug.WriteLine(
                     $"New Invoice:{NewInvoice.InvoiceName} created and " +
                     $"added to:{this.CurrentInvoices.InvoicesProjectName} " +
@@ -629,20 +623,25 @@ namespace Essensausgleich.ViewModel
         /// and convays the change down to the Inhabitant object 
         /// </summary>
         [RelayCommand]
-        public void DeleteDataGridEntry()
+        public void DeleteDataGridEntry(object? selectedItem )
         {
+            if (selectedItem is Expense expenseItem)
+            {
+               
+            
             // delet Entry and updates source
             //ListOfExpensesInhabitant1.Remove(SelectedExpenseItem);
             if (InhabitantsSelected == CurrentInvoice.Inhabitants[0].Name)
             {
-                this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Remove(SelectedExpenseItem);
+                this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Remove(expenseItem);
             }
             else if (InhabitantsSelected == CurrentInvoice.Inhabitants[1].Name)
             {
-                this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Remove(SelectedExpenseItem);
+                this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Remove(expenseItem);
             }
             OnPropertyChanged(nameof(LblpayingInhabitantContent));
             OnPropertyChanged(nameof(LblBillContent));
+            }
         }
         public void LogToFile(string message)
         {

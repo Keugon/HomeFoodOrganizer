@@ -10,70 +10,76 @@
     <ScrollView
         Orientation="Both"
         HorizontalScrollBarVisibility="Default">
-       <VerticalStackLayout>
-        <StackLayout
+        <VerticalStackLayout>
+            <StackLayout
             Orientation="Horizontal">
-            <StackLayout.GestureRecognizers>
-                <TapGestureRecognizer  Command="{Binding DeleteDataGridEntryCommand}" />
-            </StackLayout.GestureRecognizers>
-            <Label
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer  
+                    Command="{Binding DeleteDataGridEntryCommand}"
+                    CommandParameter="{Binding SelectedItem, Source={x:Reference ExpenseList}}"/>
+                </StackLayout.GestureRecognizers>
+                <Label
                 Text="Contributions"
                 FontSize="Large"
                 FontAttributes="Bold"
                 HorizontalOptions="StartAndExpand" />
-            <Label 
-                HorizontalOptions="EndAndExpand"
-                Text="Delet Entry"/>
-        </StackLayout>
-        <Grid Padding="10">
-            <CollectionView  
+                <Border>
+                    <Label 
+                    HorizontalOptions="EndAndExpand"
+                    Text="Delet Entry"
+                    FontSize="Large"
+                    FontAttributes="Bold"/>
+                </Border>
+
+            </StackLayout>
+            <Grid Padding="10">
+                <!--make the SelectedItem available to the commandParams-->
+                <CollectionView  
                 SelectionMode="Single"  
-                SelectedItem="{Binding SelectedExpenseItem}">
-                <CollectionView.Triggers>
-                    <!--If Inhabitant1 Selected use ListOfExpensesInhabitant1-->
-                    
-                    <DataTrigger TargetType="CollectionView" Value="true">
-                        <DataTrigger.Binding >
-                            <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
-                                <Binding Path="InhabitantsSelected"/>
+                x:Name="ExpenseList">
+                    <CollectionView.Triggers>
+                        <!--If Inhabitant1 Selected use ListOfExpensesInhabitant1-->
+                        <DataTrigger TargetType="CollectionView" Value="true">
+                            <DataTrigger.Binding >
+                                <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
+                                    <Binding Path="InhabitantsSelected"/>
                                     <Binding Path="CurrentInvoice.Inhabitants[0].Name"/>
-                            </MultiBinding>
-                        </DataTrigger.Binding>
-                        <Setter Property="ItemsSource" Value="{Binding CurrentInvoice.Inhabitants[0].ListOfExpenses,Mode=OneWay}"/>
-                    </DataTrigger>
-                    <!--If Inhabitant2 Selected use ListOfExpensesInhabitant2-->
-                    <DataTrigger TargetType="CollectionView" Value="true">
-                        <DataTrigger.Binding >
-                            <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
-                                <Binding Path="InhabitantsSelected"/>
+                                </MultiBinding>
+                            </DataTrigger.Binding>
+                            <Setter Property="ItemsSource" Value="{Binding CurrentInvoice.Inhabitants[0].ListOfExpenses,Mode=OneWay}"/>
+                        </DataTrigger>
+                        <!--If Inhabitant2 Selected use ListOfExpensesInhabitant2-->
+                        <DataTrigger TargetType="CollectionView" Value="true">
+                            <DataTrigger.Binding >
+                                <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
+                                    <Binding Path="InhabitantsSelected"/>
                                     <Binding Path="CurrentInvoice.Inhabitants[1].Name"/>
-                            </MultiBinding>
-                        </DataTrigger.Binding>
+                                </MultiBinding>
+                            </DataTrigger.Binding>
                             <Setter Property="ItemsSource" Value="{Binding CurrentInvoice.Inhabitants[1].ListOfExpenses,Mode=OneWay}"/>
-                    </DataTrigger>
-                    
-                </CollectionView.Triggers>
-                <CollectionView.ItemTemplate >
-                    <DataTemplate x:DataType="local:Expense" >
-                        <Grid>
-                            <Border>
-                                <HorizontalStackLayout>
-                                    <Label Text="Categorie: "
+                        </DataTrigger>
+                    </CollectionView.Triggers>
+                    <CollectionView.ItemTemplate >
+                        <DataTemplate x:DataType="local:Expense" >
+                            <Grid>
+                                <Border>
+                                    <HorizontalStackLayout>
+                                        <Label Text="Categorie: "
                                            Style="{StaticResource ContributionSize}"/>
-                                    <Label Text="{Binding Categorie}" 
+                                        <Label Text="{Binding Categorie}" 
                                            Style="{StaticResource ContributionSize}"/>
-                                    <Label Text="  Value: "
+                                        <Label Text="  Value: "
                                            Style="{StaticResource ContributionSize}"/>
-                                    <Label Text="{Binding ValueExpense}" 
+                                        <Label Text="{Binding ValueExpense}" 
                                            Style="{StaticResource ContributionSize}"/>
-                                </HorizontalStackLayout>
-                            </Border>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
-    </VerticalStackLayout>  
+                                    </HorizontalStackLayout>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </VerticalStackLayout>
     </ScrollView>
-   
+
 </ContentView>

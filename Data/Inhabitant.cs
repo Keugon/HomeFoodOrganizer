@@ -28,9 +28,31 @@ namespace Essensausgleich.Data
         /// </summary>
         public string Name { get; set; } = string.Empty;
         /// <summary>
-        /// List of Entrys for the bewohner
+        /// Internal Field
         /// </summary>
-        public ObservableCollection<Expense> ListOfExpenses { get; set; } = null!;
+        private ObservableCollection<Expense> _ListOfExpenses = null!;
+        /// <summary>
+        /// List of Expenses for the Inhabitant
+        /// </summary>
+        public ObservableCollection<Expense> ListOfExpenses
+        {
+            get
+            {
+                if (this._ListOfExpenses == null)
+                {
+                    this._ListOfExpenses = new ObservableCollection<Expense>();
+                }
+                return this._ListOfExpenses;
+            }
+            set
+            {
+                this._ListOfExpenses = value;
+            }
+        }
+        /// <summary>
+        /// Internal Field
+        /// </summary>
+        private decimal _TotalExpense;
         /// <summary>
         /// Access to TotalExpense decimal prevents input of negativ numbers
         /// </summary>
@@ -50,7 +72,6 @@ namespace Essensausgleich.Data
                 this._TotalExpense = value;
             }
         }
-        private decimal _TotalExpense;
         /// <summary>
         /// Method to Add new Entries in the <c>ListBetrag</c>
         /// </summary>
