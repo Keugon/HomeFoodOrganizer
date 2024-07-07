@@ -6,7 +6,7 @@
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
              xmlns:local="clr-namespace:Essensausgleich"
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
-x:DataType="viewmodel:Anwendung">
+             x:DataType="viewmodel:Anwendung">
     <ScrollView
         Orientation="Both"
         HorizontalScrollBarVisibility="Default">
@@ -31,25 +31,27 @@ x:DataType="viewmodel:Anwendung">
                 SelectedItem="{Binding SelectedExpenseItem}">
                 <CollectionView.Triggers>
                     <!--If Inhabitant1 Selected use ListOfExpensesInhabitant1-->
+                    
                     <DataTrigger TargetType="CollectionView" Value="true">
                         <DataTrigger.Binding >
                             <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
                                 <Binding Path="InhabitantsSelected"/>
-                                <Binding Path="Inhabitant1Name"/>
+                                    <Binding Path="CurrentInvoice.Inhabitants[0].Name"/>
                             </MultiBinding>
                         </DataTrigger.Binding>
-                        <Setter Property="ItemsSource" Value="{Binding ListOfExpensesInhabitant1,Mode=OneWay}"/>
+                        <Setter Property="ItemsSource" Value="{Binding CurrentInvoice.Inhabitants[0].ListOfExpenses,Mode=OneWay}"/>
                     </DataTrigger>
-                    <!--If Inhabitant1 Selected use ListOfExpensesInhabitant2-->
+                    <!--If Inhabitant2 Selected use ListOfExpensesInhabitant2-->
                     <DataTrigger TargetType="CollectionView" Value="true">
                         <DataTrigger.Binding >
                             <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
                                 <Binding Path="InhabitantsSelected"/>
-                                <Binding Path="Inhabitant2Name"/>
+                                    <Binding Path="CurrentInvoice.Inhabitants[1].Name"/>
                             </MultiBinding>
                         </DataTrigger.Binding>
-                        <Setter Property="ItemsSource" Value="{Binding ListOfExpensesInhabitant2,Mode=OneWay}"/>
+                            <Setter Property="ItemsSource" Value="{Binding CurrentInvoice.Inhabitants[1].ListOfExpenses,Mode=OneWay}"/>
                     </DataTrigger>
+                    
                 </CollectionView.Triggers>
                 <CollectionView.ItemTemplate >
                     <DataTemplate x:DataType="local:Expense" >
@@ -58,11 +60,11 @@ x:DataType="viewmodel:Anwendung">
                                 <HorizontalStackLayout>
                                     <Label Text="Categorie: "
                                            Style="{StaticResource ContributionSize}"/>
-                                    <Label Text="{Binding categorie}" 
+                                    <Label Text="{Binding Categorie}" 
                                            Style="{StaticResource ContributionSize}"/>
                                     <Label Text="  Value: "
                                            Style="{StaticResource ContributionSize}"/>
-                                    <Label Text="{Binding valueExpense}" 
+                                    <Label Text="{Binding ValueExpense}" 
                                            Style="{StaticResource ContributionSize}"/>
                                 </HorizontalStackLayout>
                             </Border>

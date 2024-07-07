@@ -47,15 +47,9 @@ namespace Essensausgleich.ViewModel
             System.Diagnostics.Debug.WriteLine("Initialize End");
         }
         #region PropertieBinding
-        private int _CurrentInvoicesIndex = 0;
-        public int CurrentInvoicesIndex
-        {
-            get => this._CurrentInvoicesIndex;
-            set
-            {
-                this._CurrentInvoicesIndex = value;
-            }
-        }
+
+        public int CurrentInvoicesIndex { get; set; }
+
         private Invoice _CurrentInvoice = null!;
         public Invoice CurrentInvoice
         {
@@ -72,19 +66,13 @@ namespace Essensausgleich.ViewModel
 
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice Beginn Set");
                 this._CurrentInvoice = value;
-                OnPropertyChanged(nameof(Inhabitant1Name));
-                OnPropertyChanged(nameof(Inhabitant2Name));
-                OnPropertyChanged(nameof(InhabitantsNameList));
+                OnPropertyChanged();
                 if (this.CurrentInvoice.InhabitantsNameList.Count == 2)
                 {
                     InhabitantsSelected = this.CurrentInvoice.InhabitantsNameList[0];
                 }
-                OnPropertyChanged(nameof(ExpenseInhabitant1));
-                OnPropertyChanged(nameof(ExpenseInhabitant2));
-                OnPropertyChanged(nameof(InvoiceCommentary));
                 OnPropertyChanged(nameof(LblpayingInhabitantContent));
                 OnPropertyChanged(nameof(LblBillContent));
-                OnPropertyChanged(nameof(InvoiceName));
 
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
@@ -152,17 +140,7 @@ namespace Essensausgleich.ViewModel
             }
             return ObsListe;
         }
-        public ObservableCollection<Expense> ListOfExpensesInhabitant1
-        {
-            get => this.CurrentInvoice.Inhabitants[0].ListOfExpenses;
-            set => this.CurrentInvoice.Inhabitants[0].ListOfExpenses = value;
-        }
-        public ObservableCollection<Expense> ListOfExpensesInhabitant2
-        {
-            get => this.CurrentInvoice.Inhabitants[1].ListOfExpenses;
-            set => this.CurrentInvoice.Inhabitants[1].ListOfExpenses = value;
-        }
-
+        private Expense _SelectedExpenseItem = null!;
         public Expense SelectedExpenseItem
         {
             get => _SelectedExpenseItem;
@@ -172,7 +150,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private Expense _SelectedExpenseItem;
+        private string _InhabitansSelected = null!;
         public string InhabitantsSelected
         {
             get
@@ -186,7 +164,7 @@ namespace Essensausgleich.ViewModel
                 Log.WriteLine($"User:{_InhabitansSelected} Selected");
             }
         }
-        private string _InhabitansSelected = null!;
+        private string _lblBillContent = null!;
         public string LblBillContent
         {
             get
@@ -215,7 +193,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private string _lblBillContent = null!;
+        private string _LblpayingInhabitantContent = null!;
         public string LblpayingInhabitantContent
         {
             get
@@ -236,144 +214,38 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        private string _LblpayingInhabitantContent = null!;
+
+        private string _LblToolStripContent = null!;
         public string LblToolStripContent
         {
-            get => _lblToolStripContent;
+            get => _LblToolStripContent;
             set
             {
-                _lblToolStripContent = value;
+                _LblToolStripContent = value;
                 OnPropertyChanged();
             }
         }
-        private string _lblToolStripContent = null!;
-        public string TxtBoxAddUserContent
+        private Expense _ExpenseToAdd = null!;
+        public Expense ExpenseToAdd
         {
-            get => _txtBoxAddUserContent;
+            get
+            {
+                if(this._ExpenseToAdd == null)
+                {
+                    this._ExpenseToAdd = new Expense();
+                }
+                return this._ExpenseToAdd;
+            }
             set
             {
-                _txtBoxAddUserContent = value;
+                this._ExpenseToAdd = value;
                 OnPropertyChanged();
             }
-        }
-        private string _txtBoxAddUserContent = null!;
-        public string Inhabitant1Name
-        {
-            get => CurrentInvoice.Inhabitants[0].Name;
-            set
-            {
-                CurrentInvoice.Inhabitants[0].Name = value;
-                OnPropertyChanged();
-            }
-        }
-        public decimal ExpenseInhabitant1
-        {
-            get => CurrentInvoice.Inhabitants[0].TotalExpense;
-        }
-        public decimal ExpenseInhabitant2
-        {
-            get => CurrentInvoice.Inhabitants[1].TotalExpense;
-        }
-        public string Inhabitant2Name
-        {
-            get => CurrentInvoice.Inhabitants[1].Name;
-            set
-            {
-                CurrentInvoice.Inhabitants[1].Name = value;
-                OnPropertyChanged();
-            }
-        }
-        private ObservableCollection<string> _InhabitantsNameList = new ObservableCollection<string>();
-        public ObservableCollection<string> InhabitantsNameList
-        {
-            get => this.CurrentInvoice.InhabitantsNameList;
-
-
-        }
-        public string TxtBoxAddBillText
-        {
-            get => _TxtBoxAddBillText;
-            set
-            {
-                _TxtBoxAddBillText = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _TxtBoxAddBillText = null!;
-        public string TxtBoxCategorieText
-        {
-            get => _TxtBoxCategorieText;
-            set
-            {
-                _TxtBoxCategorieText = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _TxtBoxCategorieText = null!;
-        private string _InvoiceCommentary = string.Empty!;
-        /// <summary>
-        /// Gets or Sets the Commentary for the CurrentInvoices Object
-        /// </summary>
-        public string InvoiceCommentary
-        {
-            get => this.CurrentInvoice.InvoiceComment;
-            set => this.CurrentInvoice.InvoiceComment = value;
-        }
-        public string InvoiceName
-        {
-            get => this.CurrentInvoice.InvoiceName!;
-            set
-            {
-                this.CurrentInvoice.InvoiceName = value;
-                OnPropertyChanged();
-            }
-        }
-        #endregion
+        }        
+        #endregion PropertieBinding
 
         #region Methods       
-        /// <summary>
-        /// Adds the Name to the Inhabitant object and Name List
-        /// </summary>
-        [RelayCommand]
-        public void AddUser()
-        {
-            if (!string.IsNullOrEmpty(_txtBoxAddUserContent))
-            {
-                if (Inhabitant1Name == string.Empty || Inhabitant2Name == string.Empty)
-                {
-                    if (Inhabitant1Name == string.Empty && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
-                    {
 
-                        Inhabitant1Name = _txtBoxAddUserContent;
-                        CurrentInvoice.InhabitantsNameList.Add(Inhabitant1Name);
-                        InhabitantsSelected = Inhabitant1Name;
-                        LblToolStripContent = $"Inhabitant {Inhabitant1Name} wurde angelegt";
-                    }
-                    else if (Inhabitant2Name == string.Empty && _txtBoxAddUserContent != Inhabitant1Name && Regex.IsMatch(_txtBoxAddUserContent, @"^[a-zA-Z]+$"))
-                    {
-                        Inhabitant2Name = _txtBoxAddUserContent;
-                        CurrentInvoice.InhabitantsNameList.Add(Inhabitant2Name);
-                        InhabitantsSelected = Inhabitant2Name;
-                        LblToolStripContent = $"Inhabitant {Inhabitant2Name} wurde angelegt";
-                    }
-                    else
-                    {
-                        LblToolStripContent = $"Invalide Username or Already Exists!";
-                    }
-                }
-                else
-                {
-                    LblToolStripContent = $"Maximale User anzahl bereits Angelegt";
-                }
-                TxtBoxAddUserContent = string.Empty;
-            }
-            else
-            {
-                LblToolStripContent = $"Kein User Name eingegeben";
-                return;
-            }
-
-        }
         /// <summary>
         /// Adds a Expens struct to the dedicated Inhabitant object
         /// </summary>
@@ -382,21 +254,22 @@ namespace Essensausgleich.ViewModel
         {
             if (InhabitantsSelected != string.Empty)
             {
-                decimal bill = 0;
+               
 
-                if (decimal.TryParse(_TxtBoxAddBillText, out bill) && bill > 0)
+                if (ExpenseToAdd.ValueExpense > 0)
                 {
                     if (this.CurrentInvoice.Inhabitants[0].Name == InhabitantsSelected && InhabitantsSelected != string.Empty)
                     {
-                        CurrentInvoice.Inhabitants[0].AddBetrag(_TxtBoxCategorieText, bill);
-                        OnPropertyChanged(nameof(ExpenseInhabitant1));
-                        LblToolStripContent = $"Expense {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
+                        CurrentInvoice.Inhabitants[0].AddBetrag(ExpenseToAdd.Categorie, ExpenseToAdd.ValueExpense);
+                        OnPropertyChanged(nameof(CurrentInvoice));
+                        LblToolStripContent = $"Expense {ExpenseToAdd.ValueExpense} der Kategorie {ExpenseToAdd.Categorie} hinzugefuegt";
                     }
                     else if (this.CurrentInvoice.Inhabitants[1].Name == InhabitantsSelected && InhabitantsSelected != string.Empty)
                     {
-                        CurrentInvoice.Inhabitants[1].AddBetrag(_TxtBoxCategorieText, bill);
-                        OnPropertyChanged(nameof(ExpenseInhabitant2));
-                        LblToolStripContent = $"Expense {bill} der Kategorie {_TxtBoxCategorieText} hinzugefuegt";
+                        CurrentInvoice.Inhabitants[1].AddBetrag(ExpenseToAdd.Categorie, ExpenseToAdd.ValueExpense);
+                        //Neuer Expense und Total expense wurde geändet -> auf UI pushen
+                        OnPropertyChanged(nameof(CurrentInvoice));
+                        LblToolStripContent = $"Expense {ExpenseToAdd.ValueExpense} der Kategorie {ExpenseToAdd.Categorie} hinzugefuegt";
                     }
                     else
                     {
@@ -409,8 +282,9 @@ namespace Essensausgleich.ViewModel
                 }
             }
             else LblToolStripContent = $"Missing Username";
-            TxtBoxAddBillText = string.Empty;
-            TxtBoxCategorieText = string.Empty;
+            //Null after adding the bill to clear the UI
+            ExpenseToAdd = null!;
+            
             OnPropertyChanged(nameof(LblpayingInhabitantContent));
             OnPropertyChanged(nameof(LblBillContent));
         }
@@ -424,14 +298,14 @@ namespace Essensausgleich.ViewModel
             if (parameter is Microsoft.Maui.Controls.Label label)
             {
 
-                if (label.Text == Inhabitant1Name)
+                if (label.Text == CurrentInvoice.Inhabitants[0].Name)
                 {
-                    InhabitantsSelected = Inhabitant1Name;
+                    InhabitantsSelected = CurrentInvoice.Inhabitants[0].Name;
 
                 }
-                else if (label.Text == Inhabitant2Name)
+                else if (label.Text == CurrentInvoice.Inhabitants[1].Name)
                 {
-                    InhabitantsSelected = Inhabitant2Name;
+                    InhabitantsSelected = CurrentInvoice.Inhabitants[1].Name;
 
                 }
 
@@ -517,6 +391,9 @@ namespace Essensausgleich.ViewModel
             //set it to CurrentInvoices to work with
             if (parameter is Invoice SelectedInvoice && SelectedInvoice != null)
             {
+                //find the Index of the given Item in the CurrentInvoices List
+                CurrentInvoicesIndex = this.CurrentInvoices.InvoiceList.IndexOf(SelectedInvoice);
+                this.CurrentInvoice = SelectedInvoice;
                 try
                 {
                     await Shell.Current.GoToAsync($"{nameof(EditView)}");
@@ -528,9 +405,7 @@ namespace Essensausgleich.ViewModel
                     return;
                 }
 
-                //find the Index of the given Item in the CurrentInvoices List
-                CurrentInvoicesIndex = this.CurrentInvoices.InvoiceList.IndexOf(SelectedInvoice);
-                this.CurrentInvoice = SelectedInvoice;
+
 
             }
             else
@@ -657,7 +532,8 @@ namespace Essensausgleich.ViewModel
                 titel: "Input",
                 message: "Input Name for new Invoice",
                 placeholder: "Invoice Name here");
-            if (string.IsNullOrEmpty(NewInvoiceName)){
+            if (string.IsNullOrEmpty(NewInvoiceName))
+            {
                 return;
             }
             string InhabitantName1 = await AskForDialogOkCancel(
@@ -755,20 +631,15 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public void DeleteDataGridEntry()
         {
-
             // delet Entry and updates source
-            ListOfExpensesInhabitant1.Remove(SelectedExpenseItem);
-            if (InhabitantsSelected == Inhabitant1Name)
+            //ListOfExpensesInhabitant1.Remove(SelectedExpenseItem);
+            if (InhabitantsSelected == CurrentInvoice.Inhabitants[0].Name)
             {
                 this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Remove(SelectedExpenseItem);
-                OnPropertyChanged(nameof(ExpenseInhabitant1));
-                OnPropertyChanged(nameof(ListOfExpensesInhabitant1));
             }
-            else if (InhabitantsSelected == Inhabitant2Name)
+            else if (InhabitantsSelected == CurrentInvoice.Inhabitants[1].Name)
             {
                 this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Remove(SelectedExpenseItem);
-                OnPropertyChanged(nameof(ExpenseInhabitant2));
-                OnPropertyChanged(nameof(ListOfExpensesInhabitant2));
             }
             OnPropertyChanged(nameof(LblpayingInhabitantContent));
             OnPropertyChanged(nameof(LblBillContent));
@@ -777,8 +648,8 @@ namespace Essensausgleich.ViewModel
         {
             //folder
             string LogName = "LogFile";
-            
-            File.AppendAllText(Path.Combine(InvoicesFolderPath,LogName), $"Protocol LogTime {DateTime.Now}, Message:{message} ");
+
+            File.AppendAllText(Path.Combine(InvoicesFolderPath, LogName), $"Protocol LogTime {DateTime.Now}, Message:{message} ");
 
             System.Diagnostics.Debug.WriteLine("Writen to LogFile");
         }

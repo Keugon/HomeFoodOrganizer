@@ -38,16 +38,16 @@
             Grid.ColumnSpan="2">
             <!--CurrentInvoice Titel-->
             <Label
-                Text="{Binding InvoiceName}"
+                Text="{Binding CurrentInvoice.InvoiceName}"
                 FontSize="Header"/>
             <!--Stack Pannel Add Bill-->
             <HorizontalStackLayout>
                 <Entry 
                     Placeholder="Categorie"
-                    Text="{Binding TxtBoxCategorieText}" 
+                    Text="{Binding ExpenseToAdd.Categorie}" 
                     MinimumWidthRequest="100"/>
                 <Entry Placeholder="Value"
-                    Text="{Binding TxtBoxAddBillText}" 
+                    Text="{Binding ExpenseToAdd.ValueExpense}" 
                     MinimumWidthRequest="100"
                     ReturnCommand="{Binding AddBillCommand}"
                        Keyboard="Numeric"/>
@@ -59,7 +59,7 @@
             <HorizontalStackLayout>
                 <Border
                     BackgroundColor="LightGray">
-                  <Label Text="{Binding Inhabitant1Name}"
+                    <Label Text="{Binding CurrentInvoice.Inhabitants[0].Name}"
                        FontSize="Large">
                     <Label.Style>
                         <Style TargetType="Label">
@@ -68,7 +68,8 @@
                                     <DataTrigger.Binding >
                                         <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
                                             <Binding Path="InhabitantsSelected"/>
-                                            <Binding Path="Inhabitant1Name"/>
+                                            <!--Warum kan hier im path nicht mit binding gearbeitet werden oder hat kein Intelisense-->
+                                                <Binding Path="CurrentInvoice.Inhabitants[0].Name"/>
                                         </MultiBinding>
                                     </DataTrigger.Binding>
                                     <Setter Property="TextDecorations" Value="Underline"/>
@@ -87,7 +88,7 @@
                 <Border
                     BackgroundColor="LightGray"
                     Margin="5,0,0,0">
-                    <Label Text="{Binding Inhabitant2Name}"
+                    <Label Text="{Binding CurrentInvoice.Inhabitants[1].Name}"
                        FontSize="Large">
                     <Label.Style>
                         <Style TargetType="Label">
@@ -96,7 +97,7 @@
                                     <DataTrigger.Binding >
                                         <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
                                             <Binding Path="InhabitantsSelected"/>
-                                            <Binding Path="Inhabitant2Name"/>
+                                                <Binding Path="CurrentInvoice.Inhabitants[1].Name"/>
                                         </MultiBinding>
                                     </DataTrigger.Binding>
                                     <Setter Property="TextDecorations" Value="Underline"/>
@@ -139,9 +140,9 @@
                     <!--Stackpanel vertical Inhabs-->
                     <VerticalStackLayout
                         Background="Transparent">
-                        <Label Text="{Binding Inhabitant1Name}"
+                        <Label Text="{Binding CurrentInvoice.Inhabitants[0].Name}"
                                Style="{StaticResource EditViewExpense}"/>
-                        <Label Text="{Binding Inhabitant2Name}"
+                        <Label Text="{Binding CurrentInvoice.Inhabitants[1].Name}"
                                Style="{StaticResource EditViewExpense}"
                                 TextDecorations="Underline"/>
                         <Label Text="{Binding LblpayingInhabitantContent}"
@@ -152,9 +153,9 @@
                     <VerticalStackLayout 
                         Background="Transparent"
                         Margin="5,0,0,0">
-                        <Label Text="{Binding ExpenseInhabitant1}"
+                        <Label Text="{Binding CurrentInvoice.Inhabitants[0].TotalExpense}"
                                Style="{StaticResource EditViewExpense}"/>
-                        <Label Text="{Binding ExpenseInhabitant2}"
+                        <Label Text="{Binding CurrentInvoice.Inhabitants[1].TotalExpense}"
                                Style="{StaticResource EditViewExpense}"
                                TextDecorations="Underline"/>
                          <Label Text="{Binding LblBillContent}"
@@ -170,7 +171,7 @@
                 HorizontalOptions="FillAndExpand">
                 <Editor 
                     Placeholder="Coment"
-                    Text ="{Binding InvoiceCommentary}"                   
+                    Text ="{Binding CurrentInvoice.InvoiceComment}"                   
                     BackgroundColor="Coral"/>
             </Border>
         </StackLayout>

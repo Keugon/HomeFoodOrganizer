@@ -14,47 +14,23 @@ namespace Essensausgleich.Data
     /// <summary>
     /// Type save List of Inhabitant Obejct
     /// </summary>
-    public class Inhabitants: List<Inhabitant> 
+    public class Inhabitants : List<Inhabitant>
     {
-       
+
     }
     /// <summary>
     /// Class for the Userobject Inhabitant 
     /// </summary>
-    public class Inhabitant 
+    public class Inhabitant
     {
-
-        /// <summary>
-        /// inits the Name of the Inhabitant to ""
-        /// </summary>
-        private string _Name = string.Empty;
         /// <summary>
         /// Gets or Sets the Name propertie of Inhabitant
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _Name;
-            }
-            set
-            {
-                _Name = value;
-                //OnPropertyChanged();
-            }
-        }
+        public string Name { get; set; } = string.Empty;
         /// <summary>
         /// List of Entrys for the bewohner
         /// </summary>
-        
-        public ObservableCollection<Expense> ListOfExpenses = new ObservableCollection<Expense>();
-        /// <summary>
-        /// creates and obj of Inhabitant
-        /// </summary>
-        public Inhabitant()
-        {
-
-        }
+        public ObservableCollection<Expense> ListOfExpenses { get; set; } = null!;
         /// <summary>
         /// Access to TotalExpense decimal prevents input of negativ numbers
         /// </summary>
@@ -63,9 +39,9 @@ namespace Essensausgleich.Data
             get
             {
                 this._TotalExpense = 0;
-               foreach (var expense in ListOfExpenses)
+                foreach (var expense in ListOfExpenses)
                 {
-                    this._TotalExpense += expense.valueExpense;
+                    this._TotalExpense += expense.ValueExpense;
                 }
                 return this._TotalExpense;
             }
@@ -85,12 +61,20 @@ namespace Essensausgleich.Data
 
             if (categorie != "")
             {
-                ListOfExpenses.Add(new Expense(categorie, valueExpense));
+                ListOfExpenses.Add(new Expense
+                {
+                    Categorie = categorie,
+                    ValueExpense = valueExpense
+                });
                 _TotalExpense += valueExpense;
             }
             else
             {
-                ListOfExpenses.Add(new Expense("unkategorisiert", valueExpense));
+                ListOfExpenses.Add(new Expense
+                {
+                    Categorie = categorie,
+                    ValueExpense = valueExpense
+                });
                 _TotalExpense += valueExpense;
             }
         }
@@ -101,7 +85,7 @@ namespace Essensausgleich.Data
         {
             foreach (var Betrag in ListOfExpenses)
             {
-                _TotalExpense += Betrag.valueExpense;
+                _TotalExpense += Betrag.ValueExpense;
             }
         }
         /// <summary>
@@ -121,6 +105,6 @@ namespace Essensausgleich.Data
         public override string ToString()
         {
             return base.ToString()!;
-        }   
+        }
     }
 }
