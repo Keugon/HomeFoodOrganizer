@@ -146,16 +146,6 @@ namespace Essensausgleich.Data
                 OnPropertyChanged(nameof(DateTimeChanged));
             }
         }
-        /// <summary>
-        /// Adds a Inhabitant to the End of the Inhabitants List
-        /// </summary>
-        /// <param name="inhabitantToAdd"></param>
-        public void AddInhabitantToList(Inhabitant inhabitantToAdd)
-        {
-            this.Inhabitants.Add(inhabitantToAdd);
-        }
-
+        
     }
-
-
 }

@@ -1,10 +1,12 @@
-﻿using Essensausgleich.Infra;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Essensausgleich.Infra;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -21,7 +23,7 @@ namespace Essensausgleich.Data
     /// <summary>
     /// Class for the Userobject Inhabitant 
     /// </summary>
-    public class Inhabitant
+    public partial class Inhabitant : ObservableObject, INotifyPropertyChanged
     {
         /// <summary>
         /// Gets or Sets the Name propertie of Inhabitant
@@ -98,6 +100,6 @@ namespace Essensausgleich.Data
                 });
                 _TotalExpense += valueExpense;
             }
-        }
+        }       
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
@@ -213,17 +214,6 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-
-        private string _LblToolStripContent = null!;
-        public string LblToolStripContent
-        {
-            get => _LblToolStripContent;
-            set
-            {
-                _LblToolStripContent = value;
-                OnPropertyChanged();
-            }
-        }
         private Expense _ExpenseToAdd = null!;
         public Expense ExpenseToAdd
         {
@@ -241,6 +231,48 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
+        #region NewInvoice
+        /// <summary>
+        /// Intenal Field
+        /// </summary>
+        private bool _IsInputFormularVisible = false;
+        /// <summary>
+        /// Gets or set the visibility of 
+        /// the "New Invoice Input Formular"
+        /// </summary>
+        public bool IsInputFormularVisible
+        {
+            get => this._IsInputFormularVisible;
+            set
+            {
+                this._IsInputFormularVisible = value;
+                OnPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// Internal Field
+        /// </summary>
+        private Invoice _InvoiceToCreate = null!;
+        /// <summary>
+        /// Gets or sets the Invoice to be created
+        /// </summary>
+        public Invoice InvoiceToCreate
+        {
+            get
+            {
+                if (this._InvoiceToCreate == null)
+                {
+                    this._InvoiceToCreate = new Invoice();
+                }
+                return this._InvoiceToCreate;
+            }
+            set
+            {              
+                    this._InvoiceToCreate = value;
+                    OnPropertyChanged(nameof(CanExecuteNewInvoice));                             
+            }
+        }
+        #endregion NewInvoice
         #endregion PropertieBinding
 
         #region Methods       
@@ -260,18 +292,16 @@ namespace Essensausgleich.ViewModel
                     {
                         CurrentInvoice.Inhabitants[0].AddBetrag(ExpenseToAdd.Categorie, ExpenseToAdd.ValueExpense);
                         OnPropertyChanged(nameof(CurrentInvoice));
-                        LblToolStripContent = $"Expense {ExpenseToAdd.ValueExpense} der Kategorie {ExpenseToAdd.Categorie} hinzugefuegt";
                     }
                     else if (this.CurrentInvoice.Inhabitants[1].Name == InhabitantsSelected && InhabitantsSelected != string.Empty)
                     {
                         CurrentInvoice.Inhabitants[1].AddBetrag(ExpenseToAdd.Categorie, ExpenseToAdd.ValueExpense);
                         //Neuer Expense und Total expense wurde geändet -> auf UI pushen
                         OnPropertyChanged(nameof(CurrentInvoice));
-                        LblToolStripContent = $"Expense {ExpenseToAdd.ValueExpense} der Kategorie {ExpenseToAdd.Categorie} hinzugefuegt";
                     }
                     else
                     {
-                        LblToolStripContent = $"Error keine Inhabitant wurde mit der im Dropdown ausgewaehlten User identifiziert";
+                        Log.WriteLine($"Error keine Inhabitant wurde mit der im Dropdown ausgewaehlten User identifiziert");
                     }
                 }
                 else
@@ -279,7 +309,8 @@ namespace Essensausgleich.ViewModel
                     Log.WriteLine("Invalide Value Input");
                 }
             }
-            else LblToolStripContent = $"Missing Username";
+            //Todo Canexecute
+            //else LblToolStripContent = $"Missing Username";
             //Null after adding the bill to clear the UI
             ExpenseToAdd = null!;
 
@@ -516,88 +547,55 @@ namespace Essensausgleich.ViewModel
 
         }
         /// <summary>
+        /// Shows the Input Formular for a new Invoice
+        /// </summary>
+        [RelayCommand]
+        public void ShowInvoiceFormular()
+        {
+            if (this.IsInputFormularVisible == false)
+            {
+                this.IsInputFormularVisible = true;
+            }
+        }
+        /// <summary>
         /// Starts a new Invoice gives it via Dialog a Name
         /// then gets added CurrentInvoices List
         /// </summary>
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteNewInvoice))]
         public async Task NewInvoice()
         {
-            //Ask for All Inputs First!
-            string NewInvoiceName = await AskForDialogOkCancel(
-                titel: "Input",
-                message: "Input Name for new Invoice",
-                placeholder: "Invoice Name here");
-            if (string.IsNullOrEmpty(NewInvoiceName))
+
+            //Checks if the Name only Consists of Letters 
+            //Regex.IsMatch(InhabitantName1, @"^[a-zA-Z]+$") &&
+            //Regex.IsMatch(InhabitantName1, @"^[a-zA-Z]+$"))
+            //Set Date of creation for the new Invoice
+            InvoiceToCreate.DateTimeCreation = DateTime.Now;
+            this.CurrentInvoice = InvoiceToCreate;
+            this.CurrentInvoices.InvoiceList.Add(InvoiceToCreate);
+            System.Diagnostics.Debug.WriteLine(
+                $"New Invoice:{InvoiceToCreate.InvoiceName} created and " +
+                $"added to:{this.CurrentInvoices.InvoicesProjectName} " +
+                $"on position:{this.CurrentInvoices.InvoiceList.Count - 1}");
+            //Save The New but not Edited Invoice to File in case of not directly
+            //editing and Save via update there, also makes sure that the File
+            //DateTime Changed gets updated.
+            this.Context.InvoiceManager.Save(this.CurrentInvoices);
+            try
             {
+                await Shell.Current.GoToAsync($"{nameof(EditView)}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return;
             }
-            string InhabitantName1 = await AskForDialogOkCancel(
-               titel: "Input",
-               message: "Input First Username",
-               placeholder: "1st Username");
-            if (string.IsNullOrEmpty(InhabitantName1))
-            {
-                return;
-            }
-            string InhabitantName2 = await AskForDialogOkCancel(
-                titel: "Input",
-                message: "Input Second Username",
-                placeholder: "2nd Username");
-            if (string.IsNullOrEmpty(InhabitantName2))
-            {
-                return;
-            }
-            //Check if every input is not null or empty to proceed
-            if (!string.IsNullOrEmpty(NewInvoiceName) &&
-                !string.IsNullOrEmpty(InhabitantName1) &&
-                !string.IsNullOrEmpty(InhabitantName2) &&
-                //Checks if the Name only Consists of Letters 
-                Regex.IsMatch(InhabitantName1, @"^[a-zA-Z]+$") &&
-                Regex.IsMatch(InhabitantName1, @"^[a-zA-Z]+$"))
-            {
-                Invoice NewInvoice = new Invoice
-                {
-                    InvoiceName = NewInvoiceName,
-                    DateTimeCreation = DateTime.Now,
-                    InhabitantsNameList = new ObservableCollection<string> { InhabitantName1, InhabitantName2 },
-                    Inhabitants = new Inhabitants
-                    {
-                        new Inhabitant
-                        {
-                            Name = InhabitantName1,
-                        },
-                        new Inhabitant
-                        {
-                            Name = InhabitantName2
-                        }
-                    }
-                };
-                this.CurrentInvoice = NewInvoice;
-                this.CurrentInvoices.InvoiceList.Add(NewInvoice);
-                System.Diagnostics.Debug.WriteLine(
-                    $"New Invoice:{NewInvoice.InvoiceName} created and " +
-                    $"added to:{this.CurrentInvoices.InvoicesProjectName} " +
-                    $"on position:{this.CurrentInvoices.InvoiceList.Count - 1}");
-                //Save The New but not Edited Invoice to File in case of not directly
-                //editing and Save via update there, also makes sure that the File
-                //DateTime Changed gets updated.
-                this.Context.InvoiceManager.Save(this.CurrentInvoices);
-                try
-                {
-                    await Shell.Current.GoToAsync($"{nameof(EditView)}");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                    return;
-                }
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine($"Inputs Wrongt " +
-                    $"InvoiceName:{NewInvoiceName}," +
-                    $" Inhab1:{InhabitantName1}, Inhab2:{InhabitantName2}");
-            }
+            //}
+            //else
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"Inputs Wrongt " +
+            //        $"InvoiceName:{NewInvoiceName}," +
+            //        $" Inhab1:{InhabitantName1}, Inhab2:{InhabitantName2}");
+            //}
         }
         /// <summary>
         /// Ask via Dialog for Information
@@ -623,24 +621,24 @@ namespace Essensausgleich.ViewModel
         /// and convays the change down to the Inhabitant object 
         /// </summary>
         [RelayCommand]
-        public void DeleteDataGridEntry(object? selectedItem )
+        public void DeleteDataGridEntry(object? selectedItem)
         {
             if (selectedItem is Expense expenseItem)
             {
-               
-            
-            // delet Entry and updates source
-            //ListOfExpensesInhabitant1.Remove(SelectedExpenseItem);
-            if (InhabitantsSelected == CurrentInvoice.Inhabitants[0].Name)
-            {
-                this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Remove(expenseItem);
-            }
-            else if (InhabitantsSelected == CurrentInvoice.Inhabitants[1].Name)
-            {
-                this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Remove(expenseItem);
-            }
-            OnPropertyChanged(nameof(LblpayingInhabitantContent));
-            OnPropertyChanged(nameof(LblBillContent));
+
+
+                // delet Entry and updates source
+                //ListOfExpensesInhabitant1.Remove(SelectedExpenseItem);
+                if (InhabitantsSelected == CurrentInvoice.Inhabitants[0].Name)
+                {
+                    this.CurrentInvoice.Inhabitants[0].ListOfExpenses.Remove(expenseItem);
+                }
+                else if (InhabitantsSelected == CurrentInvoice.Inhabitants[1].Name)
+                {
+                    this.CurrentInvoice.Inhabitants[1].ListOfExpenses.Remove(expenseItem);
+                }
+                OnPropertyChanged(nameof(LblpayingInhabitantContent));
+                OnPropertyChanged(nameof(LblBillContent));
             }
         }
         public void LogToFile(string message)
@@ -653,5 +651,21 @@ namespace Essensausgleich.ViewModel
             System.Diagnostics.Debug.WriteLine("Writen to LogFile");
         }
         #endregion Methods
+
+        #region canExecute
+        //new invoice can execute
+        public bool CanExecuteNewInvoice()
+        {
+            //if (Regex.IsMatch(InvoiceToCreate.Inhabitants[0].Name, @"^[a-zA-Z]+$") &&
+            //    Regex.IsMatch(InvoiceToCreate.Inhabitants[1].Name, @"^[a-zA-Z]+$") &&
+            //    Regex.IsMatch(InvoiceToCreate.InvoiceName!, @"^[a-zA-Z0-9]+$"))
+            //{
+            //    return true;
+            //}
+            //Log.WriteLine("CanExecuteNewInvoice false");
+            //return false;
+            return true;
+        }
+        #endregion canExecute
     }
 }
