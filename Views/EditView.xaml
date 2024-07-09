@@ -35,11 +35,13 @@
         <VerticalStackLayout
             Grid.Row="0" 
             Grid.Column="0"
-            Grid.ColumnSpan="2">
+            Grid.ColumnSpan="2"
+            Background="{AppThemeBinding Light={StaticResource Coral}, Dark={StaticResource MidnightBlue}}">
             <!--CurrentInvoice Titel-->
             <Label
                 Text="{Binding CurrentInvoice.InvoiceName}"
-                FontSize="Header"/>
+                FontSize="Header"
+                Style="{StaticResource EditViewExpense}"/>
             <!--Stack Pannel Add Bill-->
             <HorizontalStackLayout>
                 <Entry 
@@ -53,14 +55,16 @@
                        Keyboard="Numeric"/>
                 <Button 
                     Command="{Binding AddBillCommand}" 
-                    Text="Add Bill"/>
+                    Text="Add Bill"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource Coral}}"/>
             </HorizontalStackLayout>
             <!--Inhabitants Names to Choose for Input and Display of Contributions-->
             <HorizontalStackLayout>
                 <Border
-                    BackgroundColor="LightGray">
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}">
                     <Label Text="{Binding CurrentInvoice.Inhabitants[0].Name}"
-                       FontSize="Large">
+                           FontSize="Large"
+                           TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}">
                     <Label.Style>
                         <Style TargetType="Label">
                             <Style.Triggers>
@@ -86,10 +90,11 @@
                 </Border>
                 
                 <Border
-                    BackgroundColor="LightGray"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
                     Margin="5,0,0,0">
                     <Label Text="{Binding CurrentInvoice.Inhabitants[1].Name}"
-                       FontSize="Large">
+                           FontSize="Large"
+                           TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}">
                     <Label.Style>
                         <Style TargetType="Label">
                             <Style.Triggers>
@@ -123,7 +128,7 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Background="Aqua"/>
+            Background="{AppThemeBinding Light={StaticResource Coral}, Dark={StaticResource MidnightBlue}}"/>
         <!--Row 2-->
         <!--Inhabitants Expense and Commentary on the bottom-->
         <StackLayout
@@ -131,13 +136,12 @@
             Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            BackgroundColor="Gray"
             HorizontalOptions="FillAndExpand">
             <!--Stackpanel Inhabitants Expenses-->
             <Border 
                 StrokeThickness="3"
                 Padding="0" 
-                Background="LightBlue"
+                Background="{AppThemeBinding Light={StaticResource MildViolet}, Dark={StaticResource Gray600}}"
                 HorizontalOptions="FillAndExpand">
                 <HorizontalStackLayout>
                     <!--Stackpanel vertical Inhabs-->
@@ -175,7 +179,7 @@
                 <Editor 
                     Placeholder="Coment"
                     Text ="{Binding CurrentInvoice.InvoiceComment}"                   
-                    BackgroundColor="Coral"/>
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Orange}, Dark={StaticResource Chocolade}}"/>
             </Border>
         </StackLayout>
     </Grid>

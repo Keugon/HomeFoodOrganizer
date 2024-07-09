@@ -8,6 +8,7 @@
              xmlns:data="clr-namespace:Essensausgleich.Data"
              xmlns:views="clr-namespace:Essensausgleich.Views"
              x:DataType="viewmodel:Anwendung"
+             BackgroundColor="{StaticResource Coral}"
              Title="InvoiceViewPage">
     <ContentPage.ToolbarItems >
         <ToolbarItem Text="Delete this Project"
@@ -45,12 +46,15 @@
                                             CommandParameter="{Binding .}"/>
                                     </HorizontalStackLayout.GestureRecognizers>
                                     <VerticalStackLayout>
-                                        <Label Text="{Binding DateTimeCreation,StringFormat='&#x270E;{0:dd.MM.yy, HH:mm} | '}"/>
-                                        <Label Text="{Binding DateTimeChanged,StringFormat='&#x21BB;{0:dd.MM.yy, HH:mm} | '}"/>
+                                        <Label Text="{Binding DateTimeCreation,StringFormat='&#x270E;{0:dd.MM.yy, HH:mm} | '}"
+                                               TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}"/>
+                                        <Label Text="{Binding DateTimeChanged,StringFormat='&#x21BB;{0:dd.MM.yy, HH:mm} | '}"
+                                               TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}"/>
                                     </VerticalStackLayout>
                                     <Label
                                         Text="{Binding InvoiceName}"
-                                        FontSize="Medium"/>
+                                        FontSize="Medium"
+                                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}"/>
                                 </HorizontalStackLayout>
                             </Border>
                         </Grid>
