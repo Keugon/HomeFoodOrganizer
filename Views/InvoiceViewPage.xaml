@@ -14,7 +14,7 @@
                          Command="{Binding DeleteCurrentProjectCommand}"/>
     </ContentPage.ToolbarItems>
     <Grid 
-        RowDefinitions="50,*,*"
+        RowDefinitions="50,*"
         ColumnDefinitions="*">
         <!--Header-->
         <VerticalStackLayout
@@ -62,10 +62,9 @@
                 Command="{Binding ShowInvoiceFormularCommand}"/>
             <views:NewInvoiceView
                 IsVisible="{Binding IsInputFormularVisible}"
-                Grid.Row="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Background="Aqua"/>
         </VerticalStackLayout>
-    </Grid>
+ </Grid>
 </ContentPage>

@@ -26,9 +26,24 @@ namespace Essensausgleich.Data
     public partial class Inhabitant : ObservableObject, INotifyPropertyChanged
     {
         /// <summary>
+        /// Internal Field
+        /// </summary>
+        private string _Name = string.Empty;
+        /// <summary>
         /// Gets or Sets the Name propertie of Inhabitant
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public string Name
+        {
+            get => this._Name;
+            set
+            {
+                if (this._Name != value)
+                {
+                    this._Name = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         /// <summary>
         /// Internal Field
         /// </summary>
@@ -100,6 +115,6 @@ namespace Essensausgleich.Data
                 });
                 _TotalExpense += valueExpense;
             }
-        }       
+        }
     }
 }

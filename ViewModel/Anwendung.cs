@@ -46,6 +46,7 @@ namespace Essensausgleich.ViewModel
                 System.IO.Directory.CreateDirectory(InvoicesFolderPath);
             }
             System.Diagnostics.Debug.WriteLine("Initialize End");
+            
         }
         #region PropertieBinding
         /// <summary>
@@ -263,15 +264,20 @@ namespace Essensausgleich.ViewModel
                 if (this._InvoiceToCreate == null)
                 {
                     this._InvoiceToCreate = new Invoice();
+                    //Attach Event
+                    InvoiceToCreate.Inhabitants[0].PropertyChanged += TestingEvent_OnPropertyChangedFromInvoiceToCreate!;
+                    InvoiceToCreate.Inhabitants[1].PropertyChanged += TestingEvent_OnPropertyChangedFromInvoiceToCreate!;
+                    InvoiceToCreate.PropertyChanging += TestingEvent_OnPropertyChangedFromInvoiceToCreate!;
                 }
                 return this._InvoiceToCreate;
             }
             set
-            {              
-                    this._InvoiceToCreate = value;
-                    OnPropertyChanged(nameof(CanExecuteNewInvoice));                             
+            {
+                this._InvoiceToCreate = value;
+                OnPropertyChanged();
             }
         }
+        
         #endregion NewInvoice
         #endregion PropertieBinding
 
@@ -564,10 +570,6 @@ namespace Essensausgleich.ViewModel
         [RelayCommand(CanExecute = nameof(CanExecuteNewInvoice))]
         public async Task NewInvoice()
         {
-
-            //Checks if the Name only Consists of Letters 
-            //Regex.IsMatch(InhabitantName1, @"^[a-zA-Z]+$") &&
-            //Regex.IsMatch(InhabitantName1, @"^[a-zA-Z]+$"))
             //Set Date of creation for the new Invoice
             InvoiceToCreate.DateTimeCreation = DateTime.Now;
             this.CurrentInvoice = InvoiceToCreate;
@@ -589,13 +591,8 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return;
             }
-            //}
-            //else
-            //{
-            //    System.Diagnostics.Debug.WriteLine($"Inputs Wrongt " +
-            //        $"InvoiceName:{NewInvoiceName}," +
-            //        $" Inhab1:{InhabitantName1}, Inhab2:{InhabitantName2}");
-            //}
+            InvoiceToCreate = null!;
+            IsInputFormularVisible = false;
         }
         /// <summary>
         /// Ask via Dialog for Information
@@ -656,15 +653,22 @@ namespace Essensausgleich.ViewModel
         //new invoice can execute
         public bool CanExecuteNewInvoice()
         {
-            //if (Regex.IsMatch(InvoiceToCreate.Inhabitants[0].Name, @"^[a-zA-Z]+$") &&
-            //    Regex.IsMatch(InvoiceToCreate.Inhabitants[1].Name, @"^[a-zA-Z]+$") &&
-            //    Regex.IsMatch(InvoiceToCreate.InvoiceName!, @"^[a-zA-Z0-9]+$"))
-            //{
-            //    return true;
-            //}
-            //Log.WriteLine("CanExecuteNewInvoice false");
-            //return false;
-            return true;
+            if (Regex.IsMatch(InvoiceToCreate.Inhabitants[0].Name, @"^[a-zA-Z]+$") &&
+                Regex.IsMatch(InvoiceToCreate.Inhabitants[1].Name, @"^[a-zA-Z]+$") &&
+                Regex.IsMatch(InvoiceToCreate.InvoiceName!, @"^[a-zA-Z0-9]+$"))
+            {
+                return true;
+            }
+            Log.WriteLine("CanExecuteNewInvoice false");
+            return false;
+           
+
+        }
+        //Act on Event
+        public void TestingEvent_OnPropertyChangedFromInvoiceToCreate(object sender, EventArgs e)
+        {
+            Console.WriteLine("Event got called");
+            NewInvoiceCommand.NotifyCanExecuteChanged();
         }
         #endregion canExecute
     }
