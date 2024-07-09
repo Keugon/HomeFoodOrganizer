@@ -57,26 +57,14 @@ namespace Essensausgleich.Data
     /// </summary>
     public partial class Invoice : GuidDataObject, INotifyPropertyChanged
     {
+        /// <summary>
+        /// Internal Field
+        /// </summary>
         [ObservableProperty]
         private string? _InvoiceName;
         /// <summary>
-        /// Internal Field for Caching
+        /// Internal Field
         /// </summary>
-        private ObservableCollection<string> _InhabitantsNameList = new ObservableCollection<string>();
-        /// <summary>
-        /// Gets or Sets a ObservableList of Strings 
-        /// </summary>
-        public ObservableCollection<string> InhabitantsNameList
-        {
-            get
-            {
-                return this._InhabitantsNameList;
-            }
-            set
-            {
-                this._InhabitantsNameList = value;
-            }
-        }
         private Inhabitants _Inhabitants = null!;
         /// <summary>
         /// Gets or Sets the Content for the Inhabitants List

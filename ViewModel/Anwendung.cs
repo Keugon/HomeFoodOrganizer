@@ -46,7 +46,7 @@ namespace Essensausgleich.ViewModel
                 System.IO.Directory.CreateDirectory(InvoicesFolderPath);
             }
             System.Diagnostics.Debug.WriteLine("Initialize End");
-            
+
         }
         #region PropertieBinding
         /// <summary>
@@ -72,9 +72,9 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice Beginn Set");
                 this._CurrentInvoice = value;
                 OnPropertyChanged();
-                if (this.CurrentInvoice.InhabitantsNameList.Count == 2)
+                if (this.CurrentInvoice.Inhabitants.Count == 2)
                 {
-                    InhabitantsSelected = this.CurrentInvoice.InhabitantsNameList[0];
+                    InhabitantsSelected = this.CurrentInvoice.Inhabitants[0].Name;
                 }
                 OnPropertyChanged(nameof(LblpayingInhabitantContent));
                 OnPropertyChanged(nameof(LblBillContent));
@@ -277,7 +277,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-        
+
         #endregion NewInvoice
         #endregion PropertieBinding
 
@@ -572,25 +572,15 @@ namespace Essensausgleich.ViewModel
         {
             //Set Date of creation for the new Invoice
             InvoiceToCreate.DateTimeCreation = DateTime.Now;
-            this.CurrentInvoice = InvoiceToCreate;
             this.CurrentInvoices.InvoiceList.Add(InvoiceToCreate);
-            System.Diagnostics.Debug.WriteLine(
-                $"New Invoice:{InvoiceToCreate.InvoiceName} created and " +
-                $"added to:{this.CurrentInvoices.InvoicesProjectName} " +
-                $"on position:{this.CurrentInvoices.InvoiceList.Count - 1}");
             //Save The New but not Edited Invoice to File in case of not directly
             //editing and Save via update there, also makes sure that the File
             //DateTime Changed gets updated.
             this.Context.InvoiceManager.Save(this.CurrentInvoices);
-            try
-            {
-                await Shell.Current.GoToAsync($"{nameof(EditView)}");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                return;
-            }
+            //Switch to EditView
+            await LoadSelectedInvoiceToCurrent(InvoiceToCreate);
+            //After Switch Null InvoiceToCreate to be Ready for the next and vanish the Input View
+
             InvoiceToCreate = null!;
             IsInputFormularVisible = false;
         }
@@ -661,7 +651,7 @@ namespace Essensausgleich.ViewModel
             }
             Log.WriteLine("CanExecuteNewInvoice false");
             return false;
-           
+
 
         }
         //Act on Event
