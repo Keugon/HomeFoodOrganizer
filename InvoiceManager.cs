@@ -106,7 +106,10 @@ namespace Essensausgleich
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Deletes the given InvoiceList
+        /// </summary>
+        /// <param name="invoiceToDelete">Invoices (Project) to delete</param>
         public void Delete(Invoices invoiceToDelete)
         {
             try
@@ -145,8 +148,14 @@ namespace Essensausgleich
             }
         }
         #region WPF über Änderungen Informieren
+        /// <summary>
+        /// Event PropertyChanged
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
-
+        /// <summary>
+        /// On PropertyChanged
+        /// </summary>
+        /// <param name="propertyName"></param>
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

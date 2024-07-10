@@ -9,11 +9,16 @@ using Windows.Graphics;
 #endif
 
 namespace Essensausgleich
-{
+{/// <summary>
+/// App.xaml.cs
+/// </summary>
     public partial class App : Application
     {
         const int WindowWidth = 380;
         const int WindowHeight = 620;
+        /// <summary>
+        /// Public App
+        /// </summary>
         public App()
         {
             InitializeComponent();

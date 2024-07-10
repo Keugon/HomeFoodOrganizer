@@ -18,7 +18,10 @@ namespace Essensausgleich.WinUI
         {
             this.InitializeComponent();
         }
-
+        /// <summary>
+        /// CreatMauiApp
+        /// </summary>
+        /// <returns></returns>
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }
 

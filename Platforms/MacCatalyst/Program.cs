@@ -3,6 +3,9 @@ using UIKit;
 
 namespace Essensausgleich
 {
+    /// <summary>
+    /// Program
+    /// </summary>
     public class Program
     {
         // This is the main entry point of the application.

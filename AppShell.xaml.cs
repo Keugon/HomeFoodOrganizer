@@ -2,8 +2,14 @@
 
 namespace Essensausgleich
 {
+    /// <summary>
+    /// AppShell.xaml.cs
+    /// </summary>
     public partial class AppShell : Shell
     {
+        /// <summary>
+        /// AppShell here is where the Routes get registert
+        /// </summary>
         public AppShell()
         {
             

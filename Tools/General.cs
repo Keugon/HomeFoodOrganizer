@@ -30,8 +30,19 @@ namespace Essensausgleich.Tools
 
 
     }
+    /// <summary>
+    /// Returns the Filename from a Fullpath
+    /// </summary>
     public class FilePathToFileNameConverter : IValueConverter
     {
+        /// <summary>
+        /// Path to File
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
         public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is string filePath)
@@ -40,14 +51,33 @@ namespace Essensausgleich.Tools
             }
             return value!; // Return original value if it's not a string
         }
-
+        /// <summary>
+        /// Not Implemented
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
     }
+    /// <summary>
+    /// checks if in a multibinding with 2 Binds the ToString equal is if so gives a truthfull return
+    /// </summary>
     public class TwoValueMustEqualMultiConverter : IMultiValueConverter
     {
+        /// <summary>
+        /// If 1 and 2 same true
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         { 
             if (values == null || values.Length < 2)
@@ -58,7 +88,15 @@ namespace Essensausgleich.Tools
 
             return value1 == value2;    
     }
-
+        /// <summary>
+        /// Not Implemented
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetTypes"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

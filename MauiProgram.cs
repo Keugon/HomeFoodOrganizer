@@ -5,9 +5,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Essensausgleich
 {
+    /// <summary>
+    /// MauiProgram
+    /// </summary>
     public static class MauiProgram
     {
-
+        /// <summary>
+        /// CreateMauiApp here it is to configure resources like fints and initiate Views/Pages
+        /// </summary>
+        /// <returns></returns>
         public static MauiApp CreateMauiApp()
         {
 

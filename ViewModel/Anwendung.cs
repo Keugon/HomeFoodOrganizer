@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
+using static System.Net.Mime.MediaTypeNames;
 using Log = System.Diagnostics.Debug;
 
 namespace Essensausgleich.ViewModel
@@ -48,10 +49,28 @@ namespace Essensausgleich.ViewModel
             System.Diagnostics.Debug.WriteLine("Initialize End");
 
         }
-        #region PropertieBinding
+        #region Services
+        private DataSharingController _DataSharingController = null!;
         /// <summary>
-        /// Internal Field
+        /// Gets or sets the Service for Data sharing between Apps
         /// </summary>
+        public DataSharingController DataSharingController
+        {
+            get
+            {
+                if (this._DataSharingController == null)
+                {
+                    this._DataSharingController = this.Context.Fabricate<DataSharingController>();
+                }
+                return this._DataSharingController;
+            }
+            set => this._DataSharingController = value;
+        }
+        #endregion Services
+            #region PropertieBinding
+            /// <summary>
+            /// Internal Field
+            /// </summary>
         private Invoice _CurrentInvoice = null!;
         /// <summary>
         /// Gets or sets the CurrentInvoice displayed on EditView to modify
@@ -152,6 +171,9 @@ namespace Essensausgleich.ViewModel
             return ObsListe;
         }
         private string _InhabitansSelected = null!;
+        /// <summary>
+        /// Gets or sets the SelectedInhabitant for adding Expenses
+        /// </summary>
         public string InhabitantsSelected
         {
             get
@@ -166,6 +188,10 @@ namespace Essensausgleich.ViewModel
             }
         }
         private string _lblBillContent = null!;
+        /// <summary>
+        /// Gets or sets the amount that needs to be
+        /// payed to the other inhabitant
+        /// </summary>
         public string LblBillContent
         {
             get
@@ -183,7 +209,6 @@ namespace Essensausgleich.ViewModel
                         result = this.CurrentInvoice.Inhabitants[1].TotalExpense - result;
 
                     }
-
                     return result.ToString();
                 }
                 return string.Empty;
@@ -195,6 +220,10 @@ namespace Essensausgleich.ViewModel
             }
         }
         private string _LblpayingInhabitantContent = null!;
+        /// <summary>
+        /// Gets or sets the disyplayed Inhabitant
+        /// name that needs to pay the other one
+        /// </summary>
         public string LblpayingInhabitantContent
         {
             get
@@ -216,6 +245,10 @@ namespace Essensausgleich.ViewModel
             }
         }
         private Expense _ExpenseToAdd = null!;
+        /// <summary>
+        /// Gets or sets the Expense Object that
+        /// is used to add a new Expense to a Inhabitant
+        /// </summary>
         public Expense ExpenseToAdd
         {
             get
@@ -264,10 +297,10 @@ namespace Essensausgleich.ViewModel
                 if (this._InvoiceToCreate == null)
                 {
                     this._InvoiceToCreate = new Invoice();
-                    //Attach Event
-                    InvoiceToCreate.Inhabitants[0].PropertyChanged += TestingEvent_OnPropertyChangedFromInvoiceToCreate!;
-                    InvoiceToCreate.Inhabitants[1].PropertyChanged += TestingEvent_OnPropertyChangedFromInvoiceToCreate!;
-                    InvoiceToCreate.PropertyChanging += TestingEvent_OnPropertyChangedFromInvoiceToCreate!;
+                    //On initialize the Invoice object attach the Methode that ultimatly checks for valid User Input
+                    InvoiceToCreate.Inhabitants[0].PropertyChanged += (sender, e) => NewInvoiceCommand.NotifyCanExecuteChanged();
+                    InvoiceToCreate.Inhabitants[1].PropertyChanged += (sender, e) => NewInvoiceCommand.NotifyCanExecuteChanged();
+                    InvoiceToCreate.PropertyChanging += (sender, e) => NewInvoiceCommand.NotifyCanExecuteChanged();
                 }
                 return this._InvoiceToCreate;
             }
@@ -451,14 +484,15 @@ namespace Essensausgleich.ViewModel
 
         }
         /// <summary>
-        /// This ask if the currentInvoice should be Updated 
-        /// is Yes gets pushed to CurrentInvoices at index
+        /// Saves the Current activ Project (Invoces) to file, also changes 
+        /// the DateTime Changed for the Single Invoices as well of the Project
         /// </summary>
         [RelayCommand]
         public async Task UpdateCurrentInvoice()
         {
             //maybe not necessari
             //this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
+            this.CurrentInvoice.DateTimeChanged = DateTime.Now;
             this.Context.InvoiceManager.Save(this.CurrentInvoices);
             try
             {
@@ -562,6 +596,10 @@ namespace Essensausgleich.ViewModel
             {
                 this.IsInputFormularVisible = true;
             }
+            else
+            {
+                this.IsInputFormularVisible = false;
+            }
         }
         /// <summary>
         /// Starts a new Invoice gives it via Dialog a Name
@@ -628,6 +666,11 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged(nameof(LblBillContent));
             }
         }
+        /// <summary>
+        /// Logs a given string to a File a a form of protocoll
+        /// </summary>
+        /// <param name="message">string to 
+        /// be saved to the protocoll</param>
         public void LogToFile(string message)
         {
             //folder
@@ -637,28 +680,43 @@ namespace Essensausgleich.ViewModel
 
             System.Diagnostics.Debug.WriteLine("Writen to LogFile");
         }
+        /// <summary>
+        /// Shares the invoice informations in string form
+        /// </summary>
+        /// <param name="invoiceToShare"></param>
+        [RelayCommand]
+        public async Task ShareInvoice(object? invoiceToShare)
+        {
+            if (invoiceToShare is Invoice invoice) 
+            {
+                await this.DataSharingController.RequestAsync(new ShareTextRequest
+                {
+                    Text = invoice.InvoiceName,
+                    Title = "Share Text"
+                });
+               
+            }
+        }
         #endregion Methods
 
         #region canExecute
         //new invoice can execute
+        /// <summary>
+        /// checks if the inputs for creating the new Invoice are valid
+        /// </summary>
+        /// <returns>true - if InvoiceName and both 
+        /// Inhabitant Names have a valid input
+        /// (Names only Letters, Invoice alphanumerical)</returns>
         public bool CanExecuteNewInvoice()
         {
-            if (Regex.IsMatch(InvoiceToCreate.Inhabitants[0].Name, @"^[a-zA-Z]+$") &&
-                Regex.IsMatch(InvoiceToCreate.Inhabitants[1].Name, @"^[a-zA-Z]+$") &&
-                Regex.IsMatch(InvoiceToCreate.InvoiceName!, @"^[a-zA-Z0-9]+$"))
+            if (Regex.IsMatch(InvoiceToCreate.Inhabitants[0].Name.Trim(), @"^[a-zA-Z]+$") &&
+                Regex.IsMatch(InvoiceToCreate.Inhabitants[1].Name.Trim(), @"^[a-zA-Z]+$") &&
+                Regex.IsMatch(InvoiceToCreate.InvoiceName!.Trim(), @"^[a-zA-Z0-9]+$"))
             {
                 return true;
             }
             Log.WriteLine("CanExecuteNewInvoice false");
             return false;
-
-
-        }
-        //Act on Event
-        public void TestingEvent_OnPropertyChangedFromInvoiceToCreate(object sender, EventArgs e)
-        {
-            Console.WriteLine("Event got called");
-            NewInvoiceCommand.NotifyCanExecuteChanged();
         }
         #endregion canExecute
     }

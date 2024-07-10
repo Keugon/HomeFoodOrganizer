@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net8.0-android;net8.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -37,6 +37,61 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<AnalysisLevel>latest</AnalysisLevel>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<Authors>Keugon</Authors>
+		<Title>AusgabenBuddy</Title>
+		<IncludeSymbols>True</IncludeSymbols>
+		<Company>draxnet</Company>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
+	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
+	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
+	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
+	  <AndroidKeyStore>False</AndroidKeyStore>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
+	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
+	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
+	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
+	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
+	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
+	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
+	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
+	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
+	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
+	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
+	  <AndroidKeyStore>False</AndroidKeyStore>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
+	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
+	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
+	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
+	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
+	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
+	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
+	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
+	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
 	</PropertyGroup>
 
 	<ItemGroup>

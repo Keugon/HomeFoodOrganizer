@@ -39,12 +39,14 @@
                         <Grid>
                             <Border
                                 Style="{StaticResource Key=ItemBorder}">
-                                <HorizontalStackLayout>
-                                    <HorizontalStackLayout.GestureRecognizers>
+                                <StackLayout Orientation="Horizontal"
+                                    BackgroundColor="AliceBlue"
+                                             VerticalOptions="Center">
+                                    <StackLayout.GestureRecognizers>
                                         <TapGestureRecognizer
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=LoadSelectedInvoiceToCurrentCommand}"
                                             CommandParameter="{Binding .}"/>
-                                    </HorizontalStackLayout.GestureRecognizers>
+                                    </StackLayout.GestureRecognizers>
                                     <VerticalStackLayout>
                                         <Label Text="{Binding DateTimeCreation,StringFormat='&#x270E;{0:dd.MM.yy, HH:mm} | '}"
                                                TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}"/>
@@ -55,15 +57,33 @@
                                         Text="{Binding InvoiceName}"
                                         FontSize="Medium"
                                         TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}"/>
-                                </HorizontalStackLayout>
+                                    <Button 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=ShareInvoiceCommand}"
+                                        CommandParameter="{Binding .}"
+                                        Text="Nicht Button"
+                                        HorizontalOptions="EndAndExpand"/>
+                                </StackLayout>
                             </Border>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <!--Button be be replaced if NewInvoiceView is visible or not-->
+            <!--Add new Invoice shown if IsInputFormularVisible == false
+            Logic button is IsVisible=false unless the datatrigger sets it to visible-->
             <Button
-                Text="Add new Invoice"
-                Command="{Binding ShowInvoiceFormularCommand}"/>
+                Text="&#xE118;"
+                FontFamily="Segoe UI Symbol"
+                Command="{Binding ShowInvoiceFormularCommand}">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                                 Binding="{Binding IsInputFormularVisible}"
+                                 Value="true">
+                        <Setter Property="Text" Value="&#xE11C;"/>
+                        <Setter Property="BackgroundColor" Value="PaleVioletRed"/>
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
             <views:NewInvoiceView
                 IsVisible="{Binding IsInputFormularVisible}"
                 Grid.Column="0"
