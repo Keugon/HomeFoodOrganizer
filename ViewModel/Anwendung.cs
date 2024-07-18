@@ -4,6 +4,8 @@ using Essensausgleich.Controller;
 using Essensausgleich.Data;
 using Essensausgleich.Tools;
 using Essensausgleich.Views;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
 using Microsoft.Maui.Controls.PlatformConfiguration.TizenSpecific;
 using Microsoft.Win32;
 using System;
@@ -67,10 +69,11 @@ namespace Essensausgleich.ViewModel
             set => this._DataSharingController = value;
         }
         #endregion Services
-            #region PropertieBinding
-            /// <summary>
-            /// Internal Field
-            /// </summary>
+
+        #region PropertieBinding
+        /// <summary>
+        /// Internal Field
+        /// </summary>
         private Invoice _CurrentInvoice = null!;
         /// <summary>
         /// Gets or sets the CurrentInvoice displayed on EditView to modify
@@ -312,6 +315,66 @@ namespace Essensausgleich.ViewModel
         }
 
         #endregion NewInvoice
+
+        #region Charts
+        /// <summary>
+        /// Internal Cache
+        /// </summary>
+        private ISeries[] _ProjectChart = null!;
+        /// <summary>
+        /// Gets the Datatype for visualize the chart
+        /// </summary>
+        public ISeries[] ProjectChart
+        {
+            get
+            {
+                if (this._ProjectChart == null)
+                {
+                    //get data from invoices
+                    decimal[] user1Exp = new decimal[CurrentInvoices.InvoiceList.Count];
+                    decimal[] user2Exp = new decimal[CurrentInvoices.InvoiceList.Count];
+                    for (int i = 0; i < CurrentInvoices.InvoiceList.Count; i++)
+                    {
+                        user1Exp[i] = CurrentInvoices.InvoiceList[i].Inhabitants[0].TotalExpense;
+                        user2Exp[i] = CurrentInvoices.InvoiceList[i].Inhabitants[1].TotalExpense;
+                    }
+                    //Generate Lines from CurrentInvoice(s)
+                    this._ProjectChart = new ISeries[]
+                    {
+                        new LineSeries<decimal>
+                        {
+                        Values = user1Exp,
+                        Fill = null
+                        },
+                        new LineSeries<decimal>
+                        {
+                        Values = user2Exp,
+                        Fill = null
+                        }
+                    };
+                }
+                //Sample Line and Columne
+                /*
+                this._ProjectChart = new ISeries[]
+                {
+                        new LineSeries<double>
+                        {
+                            Values = new double[] { 2, 1, 3, 5, 3, 4, 6 },
+                            Fill = null
+                        },
+                         new ColumnSeries<double>
+                        {
+                            Values = new double[] { 2, 5, 4, -2, 4, -3, 5 }
+                        }
+                        };
+                }
+                */
+                return this._ProjectChart;
+            }
+
+        }
+
+        #endregion Charts
         #endregion PropertieBinding
 
         #region Methods       
@@ -687,14 +750,14 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public async Task ShareInvoice(object? invoiceToShare)
         {
-            if (invoiceToShare is Invoice invoice) 
+            if (invoiceToShare is Invoice invoice)
             {
                 await this.DataSharingController.RequestAsync(new ShareTextRequest
                 {
                     Text = invoice.InvoiceName,
                     Title = "Share Text"
                 });
-               
+
             }
         }
         #endregion Methods

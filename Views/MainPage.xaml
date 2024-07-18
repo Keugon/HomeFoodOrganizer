@@ -17,12 +17,6 @@
     <Grid 
         RowDefinitions="50,*,*"
         ColumnDefinitions="*">
-        <!--Header-->
-        <VerticalStackLayout
-            Grid.Row="0">
-            <Label
-                Text="Header"/>
-        </VerticalStackLayout>
         <!--Invoices in AppDataDirectory-->
         <VerticalStackLayout
             Grid.Row="1">

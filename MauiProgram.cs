@@ -2,6 +2,7 @@
 using Essensausgleich.ViewModel;
 using Essensausgleich.Views;
 using Microsoft.Extensions.Logging;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace Essensausgleich
 {
@@ -19,6 +20,7 @@ namespace Essensausgleich
 
             var builder = MauiApp.CreateBuilder();
             builder
+                .UseSkiaSharp(true)
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>

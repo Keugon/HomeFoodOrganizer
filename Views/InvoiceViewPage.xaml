@@ -7,12 +7,13 @@
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
              xmlns:data="clr-namespace:Essensausgleich.Data"
              xmlns:views="clr-namespace:Essensausgleich.Views"
+             xmlns:lcv="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              x:DataType="viewmodel:Anwendung"
              BackgroundColor="{StaticResource Coral}"
              Title="InvoiceViewPage">
     <ContentPage.ToolbarItems >
         <ToolbarItem Text="Delete this Project"
-                         Command="{Binding DeleteCurrentProjectCommand}"/>
+                     Command="{Binding DeleteCurrentProjectCommand}"/>
     </ContentPage.ToolbarItems>
     <Grid 
         RowDefinitions="50,*"
@@ -22,6 +23,7 @@
             Grid.Row="0">
             <Label
             Text="InvoiceViewPage"/>
+            
         </VerticalStackLayout>
         <!--Invoices in AppDataDirectory-->
         <VerticalStackLayout
@@ -60,7 +62,7 @@
                                     <Button 
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=ShareInvoiceCommand}"
                                         CommandParameter="{Binding .}"
-                                        Text="Nicht Button"
+                                        Text="Share"
                                         HorizontalOptions="EndAndExpand"/>
                                 </StackLayout>
                             </Border>
@@ -89,6 +91,12 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Background="Aqua"/>
+            <lcv:CartesianChart
+    Series="{Binding ProjectChart}"
+    BackgroundColor="Aqua"
+                
+                MaximumHeightRequest="400">
+            </lcv:CartesianChart>
         </VerticalStackLayout>
- </Grid>
+    </Grid>
 </ContentPage>
