@@ -328,6 +328,7 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
+                //Todo Event for redraw the graph if the TotalExpense of any Inhabitant has changed
                 if (this._ProjectChart == null)
                 {
                     //get data from invoices
@@ -386,8 +387,6 @@ namespace Essensausgleich.ViewModel
         {
             if (InhabitantsSelected != string.Empty)
             {
-
-
                 if (ExpenseToAdd.ValueExpense > 0)
                 {
                     if (this.CurrentInvoice.Inhabitants[0].Name == InhabitantsSelected && InhabitantsSelected != string.Empty)

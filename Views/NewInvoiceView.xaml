@@ -12,13 +12,17 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Entry Placeholder="Invoice Name"
+               MinimumHeightRequest="48"
                Text="{Binding InvoiceToCreate.InvoiceName,Mode=TwoWay}"/>
         <Entry Placeholder="First Username"
+               MinimumHeightRequest="48"
                Text="{Binding InvoiceToCreate.Inhabitants[0].Name,Mode=TwoWay}"/>
         <Entry Placeholder="Secound Username"
+               MinimumHeightRequest="48"
                Text="{Binding InvoiceToCreate.Inhabitants[1].Name,Mode=TwoWay}"/>
         <Button 
             Text="Create new Invoice"
+            MinimumHeightRequest="48"
             Command="{Binding NewInvoiceCommand}"/>
     </VerticalStackLayout>
 </ContentView>

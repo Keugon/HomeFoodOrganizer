@@ -46,15 +46,19 @@
             <HorizontalStackLayout>
                 <Entry 
                     Placeholder="Categorie"
+                    MinimumHeightRequest="48"
                     Text="{Binding ExpenseToAdd.Categorie}" 
                     MinimumWidthRequest="100"/>
-                <Entry Placeholder="Value"
+                <Entry 
+                    Placeholder="Value"
+                    MinimumHeightRequest="48"
                     Text="{Binding ExpenseToAdd.ValueExpense}" 
                     MinimumWidthRequest="100"
                     ReturnCommand="{Binding AddBillCommand}"
                        Keyboard="Numeric"/>
                 <Button 
                     Command="{Binding AddBillCommand}" 
+                    MinimumHeightRequest="48"
                     Text="Add Bill"
                     BackgroundColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource Coral}}"/>
             </HorizontalStackLayout>

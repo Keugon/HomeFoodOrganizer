@@ -16,87 +16,79 @@
                      Command="{Binding DeleteCurrentProjectCommand}"/>
     </ContentPage.ToolbarItems>
     <Grid 
-        RowDefinitions="50,*"
+        RowDefinitions="*,200"
         ColumnDefinitions="*">
-        <!--Header-->
-        <VerticalStackLayout
-            Grid.Row="0">
-            <Label
-            Text="InvoiceViewPage"/>
-            
-        </VerticalStackLayout>
         <!--Invoices in AppDataDirectory-->
-        <VerticalStackLayout
-            Grid.Row="1">
-            <Label 
-             Text="Invoices"
-             VerticalOptions="Center" 
-             HorizontalOptions="Center"/>
-            <!--Datatrigger to IsEnable when the New Invoice Formular appears-->
-            <CollectionView 
-             ItemsSource="{Binding CurrentInvoices.InvoiceList}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate 
-                    x:DataType="data:Invoice">
-                        <Grid>
-                            <Border
-                                Style="{StaticResource Key=ItemBorder}">
-                                <StackLayout Orientation="Horizontal"
-                                    BackgroundColor="AliceBlue"
-                                             VerticalOptions="Center">
-                                    <StackLayout.GestureRecognizers>
-                                        <TapGestureRecognizer
+        <ScrollView
+            VerticalOptions="StartAndExpand"
+            Grid.Row="0">
+            <VerticalStackLayout>
+                    <!--Datatrigger to IsEnable when the New Invoice Formular appears-->
+                <CollectionView 
+                     ItemsSource="{Binding CurrentInvoices.InvoiceList}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate 
+                            x:DataType="data:Invoice">
+                            <Grid>
+                                <Border
+                                    Style="{StaticResource Key=ItemBorder}">
+                                    <StackLayout 
+                                        Orientation="Horizontal"
+                                        BackgroundColor="AliceBlue"
+                                        VerticalOptions="Center">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=LoadSelectedInvoiceToCurrentCommand}"
                                             CommandParameter="{Binding .}"/>
-                                    </StackLayout.GestureRecognizers>
-                                    <VerticalStackLayout>
-                                        <Label Text="{Binding DateTimeCreation,StringFormat='&#x270E;{0:dd.MM.yy, HH:mm} | '}"
+                                        </StackLayout.GestureRecognizers>
+                                        <VerticalStackLayout
+                                            MinimumHeightRequest="48">
+                                            <Label Text="{Binding DateTimeCreation,StringFormat='&#x270E;{0:dd.MM.yy, HH:mm} | '}"
                                                TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}"/>
-                                        <Label Text="{Binding DateTimeChanged,StringFormat='&#x21BB;{0:dd.MM.yy, HH:mm} | '}"
+                                            <Label Text="{Binding DateTimeChanged,StringFormat='&#x21BB;{0:dd.MM.yy, HH:mm} | '}"
                                                TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}"/>
-                                    </VerticalStackLayout>
-                                    <Label
-                                        Text="{Binding InvoiceName}"
-                                        FontSize="Medium"
-                                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}"/>
-                                    <Button 
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=ShareInvoiceCommand}"
-                                        CommandParameter="{Binding .}"
-                                        Text="Share"
-                                        HorizontalOptions="EndAndExpand"/>
-                                </StackLayout>
-                            </Border>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <!--Button be be replaced if NewInvoiceView is visible or not-->
-            <!--Add new Invoice shown if IsInputFormularVisible == false
-            Logic button is IsVisible=false unless the datatrigger sets it to visible-->
-            <Button
-                Text="&#xE118;"
-                FontFamily="Segoe UI Symbol"
-                Command="{Binding ShowInvoiceFormularCommand}">
-                <Button.Triggers>
-                    <DataTrigger TargetType="Button"
-                                 Binding="{Binding IsInputFormularVisible}"
-                                 Value="true">
-                        <Setter Property="Text" Value="&#xE11C;"/>
-                        <Setter Property="BackgroundColor" Value="PaleVioletRed"/>
-                    </DataTrigger>
-                </Button.Triggers>
-            </Button>
-            <views:NewInvoiceView
-                IsVisible="{Binding IsInputFormularVisible}"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Background="Aqua"/>
-            <lcv:CartesianChart
-    Series="{Binding ProjectChart}"
-    BackgroundColor="Aqua"
-                
-                MaximumHeightRequest="400">
-            </lcv:CartesianChart>
-        </VerticalStackLayout>
+                                        </VerticalStackLayout>
+                                        <Label
+                                            Text="{Binding InvoiceName}"
+                                            FontSize="Medium"
+                                            TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}"/>
+                                        <Button 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=ShareInvoiceCommand}"
+                                            CommandParameter="{Binding .}"
+                                            Text="Share"
+                                            HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                    <!--Button be be replaced if NewInvoiceView is visible or not-->
+                    <!--Add new Invoice shown if IsInputFormularVisible == false
+                    Logic button is IsVisible=false unless the datatrigger sets it to visible-->               
+                <Button
+                        Text="&#xE118;"
+                        FontFamily="Segoe UI Symbol"
+                        Command="{Binding ShowInvoiceFormularCommand}">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding IsInputFormularVisible}"
+                                     Value="true">
+                            <Setter Property="Text" Value="&#xE11C;"/>
+                            <Setter Property="BackgroundColor" Value="PaleVioletRed"/>
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+                <views:NewInvoiceView
+                 IsVisible="{Binding IsInputFormularVisible}"
+                 Background="Aqua"/>
+            </VerticalStackLayout>
+        </ScrollView>
+        <lcv:CartesianChart
+             VerticalOptions="EndAndExpand"
+             Grid.Row="1"
+             Series="{Binding ProjectChart}"
+             BackgroundColor="Aqua"
+             MaximumHeightRequest="200"/>
     </Grid>
 </ContentPage>
