@@ -47,12 +47,12 @@
                 <Entry 
                     Placeholder="Categorie"
                     MinimumHeightRequest="48"
-                    Text="{Binding ExpenseToAdd.Categorie}" 
+                    Text="{Binding ExpenseToAdd.Categorie,Mode=TwoWay}" 
                     MinimumWidthRequest="100"/>
                 <Entry 
                     Placeholder="Value"
                     MinimumHeightRequest="48"
-                    Text="{Binding ExpenseToAdd.ValueExpense}" 
+                    Text="{Binding ExpenseToAdd.ValueExpense,Mode=TwoWay}" 
                     MinimumWidthRequest="100"
                     ReturnCommand="{Binding AddBillCommand}"
                        Keyboard="Numeric"/>

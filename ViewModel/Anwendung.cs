@@ -259,6 +259,7 @@ namespace Essensausgleich.ViewModel
                 if (this._ExpenseToAdd == null)
                 {
                     this._ExpenseToAdd = new Expense();
+                    ExpenseToAdd.PropertyChanged += (sender, e) => AddBillCommand.NotifyCanExecuteChanged();
                 }
                 return this._ExpenseToAdd;
             }
@@ -391,39 +392,25 @@ namespace Essensausgleich.ViewModel
         /// <summary>
         /// Adds a Expens struct to the dedicated Inhabitant object
         /// </summary>
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteAddBill))]
         public void AddBill()
         {
-            if (InhabitantsSelected != string.Empty)
+            //26.07.2024 renew Methode no longer the option to select a inhabitant, entry converter prohibits invalid input only numerics
+            if (this.CurrentInvoice.Inhabitants[0].Name == InhabitantsSelected )
             {
-                if (ExpenseToAdd.ValueExpense > 0)
-                {
-                    if (this.CurrentInvoice.Inhabitants[0].Name == InhabitantsSelected && InhabitantsSelected != string.Empty)
-                    {
-                        CurrentInvoice.Inhabitants[0].AddBetrag(ExpenseToAdd.Categorie, ExpenseToAdd.ValueExpense);
-                        OnPropertyChanged(nameof(CurrentInvoice));
-                    }
-                    else if (this.CurrentInvoice.Inhabitants[1].Name == InhabitantsSelected && InhabitantsSelected != string.Empty)
-                    {
-                        CurrentInvoice.Inhabitants[1].AddBetrag(ExpenseToAdd.Categorie, ExpenseToAdd.ValueExpense);
-                        //Neuer Expense und Total expense wurde geändet -> auf UI pushen
-                        OnPropertyChanged(nameof(CurrentInvoice));
-                    }
-                    else
-                    {
-                        Log.WriteLine($"Error keine Inhabitant wurde mit der im Dropdown ausgewaehlten User identifiziert");
-                    }
-                }
-                else
-                {
-                    Log.WriteLine("Invalide Value Input");
-                }
+                CurrentInvoice.Inhabitants[0].AddBetrag(ExpenseToAdd.Categorie, ExpenseToAdd.ValueExpense);
+                OnPropertyChanged(nameof(CurrentInvoice));
             }
-            //Todo Canexecute
+            else if (this.CurrentInvoice.Inhabitants[1].Name == InhabitantsSelected)
+            {
+                CurrentInvoice.Inhabitants[1].AddBetrag(ExpenseToAdd.Categorie, ExpenseToAdd.ValueExpense);
+                //Neuer Expense und Total expense wurde geändet -> auf UI pushen
+                OnPropertyChanged(nameof(CurrentInvoice));
+            }
+            //26.07.2024 Canexecute
             //else LblToolStripContent = $"Missing Username";
             //Null after adding the bill to clear the UI
             ExpenseToAdd = null!;
-
             OnPropertyChanged(nameof(LblpayingInhabitantContent));
             OnPropertyChanged(nameof(LblBillContent));
         }
@@ -799,6 +786,18 @@ namespace Essensausgleich.ViewModel
                 return true;
             }
             Log.WriteLine("CanExecuteNewInvoice false");
+            return false;
+        }
+        /// <summary>
+        /// Checks if the input is valid to create a new Bill
+        /// </summary>
+        /// <returns></returns>
+        public bool CanExecuteAddBill()
+        {
+            if (this.ExpenseToAdd.ValueExpense > 0 & !string.IsNullOrEmpty(this.ExpenseToAdd.Categorie))
+            {
+                return true;
+            }
             return false;
         }
         #endregion canExecute

@@ -68,7 +68,6 @@ public class Infrastructur : System.Object
         System.Diagnostics.Debug.WriteLine($"Es wurde das Objekt:" +
             $"{newObject} produziert");
 #endif
-        // TODO - hier weitere Produktionsschritte ergänzen
 
         newObject.FehlerAufgetreten += (sender, e) =>
         System.Diagnostics.Debug.WriteLine(
