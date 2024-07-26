@@ -328,9 +328,18 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-                //Todo Event for redraw the graph if the TotalExpense of any Inhabitant has changed
+                //26.07.2024 Event for redraw the graph if the TotalExpense of any Inhabitant has changed
                 if (this._ProjectChart == null)
                 {
+                    //Sub to event
+                    foreach (var invoice in CurrentInvoices.InvoiceList)
+                    {
+                        foreach (var inhabitant in invoice.Inhabitants)
+                        {
+                            inhabitant.ListOfExpenses.CollectionChanged -= ListOfExpenses_CollectionChanged!;
+                            inhabitant.ListOfExpenses.CollectionChanged += ListOfExpenses_CollectionChanged!;
+                        }
+                    }
                     //get data from invoices
                     decimal[] user1Exp = new decimal[CurrentInvoices.InvoiceList.Count];
                     decimal[] user2Exp = new decimal[CurrentInvoices.InvoiceList.Count];
@@ -758,6 +767,18 @@ namespace Essensausgleich.ViewModel
                 });
 
             }
+        }
+        /// <summary>
+        /// Nulls the current Chart and forces the UI to recall it with current Data
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListOfExpenses_CollectionChanged(object sender, EventArgs e)
+        {
+            //Invalidate the cache to force re-creation
+            Log.WriteLine("Listofexpenses changed invoked");
+            _ProjectChart = null!;
+            OnPropertyChanged(nameof(this.ProjectChart));
         }
         #endregion Methods
 
