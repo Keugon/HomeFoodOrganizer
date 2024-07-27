@@ -42,6 +42,10 @@
 		<Title>AusgabenBuddy</Title>
 		<IncludeSymbols>True</IncludeSymbols>
 		<Company>draxnet</Company>
+		<PackageIcon>applogo.png</PackageIcon>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/Keugon/HomeFoodOrganizer</RepositoryUrl>
+
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
@@ -74,6 +78,7 @@
 	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
 	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
 	  <AndroidKeyStore>False</AndroidKeyStore>
+	  <DebugSymbols>False</DebugSymbols>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
@@ -96,7 +101,6 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -149,7 +153,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
-
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionHomeFoodOrganizerMAUIHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>

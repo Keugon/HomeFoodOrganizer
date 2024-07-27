@@ -337,8 +337,8 @@ namespace Essensausgleich.ViewModel
                     {
                         foreach (var inhabitant in invoice.Inhabitants)
                         {
-                            inhabitant.ListOfExpenses.CollectionChanged -= ListOfExpenses_CollectionChanged!;
-                            inhabitant.ListOfExpenses.CollectionChanged += ListOfExpenses_CollectionChanged!;
+                            inhabitant.ListOfExpenses.CollectionChanged -= ExpenseDataChart_CollectionChanged!;
+                            inhabitant.ListOfExpenses.CollectionChanged += ExpenseDataChart_CollectionChanged!;
                         }
                     }
                     //get data from invoices
@@ -676,9 +676,11 @@ namespace Essensausgleich.ViewModel
             //Switch to EditView
             await LoadSelectedInvoiceToCurrent(InvoiceToCreate);
             //After Switch Null InvoiceToCreate to be Ready for the next and vanish the Input View
-
-            InvoiceToCreate = null!;
+                        InvoiceToCreate = null!;
             IsInputFormularVisible = false;
+            //27.07.2024 After Creation of the new invoice rebuilt the chart
+            //Reset the chart 
+            ExpenseDataChart_CollectionChanged(this, EventArgs.Empty);
         }
         /// <summary>
         /// Ask via Dialog for Information
@@ -749,7 +751,9 @@ namespace Essensausgleich.ViewModel
             {
                 await this.DataSharingController.RequestAsync(new ShareTextRequest
                 {
-                    Text = invoice.InvoiceName,
+                    Text = $"Invoice Name: {invoice.InvoiceName}\n" +
+                    $"{invoice.Inhabitants[0].Name}:{invoice.Inhabitants[0].TotalExpense}\n" +
+                    $"{invoice.Inhabitants[1].Name}:{invoice.Inhabitants[1].TotalExpense}",
                     Title = "Share Text"
                 });
 
@@ -760,7 +764,7 @@ namespace Essensausgleich.ViewModel
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ListOfExpenses_CollectionChanged(object sender, EventArgs e)
+        private void ExpenseDataChart_CollectionChanged(object sender, EventArgs e)
         {
             //Invalidate the cache to force re-creation
             Log.WriteLine("Listofexpenses changed invoked");
