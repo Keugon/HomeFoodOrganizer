@@ -24,6 +24,7 @@
                 FontSize="Large"
                 FontAttributes="Bold"
                 HorizontalOptions="StartAndExpand" />
+                <!--Todo Touchable area-->
                 <Border>
                     <Label 
                     HorizontalOptions="EndAndExpand"

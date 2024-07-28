@@ -5,11 +5,12 @@
              xmlns:local="clr-namespace:Essensausgleich"
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
              xmlns:views="clr-namespace:Essensausgleich.Views"
-            xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel"
-            xmlns:data="clr-namespace:Essensausgleich.Data" 
-            x:DataType="viewmodel:Anwendung"
+             xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel"
+             xmlns:data="clr-namespace:Essensausgleich.Data" 
+             x:DataType="viewmodel:Anwendung"
+             BackgroundColor="{StaticResource Gray100}"
              Title="EditView">
-   
+
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
     <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
     <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
@@ -35,104 +36,169 @@
         <VerticalStackLayout
             Grid.Row="0" 
             Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Background="{AppThemeBinding Light={StaticResource Coral}, Dark={StaticResource MidnightBlue}}">
+            Grid.ColumnSpan="2">
             <!--CurrentInvoice Titel-->
             <Label
                 Text="{Binding CurrentInvoice.InvoiceName}"
                 FontSize="Header"
                 Style="{StaticResource EditViewExpense}"/>
             <!--Stack Pannel Add Bill-->
-            <HorizontalStackLayout>
-                <Entry 
-                    Placeholder="Categorie"
-                    MinimumHeightRequest="48"
-                    Text="{Binding ExpenseToAdd.Categorie,Mode=TwoWay}" 
-                    MinimumWidthRequest="100"/>
-                <Entry 
-                    Placeholder="Value"
-                    MinimumHeightRequest="48"
-                    Text="{Binding ExpenseToAdd.ValueExpense,Mode=TwoWay}" 
-                    MinimumWidthRequest="100"
-                    ReturnCommand="{Binding AddBillCommand}"
-                       Keyboard="Numeric"/>
-                <Button 
-                    Command="{Binding AddBillCommand}" 
-                    MinimumHeightRequest="48"
-                    Text="Add Bill"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource Coral}}"/>
-            </HorizontalStackLayout>
+            <Border
+                 Margin="5"
+                 Style="{StaticResource Key=ItemBorder}">
+                <HorizontalStackLayout>
+                    <Entry 
+                        Placeholder="Categorie"
+                        MinimumHeightRequest="48"
+                        Text="{Binding ExpenseToAdd.Categorie,Mode=TwoWay}" 
+                        MinimumWidthRequest="100"/>
+                    <Entry 
+                        Placeholder="Value"
+                        MinimumHeightRequest="48"
+                        Text="{Binding ExpenseToAdd.ValueExpense,Mode=TwoWay}" 
+                        MinimumWidthRequest="100"
+                        ReturnCommand="{Binding AddBillCommand}"
+                        Keyboard="Numeric"/>
+                    <Button 
+                        Command="{Binding AddBillCommand}" 
+                        MinimumHeightRequest="48"
+                        Text="Add Bill"/>
+                </HorizontalStackLayout>
+            </Border>
+
             <!--Inhabitants Names to Choose for Input and Display of Contributions-->
+            
             <HorizontalStackLayout>
+            <!--Inhabitant 2-->
                 <Border
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}">
+                     Margin="5"
+                     Stroke="White"
+                     StrokeShape="RoundRectangle 10,0,0,10"
+                     StrokeThickness="3"
+                     BackgroundColor="White">
+                    <Border.Shadow>
+                        <Shadow 
+                             Brush="Black"
+                             Offset="10,10"
+                             Opacity="0.6" />
+                    </Border.Shadow>
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <DataTrigger TargetType="Border" Value="true">
+                                    <DataTrigger.Binding >
+                                        <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
+                                            <Binding Path="InhabitantsSelected"/>
+                                            <Binding Path="CurrentInvoice.Inhabitants[0].Name"/>
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter Property="Stroke" Value="{StaticResource Primary}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
                     <Label Text="{Binding CurrentInvoice.Inhabitants[0].Name}"
                            FontSize="Large"
                            TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}">
-                    <Label.Style>
-                        <Style TargetType="Label">
+                        <Label.Style>
+                            <Style TargetType="Label">
+                                <Style.Triggers>
+                                    <DataTrigger TargetType="Label" Value="true">
+                                        <DataTrigger.Binding >
+                                            <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
+                                                <Binding Path="InhabitantsSelected"/>
+                                                <!--Warum kan hier im path nicht mit binding gearbeitet werden oder hat kein Intelisense-->
+                                                <Binding Path="CurrentInvoice.Inhabitants[0].Name"/>
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding FillContributioWindowCommand}" 
+                                CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Border>
+            <!--Inhabitant 2-->
+                <Border
+                    Margin="5"
+                    Stroke="White"
+                    StrokeShape="RoundRectangle 10,0,0,10"
+                    StrokeThickness="3"
+                    BackgroundColor="White">
+                    <Border.Shadow>
+                        <Shadow 
+                            Brush="Black"
+                            Offset="10,10"
+                            Opacity="0.6" />
+                    </Border.Shadow>
+                    <Border.Style>
+                        <Style TargetType="Border">
                             <Style.Triggers>
-                                <DataTrigger TargetType="Label" Value="true">
+                                <DataTrigger TargetType="Border" Value="true">
                                     <DataTrigger.Binding >
                                         <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
                                             <Binding Path="InhabitantsSelected"/>
-                                            <!--Warum kan hier im path nicht mit binding gearbeitet werden oder hat kein Intelisense-->
-                                                <Binding Path="CurrentInvoice.Inhabitants[0].Name"/>
+                                            <Binding Path="CurrentInvoice.Inhabitants[1].Name"/>
                                         </MultiBinding>
                                     </DataTrigger.Binding>
-                                    <Setter Property="TextDecorations" Value="Underline"/>
+                                    <Setter Property="Stroke" Value="{StaticResource Primary}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Label.Style>
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer 
-                                Command="{Binding FillContributioWindowCommand}" 
-                                CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
-                    </Label.GestureRecognizers>
-                </Label>  
-                </Border>
-                
-                <Border
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
-                    Margin="5,0,0,0">
+                    </Border.Style>
                     <Label Text="{Binding CurrentInvoice.Inhabitants[1].Name}"
                            FontSize="Large"
                            TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray200}}">
-                    <Label.Style>
-                        <Style TargetType="Label">
-                            <Style.Triggers>
-                                <DataTrigger TargetType="Label" Value="true">
-                                    <DataTrigger.Binding >
-                                        <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
-                                            <Binding Path="InhabitantsSelected"/>
+                        <Label.Style>
+                            <Style TargetType="Label">
+                                <Style.Triggers>
+                                    <DataTrigger TargetType="Label" Value="true">
+                                        <DataTrigger.Binding >
+                                            <MultiBinding Converter="{StaticResource Key=TwoValueMustEqualMultiConverter}">
+                                                <Binding Path="InhabitantsSelected"/>
                                                 <Binding Path="CurrentInvoice.Inhabitants[1].Name"/>
-                                        </MultiBinding>
-                                    </DataTrigger.Binding>
-                                    <Setter Property="TextDecorations" Value="Underline"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Label.Style>
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer 
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer 
                                 Command="{Binding FillContributioWindowCommand}" 
                                 CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type Label}}}"/>
-                    </Label.GestureRecognizers>
-                </Label>
+                        </Label.GestureRecognizers>
+                    </Label>
                 </Border>
-                            </HorizontalStackLayout>
+            </HorizontalStackLayout>
         </VerticalStackLayout>
         <!--Row 1-->
         <!--Bind the Nestet "View" in a ContentView if 
         not it only works in DebugMode PS View is to be 
         used inside a Page and a Page is used to be as a 
         selfstanding Surface-->
-        <views:ContributionView
+        <Border
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Background="{AppThemeBinding Light={StaticResource Coral}, Dark={StaticResource MidnightBlue}}"/>
+            Margin="5"
+            Style="{StaticResource Key=ItemBorder}">
+            <Border.Shadow>
+                <Shadow 
+                    Brush="Black"
+                    Offset="10,10"
+                    Opacity="0.6" />
+            </Border.Shadow>
+            <views:ContributionView
+             Background="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource MidnightBlue}}"/>
+        </Border>
+
         <!--Row 2-->
         <!--Inhabitants Expense and Commentary on the bottom-->
         <StackLayout
@@ -144,9 +210,9 @@
             <!--Stackpanel Inhabitants Expenses-->
             <Border 
                 StrokeThickness="3"
-                Padding="0" 
-                Background="{AppThemeBinding Light={StaticResource MildViolet}, Dark={StaticResource Gray600}}"
-                HorizontalOptions="FillAndExpand">
+                HorizontalOptions="FillAndExpand"
+                Margin="5"
+                Style="{StaticResource Key=ItemBorder}">
                 <HorizontalStackLayout>
                     <!--Stackpanel vertical Inhabs-->
                     <VerticalStackLayout
@@ -169,21 +235,22 @@
                         <Label Text="{Binding CurrentInvoice.Inhabitants[1].TotalExpense}"
                                Style="{StaticResource EditViewExpense}"
                                TextDecorations="Underline"/>
-                         <Label Text="{Binding LblBillContent}"
+                        <Label Text="{Binding LblBillContent}"
                                Style="{StaticResource EditViewExpense}"
                                 TextColor="Chocolate"/>
                     </VerticalStackLayout>
-               </HorizontalStackLayout>
+                </HorizontalStackLayout>
             </Border>
             <!--Stackpanel CommentaryInvoice-->
             <Border 
                 StrokeThickness="3"
                 Padding="0"
-                HorizontalOptions="FillAndExpand">
+                HorizontalOptions="FillAndExpand"
+                Margin="5"
+                Style="{StaticResource Key=ItemBorder}">
                 <Editor 
                     Placeholder="Coment"
-                    Text ="{Binding CurrentInvoice.InvoiceComment}"                   
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Orange}, Dark={StaticResource Chocolade}}"/>
+                    Text ="{Binding CurrentInvoice.InvoiceComment}"/>
             </Border>
         </StackLayout>
     </Grid>

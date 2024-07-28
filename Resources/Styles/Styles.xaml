@@ -428,9 +428,30 @@
     <Style TargetType="Border"
            x:Key="ItemBorder">
         <Setter Property="StrokeThickness" Value="3"/>
-        <Setter Property="Stroke" Value="BlueViolet"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 10,0,0,10"/>
+        <Setter Property="Stroke" Value="White"/>
+        <Setter Property="BackgroundColor" Value="White"/>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow 
+                        Brush="Black"
+                        Offset="10,10"
+                        Opacity="0.6" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
+    <Style TargetType="Button"
+           x:Key="ItemButton">
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow 
+            Brush="Black"
+            Offset="10,10"
+            Opacity="0.6" />
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="Label"
            x:Key="ContributionSize">
         <Setter Property="FontSize" Value="20"/>

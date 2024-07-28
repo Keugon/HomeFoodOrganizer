@@ -9,7 +9,7 @@
              xmlns:views="clr-namespace:Essensausgleich.Views"
              xmlns:lcv="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              x:DataType="viewmodel:Anwendung"
-             BackgroundColor="{StaticResource Coral}"
+             BackgroundColor="{StaticResource Gray100}"
              Title="InvoiceViewPage">
     <ContentPage.ToolbarItems >
         <ToolbarItem Text="Delete this Project"
@@ -23,7 +23,7 @@
             VerticalOptions="StartAndExpand"
             Grid.Row="0">
             <VerticalStackLayout>
-                    <!--Datatrigger to IsEnable when the New Invoice Formular appears-->
+                <!--Datatrigger to IsEnable when the New Invoice Formular appears-->
                 <CollectionView 
                      ItemsSource="{Binding CurrentInvoices.InvoiceList}">
                     <CollectionView.ItemTemplate>
@@ -31,7 +31,8 @@
                             x:DataType="data:Invoice">
                             <Grid>
                                 <Border
-                                    Style="{StaticResource Key=ItemBorder}">
+                                    Style="{StaticResource Key=ItemBorder}"
+                                    Margin="5">
                                     <StackLayout 
                                         Orientation="Horizontal"
                                         BackgroundColor="AliceBlue"
@@ -63,13 +64,15 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                    <!--Button be be replaced if NewInvoiceView is visible or not-->
-                    <!--Add new Invoice shown if IsInputFormularVisible == false
-                    Logic button is IsVisible=false unless the datatrigger sets it to visible-->               
+                <!--Button be be replaced if NewInvoiceView is visible or not-->
+                <!--Add new Invoice shown if IsInputFormularVisible == false
+                    Logic button is IsVisible=false unless the datatrigger sets it to visible-->
                 <Button
                         Text="&#xE118;"
                         FontFamily="Segoe UI Symbol"
-                        Command="{Binding ShowInvoiceFormularCommand}">
+                        Command="{Binding ShowInvoiceFormularCommand}"
+                    Margin="5"
+                    Style="{StaticResource Key=ItemButton}">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                                      Binding="{Binding IsInputFormularVisible}"
@@ -89,6 +92,14 @@
              Grid.Row="1"
              Series="{Binding ProjectChart}"
              BackgroundColor="Aqua"
-             MaximumHeightRequest="200"/>
+             MaximumHeightRequest="200"
+            Margin="5">
+            <lcv:CartesianChart.Shadow>
+                <Shadow 
+                    Brush="Black"
+                    Offset="10,10"
+                    Opacity="0.6"/>
+            </lcv:CartesianChart.Shadow>
+        </lcv:CartesianChart>
     </Grid>
 </ContentPage>
