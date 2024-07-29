@@ -195,8 +195,7 @@
                     Offset="10,10"
                     Opacity="0.6" />
             </Border.Shadow>
-            <views:ContributionView
-             Background="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource MidnightBlue}}"/>
+            <views:ContributionView/>
         </Border>
 
         <!--Row 2-->
@@ -237,7 +236,7 @@
                                TextDecorations="Underline"/>
                         <Label Text="{Binding LblBillContent}"
                                Style="{StaticResource EditViewExpense}"
-                                TextColor="Chocolate"/>
+                                TextColor="{StaticResource Primary}"/>
                     </VerticalStackLayout>
                 </HorizontalStackLayout>
             </Border>

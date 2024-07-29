@@ -6,6 +6,7 @@
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
              xmlns:local="clr-namespace:Essensausgleich"
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
+             BackgroundColor="{StaticResource White}"
              x:DataType="viewmodel:Anwendung">
     <ScrollView
         Orientation="Both"
@@ -25,15 +26,18 @@
                 FontAttributes="Bold"
                 HorizontalOptions="StartAndExpand" />
                 <!--Todo Touchable area-->
-                <Border>
+                <Border
+                    Style="{StaticResource ItemBorder}"
+                    Stroke="{StaticResource Primary}"
+                    Margin="3">
                     <Label 
                     HorizontalOptions="EndAndExpand"
                     Text="Delet Entry"
                     Style="{StaticResource EditViewExpense}"
                     FontSize="Large"
-                    FontAttributes="Bold"/>
+                    FontAttributes="Bold"
+                        BackgroundColor="{StaticResource Primary}"/>
                 </Border>
-
             </StackLayout>
             <Grid Padding="10">
                 <!--make the SelectedItem available to the commandParams-->
@@ -62,10 +66,14 @@
                             <Setter Property="ItemsSource" Value="{Binding CurrentInvoice.Inhabitants[1].ListOfExpenses,Mode=OneWay}"/>
                         </DataTrigger>
                     </CollectionView.Triggers>
-                    <CollectionView.ItemTemplate >
+                    <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="local:Expense" >
+                            <!--Todo Make the Selected State look nice-->
                             <Grid>
-                                <Border>
+                                <Border
+                                    Margin="2"
+                                    BackgroundColor="{StaticResource Gray300}"
+                                    Stroke="{StaticResource Gray300}">
                                     <HorizontalStackLayout>
                                         <Label Text="Categorie: "
                                            Style="{StaticResource EditViewExpense}"/>
