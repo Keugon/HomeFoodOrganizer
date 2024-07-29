@@ -6,8 +6,11 @@ using Essensausgleich.Tools;
 using Essensausgleich.Views;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting.Effects;
+using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.Maui.Controls.PlatformConfiguration.TizenSpecific;
 using Microsoft.Win32;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -318,6 +321,28 @@ namespace Essensausgleich.ViewModel
         #endregion NewInvoice
 
         #region Charts
+        //private List<LiveChartsCore.SkiaSharpView.Axis> _ProjectChartYaxis = null!;
+        /// <summary>
+        /// Gets the Y axis for the chart
+        /// </summary>
+        public List<LiveChartsCore.SkiaSharpView.Axis> ProjectChartYaxis
+        {
+            get
+            {
+                return new List<LiveChartsCore.SkiaSharpView.Axis>
+                {
+                    new Axis
+                    {
+                        Labeler = Labelers.Currency,
+                        SeparatorsPaint = new SolidColorPaint(SKColors.LightSlateGray)
+                        {
+                            StrokeThickness = 2,
+                            PathEffect = new DashEffect(new float[] { 3, 3 })
+                        }
+                    }
+                };
+            }
+        }
         /// <summary>
         /// Internal Cache
         /// </summary>
@@ -361,30 +386,12 @@ namespace Essensausgleich.ViewModel
                         {
                         Values = user2Exp,
                         Fill = null
-                        }
+                        },
                     };
                 }
-                //Sample Line and Columne
-                /*
-                this._ProjectChart = new ISeries[]
-                {
-                        new LineSeries<double>
-                        {
-                            Values = new double[] { 2, 1, 3, 5, 3, 4, 6 },
-                            Fill = null
-                        },
-                         new ColumnSeries<double>
-                        {
-                            Values = new double[] { 2, 5, 4, -2, 4, -3, 5 }
-                        }
-                        };
-                }
-                */
                 return this._ProjectChart;
             }
-
         }
-
         #endregion Charts
         #endregion PropertieBinding
 
@@ -396,7 +403,7 @@ namespace Essensausgleich.ViewModel
         public void AddBill()
         {
             //26.07.2024 renew Methode no longer the option to select a inhabitant, entry converter prohibits invalid input only numerics
-            if (this.CurrentInvoice.Inhabitants[0].Name == InhabitantsSelected )
+            if (this.CurrentInvoice.Inhabitants[0].Name == InhabitantsSelected)
             {
                 CurrentInvoice.Inhabitants[0].AddBetrag(ExpenseToAdd.Categorie, ExpenseToAdd.ValueExpense);
                 OnPropertyChanged(nameof(CurrentInvoice));
@@ -676,7 +683,7 @@ namespace Essensausgleich.ViewModel
             //Switch to EditView
             await LoadSelectedInvoiceToCurrent(InvoiceToCreate);
             //After Switch Null InvoiceToCreate to be Ready for the next and vanish the Input View
-                        InvoiceToCreate = null!;
+            InvoiceToCreate = null!;
             IsInputFormularVisible = false;
             //27.07.2024 After Creation of the new invoice rebuilt the chart
             //Reset the chart 
