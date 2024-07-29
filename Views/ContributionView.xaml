@@ -14,22 +14,23 @@
         <VerticalStackLayout>
             <StackLayout
             Orientation="Horizontal">
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer  
-                    Command="{Binding DeleteDataGridEntryCommand}"
-                    CommandParameter="{Binding SelectedItem, Source={x:Reference ExpenseList}}"/>
-                </StackLayout.GestureRecognizers>
                 <Label
                 Text="Contributions"
                 Style="{StaticResource EditViewExpense}"
                 FontSize="Large"
                 FontAttributes="Bold"
                 HorizontalOptions="StartAndExpand" />
-                <!--Todo Touchable area-->
+                <!--29.07.2024 Touchable area from 
+                Stackpanel To Border of the DeletEntry Label-->
                 <Border
                     Style="{StaticResource ItemBorder}"
                     Stroke="{StaticResource Primary}"
                     Margin="3">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer  
+                    Command="{Binding DeleteDataGridEntryCommand}"
+                    CommandParameter="{Binding SelectedItem, Source={x:Reference ExpenseList}}"/>
+                    </Border.GestureRecognizers>
                     <Label 
                     HorizontalOptions="EndAndExpand"
                     Text="Delet Entry"
