@@ -69,7 +69,7 @@
             <!--Inhabitants Names to Choose for Input and Display of Contributions-->
             
             <HorizontalStackLayout>
-            <!--Inhabitant 2-->
+            <!--Inhabitant 1-->
                 <Border
                      Margin="5"
                      Stroke="White"
@@ -112,6 +112,7 @@
                                             </MultiBinding>
                                         </DataTrigger.Binding>
                                         <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
+                                        <Setter Property="TextColor" Value="{StaticResource White}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -165,6 +166,7 @@
                                             </MultiBinding>
                                         </DataTrigger.Binding>
                                         <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
+                                        <Setter Property="TextColor" Value="{StaticResource White}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>

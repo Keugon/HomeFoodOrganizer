@@ -28,15 +28,16 @@
                     Margin="3">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer  
-                    Command="{Binding DeleteDataGridEntryCommand}"
-                    CommandParameter="{Binding SelectedItem, Source={x:Reference ExpenseList}}"/>
+                            Command="{Binding DeleteDataGridEntryCommand}"
+                            CommandParameter="{Binding SelectedItem, Source={x:Reference ExpenseList}}"/>
                     </Border.GestureRecognizers>
                     <Label 
-                    HorizontalOptions="EndAndExpand"
-                    Text="Delet Entry"
-                    Style="{StaticResource EditViewExpense}"
-                    FontSize="Large"
-                    FontAttributes="Bold"
+                        HorizontalOptions="EndAndExpand"
+                        Text="Delet Entry"
+                        Style="{StaticResource EditViewExpense}"
+                        FontSize="Large"
+                        FontAttributes="Bold"
+                        TextColor="White"
                         BackgroundColor="{StaticResource Primary}"/>
                 </Border>
             </StackLayout>

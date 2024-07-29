@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net8.0-android</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -45,6 +45,7 @@
 		<PackageIcon>applogo.png</PackageIcon>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/Keugon/HomeFoodOrganizer</RepositoryUrl>
+		<AndroidSigningKeyStore>ausgabenbuddyzert2.keystore</AndroidSigningKeyStore>
 
 	</PropertyGroup>
 
@@ -53,6 +54,12 @@
 	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
 	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
 	  <AndroidKeyStore>False</AndroidKeyStore>
+	  <AndroidUseAapt2>True</AndroidUseAapt2>
+	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	  <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
+	  <RunAOTCompilation>False</RunAOTCompilation>
+	  <DebugSymbols>True</DebugSymbols>	  
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
@@ -77,8 +84,15 @@
 	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
 	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
 	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
-	  <AndroidKeyStore>False</AndroidKeyStore>
+	  <AndroidKeyStore>True</AndroidKeyStore>
+		<AndroidUseAapt2>False</AndroidUseAapt2>
 	  <DebugSymbols>False</DebugSymbols>
+	  <AndroidSigningStorePass>Source1903</AndroidSigningStorePass>
+	  <AndroidSigningKeyAlias>ausgabenbuddyzert2</AndroidSigningKeyAlias>
+	  <AndroidSigningKeyPass>Source1903</AndroidSigningKeyPass>
+	  <RunAOTCompilation>True</RunAOTCompilation>
+	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+	  <AndroidLinkTool>r8</AndroidLinkTool>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
@@ -127,6 +141,7 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.70" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.70" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Microsoft.NET.Runtime.MonoAOTCompiler.Task" Version="8.0.7" />
 	</ItemGroup>
 
 	<ItemGroup>

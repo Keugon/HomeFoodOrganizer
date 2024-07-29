@@ -71,8 +71,9 @@
                         Text="&#xE118;"
                         FontFamily="Segoe UI Symbol"
                         Command="{Binding ShowInvoiceFormularCommand}"
-                    Margin="5"
-                    Style="{StaticResource Key=ItemButton}">
+                        Margin="5"
+                        Style="{StaticResource Key=ItemButton}"
+                    HeightRequest="50">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                                      Binding="{Binding IsInputFormularVisible}"
