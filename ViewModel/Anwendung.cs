@@ -321,7 +321,7 @@ namespace Essensausgleich.ViewModel
         #endregion NewInvoice
 
         #region Charts
-        //private List<LiveChartsCore.SkiaSharpView.Axis> _ProjectChartYaxis = null!;
+
         /// <summary>
         /// Gets the Y axis for the chart
         /// </summary>
@@ -333,16 +333,42 @@ namespace Essensausgleich.ViewModel
                 {
                     new Axis
                     {
-                        Labeler = Labelers.Currency,
-                        SeparatorsPaint = new SolidColorPaint(SKColors.LightSlateGray)
-                        {
-                            StrokeThickness = 2,
-                            PathEffect = new DashEffect(new float[] { 3, 3 })
-                        }
+                        Name = CurrentInvoices.InvoiceList[0].Inhabitants[0].Name,
+                        NameTextSize = 14,
+                        NamePaint = new SolidColorPaint(SKColors.Gray),
+                        NamePadding = new LiveChartsCore.Drawing.Padding(0, 20),
+                        Padding =  new LiveChartsCore.Drawing.Padding(0, 0, 20, 0),
+                        TextSize = 12,
+                        LabelsPaint = new SolidColorPaint(SKColors.Gray),
+                        TicksPaint = new SolidColorPaint(SKColors.Gray),
+                        SubticksPaint = new SolidColorPaint(SKColors.Blue),
+                        DrawTicksPath = true,
+                        Labeler = Labelers.Currency
+                                            },
+                };
+            }
+        }
+
+        /// <summary>
+        /// Gets the X axis for the chart
+        /// </summary>
+        public List<LiveChartsCore.SkiaSharpView.Axis> ProjectChartXaxis
+        {
+            get
+            {
+                return new List<LiveChartsCore.SkiaSharpView.Axis>
+                {
+                    new Axis
+                    {
+                     //  // Use the labels property to define named labels.
+                     //Labels = new string[] { CurrentInvoice.Inhabitants[0].Name, CurrentInvoice.Inhabitants[1].Name}
+                     MaxLimit = 4,
+                     MinLimit = 0
                     }
                 };
             }
         }
+
         /// <summary>
         /// Internal Cache
         /// </summary>
@@ -380,12 +406,18 @@ namespace Essensausgleich.ViewModel
                         new LineSeries<decimal>
                         {
                         Values = user1Exp,
-                        Fill = null
+                        Fill = null,
+                        Name = CurrentInvoices.InvoiceList[0].Inhabitants[0].Name,
+                        Stroke = new SolidColorPaint(SKColors.Blue, 2),
+                        ScalesYAt = 0
                         },
                         new LineSeries<decimal>
                         {
                         Values = user2Exp,
-                        Fill = null
+                        Fill = null,
+                        Name = CurrentInvoices.InvoiceList[0].Inhabitants[1].Name,
+                        Stroke = new SolidColorPaint(SKColors.SteelBlue, 2),
+                        ScalesYAt = 0
                         },
                     };
                 }
@@ -506,6 +538,8 @@ namespace Essensausgleich.ViewModel
             try
             {
                 await Shell.Current.GoToAsync($"{nameof(InvoiceViewPage)}");
+                //30.07.2024 Fixed Chart stuck on first loaded Project
+                ExpenseDataChart_CollectionChanged(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
@@ -774,7 +808,7 @@ namespace Essensausgleich.ViewModel
         private void ExpenseDataChart_CollectionChanged(object sender, EventArgs e)
         {
             //Invalidate the cache to force re-creation
-            Log.WriteLine("Listofexpenses changed invoked");
+            Log.WriteLine("Chart will redraw");
             _ProjectChart = null!;
             OnPropertyChanged(nameof(this.ProjectChart));
         }

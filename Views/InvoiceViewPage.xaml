@@ -93,9 +93,12 @@
              Grid.Row="1"
              Series="{Binding ProjectChart}"
              YAxes="{Binding ProjectChartYaxis}"
+            LegendPosition="Bottom"
+            LegendTextSize="16"
+            TooltipPosition="Top"
              ZoomMode="None"
              BackgroundColor="White"           
-             MaximumHeightRequest="200"
+             MaximumHeightRequest="200"           
              Margin="5">
             <lcv:CartesianChart.Shadow>
                 <Shadow 
