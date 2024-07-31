@@ -78,6 +78,8 @@
 	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
 	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
 	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
+	  <ApplicationDisplayVersion>0.4.7</ApplicationDisplayVersion>
+	  <ApplicationVersion>7</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
@@ -111,9 +113,19 @@
 	  <ApplicationTitle>AusgabenBuddy</ApplicationTitle>
 	  <ApplicationId>com.draxnet.ausgabenbuddy</ApplicationId>
 	  <ApplicationIdGuid>985a7057-aa9c-4609-bf04-d19140b225ee</ApplicationIdGuid>
+	  <ApplicationDisplayVersion>0.4.7</ApplicationDisplayVersion>
+	  <ApplicationVersion>7</ApplicationVersion>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'" />
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
+	  <ApplicationDisplayVersion>0.4.7</ApplicationDisplayVersion>
+	  <ApplicationVersion>7</ApplicationVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android34.0|AnyCPU'">
+	  <ApplicationDisplayVersion>0.4.7</ApplicationDisplayVersion>
+	  <ApplicationVersion>7</ApplicationVersion>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->

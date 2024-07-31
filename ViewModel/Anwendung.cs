@@ -727,7 +727,7 @@ namespace Essensausgleich.ViewModel
             //folder
             string LogName = "LogFile";
 
-            File.AppendAllText(Path.Combine(InvoicesFolderPath, LogName), $"Protocol LogTime {DateTime.Now}, Message:{message} ");
+            File.AppendAllText(Path.Combine(InvoicesFolderPath, LogName), $"\nProtocol LogTime {DateTime.Now}\nMessage:{message} ");
 
             System.Diagnostics.Debug.WriteLine("Writen to LogFile");
         }
