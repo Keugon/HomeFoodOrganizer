@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Essensausgleich.Infra
 {
@@ -12,7 +7,7 @@ namespace Essensausgleich.Infra
     /// Stellt Basisfunktionalitäten für
     /// ein MVVM ViewModel bereit
     /// </summary>
-    public abstract class ViewModel        : Essensausgleich.Infra.AppObjekt,
+    public abstract class ViewModel : Essensausgleich.Infra.AppObjekt,
         System.ComponentModel.INotifyPropertyChanged, INotifyCollectionChanged
     {
         #region WPF über Änderungen Informieren
@@ -72,6 +67,6 @@ namespace Essensausgleich.Infra
             System.Diagnostics.Debug.WriteLine($"OnCollectionChanged ausgelöst bei:{e.ToString}");
         }
 
-        
+
     }
 }

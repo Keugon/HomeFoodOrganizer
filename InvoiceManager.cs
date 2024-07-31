@@ -1,14 +1,7 @@
 ﻿using Essensausgleich.Controller;
 using Essensausgleich.Data;
 using Essensausgleich.Infra;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Log = System.Diagnostics.Debug;
 
 namespace Essensausgleich
 {

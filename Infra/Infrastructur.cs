@@ -1,12 +1,4 @@
-﻿using Essensausgleich.Controller;
-using Essensausgleich.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Essensausgleich.Infra;
+﻿namespace Essensausgleich.Infra;
 
 /// <summary>
 /// Stellt den Anwendungskontext
@@ -33,7 +25,7 @@ public class Infrastructur : System.Object
     {
         get
         {
-            if(this._InvoiceManager == null)
+            if (this._InvoiceManager == null)
             {
                 this._InvoiceManager = this.Fabricate<InvoiceManager>();
             }
@@ -60,7 +52,7 @@ public class Infrastructur : System.Object
         // Die Infrastructur an 
         // das neue Objekt übergeben
         newObject.Context = this;
-        
+
         //Nur für die Entwickler
         //einen Protokolleintrag für VisualStudio
         //dass ein Objekt prouziert wurde und einen Fehlerbehandler

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Essensausgleich.Data
+﻿namespace Essensausgleich.Data
 {
     /// <summary>
     /// A Service that provides the capabiliti to share certain data to other apps

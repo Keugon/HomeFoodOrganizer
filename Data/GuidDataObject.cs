@@ -1,9 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Essensausgleich.Data;
 /// <summary>
@@ -20,7 +15,7 @@ public abstract class GuidDataObject : ObservableObject
     {
         get
         {
-            if(this._Guid == null)
+            if (this._Guid == null)
             {
                 this._Guid = System.Guid.NewGuid();
             }

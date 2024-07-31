@@ -1,13 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Log = System.Diagnostics.Debug;
 
 namespace Essensausgleich.Data
 {
@@ -49,7 +42,7 @@ namespace Essensausgleich.Data
         {
             get
             {
-                if(this.InvoiceList.Count > 0) 
+                if (this.InvoiceList.Count > 0)
                 {
                     return true;
                 }
@@ -149,6 +142,6 @@ namespace Essensausgleich.Data
                 OnPropertyChanged(nameof(DateTimeChanged));
             }
         }
-        
+
     }
 }

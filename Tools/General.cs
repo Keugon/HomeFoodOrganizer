@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace Essensausgleich.Tools
 {
@@ -79,15 +73,15 @@ namespace Essensausgleich.Tools
         /// <param name="culture"></param>
         /// <returns></returns>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        { 
+        {
             if (values == null || values.Length < 2)
                 return false;
 
             string value1 = values[0]?.ToString()!;
             string value2 = values[1]?.ToString()!;
 
-            return value1 == value2;    
-    }
+            return value1 == value2;
+        }
         /// <summary>
         /// Not Implemented
         /// </summary>

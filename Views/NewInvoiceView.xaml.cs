@@ -4,11 +4,11 @@ namespace Essensausgleich.Views;
 /// </summary>
 public partial class NewInvoiceView : ContentView
 {
-	/// <summary>
-	/// NewInvoiceView
-	/// </summary>
-	public NewInvoiceView()
-	{
-		InitializeComponent();
-	}
+    /// <summary>
+    /// NewInvoiceView
+    /// </summary>
+    public NewInvoiceView()
+    {
+        InitializeComponent();
+    }
 }

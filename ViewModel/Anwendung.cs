@@ -1,30 +1,12 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Essensausgleich.Controller;
+﻿using CommunityToolkit.Mvvm.Input;
 using Essensausgleich.Data;
-using Essensausgleich.Tools;
 using Essensausgleich.Views;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting.Effects;
 using LiveChartsCore.SkiaSharpView.Painting;
-using Microsoft.Maui.Controls.PlatformConfiguration.TizenSpecific;
-using Microsoft.Win32;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Xml;
-using static System.Net.Mime.MediaTypeNames;
 using Log = System.Diagnostics.Debug;
 
 namespace Essensausgleich.ViewModel

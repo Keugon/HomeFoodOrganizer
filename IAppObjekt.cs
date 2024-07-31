@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Essensausgleich;
+﻿namespace Essensausgleich;
 /// <summary>
 /// Stellt das Infrastructur-Objekt bereit.
 /// </summary>
@@ -19,5 +13,5 @@ public interface IAppObjekt
     /// <summary>
     /// Ruft das Infrastructur-Objekt ab oder legt dieses fest.
     /// </summary>
-     Essensausgleich.Infra.Infrastructur Context { get; set; }
+    Essensausgleich.Infra.Infrastructur Context { get; set; }
 }

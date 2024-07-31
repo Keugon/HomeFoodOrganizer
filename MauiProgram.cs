@@ -40,7 +40,7 @@ namespace Essensausgleich
                 Anwendung.Initialize();
                 return Anwendung;
             });
-            
+
 
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<ContributionView>();

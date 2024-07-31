@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Essensausgleich.Infra;
+﻿namespace Essensausgleich.Infra;
 
 //Erster Schritt für eigene Ereignisse
 //-> Die Ereignisdaten-Klasse
@@ -31,21 +25,21 @@ public class FehlerAufgetretenEventArgs : System.EventArgs
     /// dem der Fehler beschrieben ist
     /// </summary>
     public System.Exception Ursache => this._Ursache;
-}  
+}
 
-    //Zweiter Schritt für eigene Ereignisse
-    //-> Die Signatur der Methode die als
-    //Ergeigniss Behandler erlaubt ist
+//Zweiter Schritt für eigene Ereignisse
+//-> Die Signatur der Methode die als
+//Ergeigniss Behandler erlaubt ist
 
 
-    /// <summary>
-    /// Stellt die Methode dar die das FehlerAufgetreten Ereignis behandelt
-    /// </summary>
-    /// <param name="sender">Immer der erste Parameter.
-    /// Der Verweis auf das Objekt von dem diese Methode aufgerufen wird</param>
-    /// <param name="e">Immer der zweite Parameter.
-    /// Der Verweis auf das Objekt mit dem Daten für das Ereignis. Falls keine 
-    /// Daten geliefert werden, System.EventArgs alleine</param>
+/// <summary>
+/// Stellt die Methode dar die das FehlerAufgetreten Ereignis behandelt
+/// </summary>
+/// <param name="sender">Immer der erste Parameter.
+/// Der Verweis auf das Objekt von dem diese Methode aufgerufen wird</param>
+/// <param name="e">Immer der zweite Parameter.
+/// Der Verweis auf das Objekt mit dem Daten für das Ereignis. Falls keine 
+/// Daten geliefert werden, System.EventArgs alleine</param>
 public delegate void FehlerAufgetretenEventHandler(
     object sender,
     FehlerAufgetretenEventArgs e);
