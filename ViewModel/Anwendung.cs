@@ -335,7 +335,6 @@ namespace Essensausgleich.ViewModel
                                 {
                                     new Axis
                                     {
-                                        Name = CurrentInvoices.InvoiceList[0].Inhabitants[0].Name,
                                         NameTextSize = 14,
                                         NamePaint = new SolidColorPaint(SKColors.Gray),
                                         NamePadding = new LiveChartsCore.Drawing.Padding(0, 20),
@@ -780,6 +779,7 @@ namespace Essensausgleich.ViewModel
             Log.WriteLine("Chart will redraw");
             _ProjectChart = null!;
             OnPropertyChanged(nameof(this.ProjectChart));
+            OnPropertyChanged(nameof(this.ProjectChartYaxis));
         }
         #endregion Methods
 
