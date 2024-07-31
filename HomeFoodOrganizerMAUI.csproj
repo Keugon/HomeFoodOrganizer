@@ -155,6 +155,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiFont Update="Resources\Fonts\Segoe UI Symbol.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </MauiFont>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Views\ContributionView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

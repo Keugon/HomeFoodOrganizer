@@ -42,6 +42,21 @@ namespace Essensausgleich.Data
             set => this._InvoiceList = value;
         }
         /// <summary>
+        /// Gets a truefull value if this Invoices(Project) 
+        /// contains Single Invoices
+        /// </summary>
+        public bool HasInvoices
+        {
+            get
+            {
+                if(this.InvoiceList.Count > 0) 
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+        /// <summary>
         /// Gets or Set the First Time this Invoice was Saved to File
         /// </summary>
         [ObservableProperty]

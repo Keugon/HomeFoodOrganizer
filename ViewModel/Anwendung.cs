@@ -329,23 +329,28 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-                return new List<LiveChartsCore.SkiaSharpView.Axis>
+                if (this.CurrentInvoices.HasInvoices)
                 {
-                    new Axis
-                    {
-                        Name = CurrentInvoices.InvoiceList[0].Inhabitants[0].Name,
-                        NameTextSize = 14,
-                        NamePaint = new SolidColorPaint(SKColors.Gray),
-                        NamePadding = new LiveChartsCore.Drawing.Padding(0, 20),
-                        Padding =  new LiveChartsCore.Drawing.Padding(0, 0, 20, 0),
-                        TextSize = 12,
-                        LabelsPaint = new SolidColorPaint(SKColors.Gray),
-                        TicksPaint = new SolidColorPaint(SKColors.Gray),
-                        SubticksPaint = new SolidColorPaint(SKColors.Blue),
-                        DrawTicksPath = true,
-                        Labeler = Labelers.Currency
-                                            },
-                };
+                    return new List<LiveChartsCore.SkiaSharpView.Axis>
+                                {
+                                    new Axis
+                                    {
+                                        Name = CurrentInvoices.InvoiceList[0].Inhabitants[0].Name,
+                                        NameTextSize = 14,
+                                        NamePaint = new SolidColorPaint(SKColors.Gray),
+                                        NamePadding = new LiveChartsCore.Drawing.Padding(0, 20),
+                                        Padding =  new LiveChartsCore.Drawing.Padding(0, 0, 20, 0),
+                                        TextSize = 12,
+                                        LabelsPaint = new SolidColorPaint(SKColors.Gray),
+                                        TicksPaint = new SolidColorPaint(SKColors.Gray),
+                                        SubticksPaint = new SolidColorPaint(SKColors.Blue),
+                                        DrawTicksPath = true,
+                                        Labeler = Labelers.Currency
+                                    },
+                                };
+                }
+                return null!;
+
             }
         }
 
@@ -380,8 +385,13 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
+                //31.07.2024 On Enter a new/ empty Project
+                //"Exception has been thrown by the target of an invocation."
+                //happens due to the chart trys to access data that does not exist yet no Invoices!
+                //Fix Interestingly the Yaxis info gets befor the ISeries info, Fixed by imple and check for the Invoices.HasInvoices bool else send null!
+
                 //26.07.2024 Event for redraw the graph if the TotalExpense of any Inhabitant has changed
-                if (this._ProjectChart == null)
+                if (this._ProjectChart == null && this.CurrentInvoices.HasInvoices)
                 {
                     //Sub to event
                     foreach (var invoice in CurrentInvoices.InvoiceList)
@@ -421,7 +431,7 @@ namespace Essensausgleich.ViewModel
                         },
                     };
                 }
-                return this._ProjectChart;
+                return this._ProjectChart!;
             }
         }
         #endregion Charts
@@ -475,47 +485,6 @@ namespace Essensausgleich.ViewModel
                 }
 
             }
-
-            /*
-
-                        if (parameter is System.Windows.Controls.Label label)
-                        {
-                            System.Diagnostics.Debug.WriteLine($"Label Content:{label.Content}");
-                            var contributionWindow = new contributionWindow();
-                            contributionWindow.DataContext = this;
-
-
-                            if (label.Content.ToString() != string.Empty)
-                            {
-                                if (label.Content.ToString() == Inhabitant1Name)
-                                {
-                                    ListOfExpensesInhabitant1.Clear();
-                                    foreach (var item in this.CurrentInvoice.Inhabitants[0].ListOfExpensesInhabitant1)
-                                    {
-                                        ListOfExpensesInhabitant1.Add(item);
-                                    }
-                                    this.ListOfExpensesInhabitant1 = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[0].ListOfExpensesInhabitant1);
-                                    contributionWindow.Show();
-                                    contributionWindow.SizeToContent = SizeToContent.Height;
-                                }
-                                else if (label.Content.ToString() == Inhabitant2Name)
-                                {
-                                    ListOfExpensesInhabitant1.Clear();
-                                    foreach (var item in this.CurrentInvoice.Inhabitants[1].ListOfExpensesInhabitant1)
-                                    {
-                                        ListOfExpensesInhabitant1.Add(item);
-                                    }
-                                    this.ListOfExpensesInhabitant1 = new ObservableCollection<Expense>(this.CurrentInvoice.Inhabitants[1].ListOfExpensesInhabitant1);
-                                    contributionWindow.Show();
-                                    contributionWindow.SizeToContent = SizeToContent.Height;
-                                }
-                                else
-                                {
-                                    Log.WriteLine($"No Inhabitant selected or not found, Selcted:{InhabitantsSelected}");
-                                }
-                            }
-                        }
-            */
         }
         /// <summary>
         /// Sets the Clicked Item to the CurrentInvoices and switches to InvoiceViewPage
