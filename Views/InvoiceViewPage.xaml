@@ -10,7 +10,7 @@
              xmlns:lcv="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              x:DataType="viewmodel:Anwendung"
              BackgroundColor="{StaticResource Gray100}"
-             Title="InvoiceViewPage">
+             Title="Invoices">
     <ContentPage.ToolbarItems >
         <ToolbarItem Text="Delete this Project"
                      Command="{Binding DeleteCurrentProjectCommand}"/>

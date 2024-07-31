@@ -10,20 +10,16 @@
              x:DataType="viewmodel:Anwendung"
              BackgroundColor="{StaticResource Gray100}"
              Shell.NavBarIsVisible="True"
-             Title="Landing Page">
+             Title="Projects">
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
     <!--Only on Windows and Mac  ContentPage.MenuBarItems-->
     <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
     <Grid 
-        RowDefinitions="50,*,*"
+        RowDefinitions="*"
         ColumnDefinitions="*">
         <!--Invoices in AppDataDirectory-->
         <VerticalStackLayout
-            Grid.Row="1">
-            <Label 
-                 Text="Projects"
-                 VerticalOptions="Center" 
-                 HorizontalOptions="Center"/>
+            Grid.Row="0">
             <CollectionView 
                  ItemsSource="{Binding ListOfInvoicesInStorage}">
                 <CollectionView.ItemTemplate>
