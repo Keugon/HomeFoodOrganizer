@@ -8,7 +8,6 @@
              xmlns:data="clr-namespace:Essensausgleich.Data" 
              xmlns:views="clr-namespace:Essensausgleich.Views"
              x:DataType="viewmodel:Anwendung"
-             BackgroundColor="{StaticResource Gray100}"
              Shell.NavBarIsVisible="True"
              Title="Projects">
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
@@ -27,7 +26,6 @@
                         x:DataType="data:Invoices">
                         <Grid>
                             <Border
-                               Style="{StaticResource Key=ItemBorder}"
                                 Margin="5">
                                 <HorizontalStackLayout>
                                     <HorizontalStackLayout.GestureRecognizers>
@@ -59,8 +57,7 @@
                 Text="New Project"
                 HeightRequest="50"
                 Command="{Binding NewProjectCommand}"
-                Margin="5"
-                Style="{StaticResource Key=ItemButton}"/>
+                Margin="5"/>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

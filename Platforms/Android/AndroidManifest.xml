@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.draxnet.ausgabenbuddy" android:versionCode="7" android:versionName="&quot;0.4.7&quot;">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.draxnet.ausgabenbuddy" android:versionCode="8" android:versionName="&quot;0.4.8&quot;">
 	<application android:allowBackup="true" android:supportsRtl="true" android:enableOnBackInvokedCallback="true" android:label="AusgabenBuddy" android:icon="@mipmap/ic_launcher"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />

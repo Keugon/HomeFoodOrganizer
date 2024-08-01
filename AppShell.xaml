@@ -7,7 +7,6 @@
     xmlns:views="clr-namespace:Essensausgleich.Views"
     Shell.FlyoutBehavior="Disabled"
     Title="Essensausgleich"
-    BackgroundColor="Gray"
     >
     <!--Want to get ride of TabBar-->
 </Shell>

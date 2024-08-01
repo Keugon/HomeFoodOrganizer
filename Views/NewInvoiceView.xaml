@@ -7,10 +7,6 @@
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
              x:DataType="viewmodel:Anwendung">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
         <Entry Placeholder="Invoice Name"
                MinimumHeightRequest="48"
                Text="{Binding InvoiceToCreate.InvoiceName,Mode=TwoWay}"/>

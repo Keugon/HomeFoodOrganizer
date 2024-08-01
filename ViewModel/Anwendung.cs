@@ -313,17 +313,25 @@ namespace Essensausgleich.ViewModel
             {
                 if (this.CurrentInvoices.HasInvoices)
                 {
+                    SKColor YAxisColorTheme = new SKColor();
+                    if (CurrentAppTheme == AppTheme.Light) 
+                    {
+                    YAxisColorTheme = SKColors.Black;
+                    }else if(CurrentAppTheme == AppTheme.Dark)
+                    {
+                        YAxisColorTheme= SKColors.LightGray;
+                    }
                     return new List<LiveChartsCore.SkiaSharpView.Axis>
                                 {
                                     new Axis
                                     {
                                         NameTextSize = 14,
-                                        NamePaint = new SolidColorPaint(SKColors.Gray),
+                                        NamePaint = new SolidColorPaint(YAxisColorTheme),
                                         NamePadding = new LiveChartsCore.Drawing.Padding(0, 20),
                                         Padding =  new LiveChartsCore.Drawing.Padding(0, 0, 20, 0),
                                         TextSize = 12,
-                                        LabelsPaint = new SolidColorPaint(SKColors.Gray),
-                                        TicksPaint = new SolidColorPaint(SKColors.Gray),
+                                        LabelsPaint = new SolidColorPaint(YAxisColorTheme),
+                                        TicksPaint = new SolidColorPaint(YAxisColorTheme),
                                         SubticksPaint = new SolidColorPaint(SKColors.Blue),
                                         DrawTicksPath = true,
                                         Labeler = Labelers.Currency
@@ -366,6 +374,7 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
+                
                 //31.07.2024 On Enter a new/ empty Project
                 //"Exception has been thrown by the target of an invocation."
                 //happens due to the chart trys to access data that does not exist yet no Invoices!
@@ -374,6 +383,8 @@ namespace Essensausgleich.ViewModel
                 //26.07.2024 Event for redraw the graph if the TotalExpense of any Inhabitant has changed
                 if (this._ProjectChart == null && this.CurrentInvoices.HasInvoices)
                 {
+                    //Sub to Apptheme Changed for redraw
+                    Application.Current!.RequestedThemeChanged += ExpenseDataChart_CollectionChanged!;
                     //Sub to event
                     foreach (var invoice in CurrentInvoices.InvoiceList)
                     {
@@ -411,11 +422,28 @@ namespace Essensausgleich.ViewModel
                         ScalesYAt = 0
                         },
                     };
+                    
                 }
                 return this._ProjectChart!;
             }
         }
         #endregion Charts
+        #region AppTheme
+        /// <summary>
+        /// Gets the Current AppTheme
+        /// </summary>
+        /// <remarks>Enu Light, Dark, Unspecified</remarks>
+        public AppTheme CurrentAppTheme
+        {
+            get
+            {
+                //Reakt to AppTheme
+                AppTheme currentTheme = Application.Current!.RequestedTheme;
+                Log.WriteLine(currentTheme.ToString());
+                return currentTheme;
+            }
+        }
+        #endregion AppTheme
         #endregion PropertieBinding
 
         #region Methods       

@@ -9,7 +9,6 @@
              xmlns:views="clr-namespace:Essensausgleich.Views"
              xmlns:lcv="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              x:DataType="viewmodel:Anwendung"
-             BackgroundColor="{StaticResource Gray100}"
              Title="Invoices">
     <ContentPage.ToolbarItems >
         <ToolbarItem Text="Delete this Project"
@@ -31,11 +30,9 @@
                             x:DataType="data:Invoice">
                             <Grid>
                                 <Border
-                                    Style="{StaticResource Key=ItemBorder}"
                                     Margin="5">
                                     <StackLayout 
                                         Orientation="Horizontal"
-                                        BackgroundColor="AliceBlue"
                                         VerticalOptions="Center">
                                         <StackLayout.GestureRecognizers>
                                             <TapGestureRecognizer
@@ -57,7 +54,8 @@
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=ShareInvoiceCommand}"
                                             CommandParameter="{Binding .}"
                                             Text="Share"
-                                            HorizontalOptions="EndAndExpand"/>
+                                            HorizontalOptions="EndAndExpand"
+                                            MinimumWidthRequest="70"/>
                                     </StackLayout>
                                 </Border>
                             </Grid>
@@ -72,20 +70,19 @@
                         FontFamily="Segoe UI Symbol"
                         Command="{Binding ShowInvoiceFormularCommand}"
                         Margin="5"
-                        Style="{StaticResource Key=ItemButton}"
-                    HeightRequest="50">
+                        HeightRequest="50">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                                      Binding="{Binding IsInputFormularVisible}"
                                      Value="true">
                             <Setter Property="Text" Value="&#xE11C;"/>
-                            <Setter Property="BackgroundColor" Value="PaleVioletRed"/>
+                            <Setter Property="BackgroundColor" Value="Coral"/>
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
                 <views:NewInvoiceView
                  IsVisible="{Binding IsInputFormularVisible}"
-                 Background="Aqua"/>
+                    Margin="5"/>
             </VerticalStackLayout>
         </ScrollView>
         <lcv:CartesianChart
@@ -97,7 +94,7 @@
              LegendTextSize="16"
              TooltipPosition="Top"
              ZoomMode="None"
-             BackgroundColor="White"           
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray500}}"           
              MaximumHeightRequest="200"           
              Margin="5">
             <lcv:CartesianChart.Shadow>

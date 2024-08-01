@@ -6,24 +6,22 @@
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
              xmlns:local="clr-namespace:Essensausgleich"
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
-             BackgroundColor="{StaticResource White}"
              x:DataType="viewmodel:Anwendung">
     <ScrollView
         Orientation="Both"
         HorizontalScrollBarVisibility="Default">
         <VerticalStackLayout>
             <StackLayout
-            Orientation="Horizontal">
+                 Orientation="Horizontal">
                 <Label
-                Text="Contributions"
-                Style="{StaticResource EditViewExpense}"
-                FontSize="Large"
-                FontAttributes="Bold"
-                HorizontalOptions="StartAndExpand" />
+                    Text="Contributions"
+                    Style="{StaticResource EditViewExpense}"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    HorizontalOptions="StartAndExpand" />
                 <!--29.07.2024 Touchable area from 
                 Stackpanel To Border of the DeletEntry Label-->
                 <Border
-                    Style="{StaticResource ItemBorder}"
                     Stroke="{StaticResource Primary}"
                     Margin="3">
                     <Border.GestureRecognizers>
@@ -34,18 +32,16 @@
                     <Label 
                         HorizontalOptions="EndAndExpand"
                         Text="Delet Entry"
-                        Style="{StaticResource EditViewExpense}"
-                        FontSize="Large"
-                        FontAttributes="Bold"
-                        TextColor="White"
+                        FontSize="Body"
+                        TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray200}}"
                         BackgroundColor="{StaticResource Primary}"/>
                 </Border>
             </StackLayout>
             <Grid Padding="10">
                 <!--make the SelectedItem available to the commandParams-->
                 <CollectionView  
-                SelectionMode="Single"  
-                x:Name="ExpenseList">
+                    SelectionMode="Single"  
+                    x:Name="ExpenseList">
                     <CollectionView.Triggers>
                         <!--If Inhabitant1 Selected use ListOfExpensesInhabitant1-->
                         <DataTrigger TargetType="CollectionView" Value="true">
@@ -73,9 +69,9 @@
                             <!--Todo Make the Selected State look nice-->
                             <Grid>
                                 <Border
-                                    Margin="2"
-                                    BackgroundColor="{StaticResource Gray300}"
-                                    Stroke="{StaticResource Gray300}">
+                                    Margin="5"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Primary}}"
+                                    Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Primary}}">
                                     <HorizontalStackLayout>
                                         <Label Text="Categorie: "
                                            Style="{StaticResource EditViewExpense}"/>

@@ -8,7 +8,6 @@
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel"
              xmlns:data="clr-namespace:Essensausgleich.Data" 
              x:DataType="viewmodel:Anwendung"
-             BackgroundColor="{StaticResource Gray100}"
              Title="EditView">
 
     <!-- Shell.NavBarIsVisible="False" disables The Shell Titel (NavBar) -->
@@ -38,15 +37,21 @@
             Grid.Column="0"
             Grid.ColumnSpan="2">
             <!--CurrentInvoice Titel-->
-            <Label
-                Text="{Binding CurrentInvoice.InvoiceName}"
-                FontSize="Header"
-                Style="{StaticResource EditViewExpense}"/>
+            <Border
+                Margin="5"
+                HorizontalOptions="Start">
+                <Label
+                    Text="{Binding CurrentInvoice.InvoiceName}"
+                    FontSize="Header"
+                    Style="{StaticResource EditViewExpense}"/>
+            </Border>
+           
             <!--Stack Pannel Add Bill-->
             <Border
-                 Margin="5"
-                 Style="{StaticResource Key=ItemBorder}">
-                <HorizontalStackLayout>
+                 Margin="5">
+                <StackLayout
+                    Orientation="Horizontal"
+                    VerticalOptions="Center">
                     <Entry 
                         Placeholder="Categorie"
                         MinimumHeightRequest="48"
@@ -62,8 +67,10 @@
                     <Button 
                         Command="{Binding AddBillCommand}" 
                         MinimumHeightRequest="48"
-                        Text="Add Bill"/>
-                </HorizontalStackLayout>
+                        MinimumWidthRequest="80"
+                        Text="Add Bill"
+                        HorizontalOptions="EndAndExpand"/>
+                </StackLayout>
             </Border>
 
             <!--Inhabitants Names to Choose for Input and Display of Contributions-->
@@ -71,17 +78,7 @@
             <HorizontalStackLayout>
             <!--Inhabitant 1-->
                 <Border
-                     Margin="5"
-                     Stroke="White"
-                     StrokeShape="RoundRectangle 10,0,0,10"
-                     StrokeThickness="3"
-                     BackgroundColor="White">
-                    <Border.Shadow>
-                        <Shadow 
-                             Brush="Black"
-                             Offset="10,10"
-                             Opacity="0.6" />
-                    </Border.Shadow>
+                     Margin="5">
                     <Border.Style>
                         <Style TargetType="Border">
                             <Style.Triggers>
@@ -112,7 +109,7 @@
                                             </MultiBinding>
                                         </DataTrigger.Binding>
                                         <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
-                                        <Setter Property="TextColor" Value="{StaticResource White}"/>
+                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray200}}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -126,17 +123,7 @@
                 </Border>
             <!--Inhabitant 2-->
                 <Border
-                    Margin="5"
-                    Stroke="White"
-                    StrokeShape="RoundRectangle 10,0,0,10"
-                    StrokeThickness="3"
-                    BackgroundColor="White">
-                    <Border.Shadow>
-                        <Shadow 
-                            Brush="Black"
-                            Offset="10,10"
-                            Opacity="0.6" />
-                    </Border.Shadow>
+                    Margin="5">
                     <Border.Style>
                         <Style TargetType="Border">
                             <Style.Triggers>
@@ -166,7 +153,7 @@
                                             </MultiBinding>
                                         </DataTrigger.Binding>
                                         <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
-                                        <Setter Property="TextColor" Value="{StaticResource White}"/>
+                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray200}}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -189,14 +176,7 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Margin="5"
-            Style="{StaticResource Key=ItemBorder}">
-            <Border.Shadow>
-                <Shadow 
-                    Brush="Black"
-                    Offset="10,10"
-                    Opacity="0.6" />
-            </Border.Shadow>
+            Margin="5">
             <views:ContributionView/>
         </Border>
 
@@ -209,11 +189,9 @@
             Grid.ColumnSpan="2"
             HorizontalOptions="FillAndExpand">
             <!--Stackpanel Inhabitants Expenses-->
-            <Border 
-                StrokeThickness="3"
+            <Border
                 HorizontalOptions="FillAndExpand"
-                Margin="5"
-                Style="{StaticResource Key=ItemBorder}">
+                Margin="5">
                 <HorizontalStackLayout>
                     <!--Stackpanel vertical Inhabs-->
                     <VerticalStackLayout
@@ -243,12 +221,10 @@
                 </HorizontalStackLayout>
             </Border>
             <!--Stackpanel CommentaryInvoice-->
-            <Border 
-                StrokeThickness="3"
+            <Border
                 Padding="0"
                 HorizontalOptions="FillAndExpand"
-                Margin="5"
-                Style="{StaticResource Key=ItemBorder}">
+                Margin="5">
                 <Editor 
                     Placeholder="Coment"
                     Text ="{Binding CurrentInvoice.InvoiceComment}"/>
