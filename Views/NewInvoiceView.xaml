@@ -6,19 +6,26 @@
              xmlns:local="clr-namespace:Essensausgleich"
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
              x:DataType="viewmodel:Anwendung">
-    <VerticalStackLayout>
-        <Entry Placeholder="Invoice Name"
-               MinimumHeightRequest="48"
-               Text="{Binding InvoiceToCreate.InvoiceName,Mode=TwoWay}"/>
-        <Entry Placeholder="First Username"
-               MinimumHeightRequest="48"
-               Text="{Binding InvoiceToCreate.Inhabitants[0].Name,Mode=TwoWay}"/>
-        <Entry Placeholder="Secound Username"
-               MinimumHeightRequest="48"
-               Text="{Binding InvoiceToCreate.Inhabitants[1].Name,Mode=TwoWay}"/>
+    <Border>
+       <VerticalStackLayout>
+        <Entry 
+            Placeholder="Invoice Name"
+            MinimumHeightRequest="48"
+            Text="{Binding InvoiceToCreate.InvoiceName,Mode=TwoWay}"/>
+        <Entry 
+            Placeholder="First Username"
+            MinimumHeightRequest="48"
+            Text="{Binding InvoiceToCreate.Inhabitants[0].Name,Mode=TwoWay}"/>
+        <Entry 
+            Placeholder="Secound Username"
+            MinimumHeightRequest="48"
+            Text="{Binding InvoiceToCreate.Inhabitants[1].Name,Mode=TwoWay}"/>
         <Button 
             Text="Create new Invoice"
             MinimumHeightRequest="48"
-            Command="{Binding NewInvoiceCommand}"/>
-    </VerticalStackLayout>
+            Command="{Binding NewInvoiceCommand}"
+            Margin="5"/>
+    </VerticalStackLayout> 
+    </Border>
+    
 </ContentView>

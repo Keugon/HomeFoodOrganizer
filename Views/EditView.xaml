@@ -200,10 +200,9 @@
                                Style="{StaticResource EditViewExpense}"/>
                         <Label Text="{Binding CurrentInvoice.Inhabitants[1].Name}"
                                Style="{StaticResource EditViewExpense}"
-                                TextDecorations="Underline"/>
+                               TextDecorations="Underline"/>
                         <Label Text="{Binding LblpayingInhabitantContent}"
-                               Style="{StaticResource EditViewExpense}"
-                                TextColor="Chocolate"/>
+                               Style="{StaticResource EditViewExpense}"/>
                     </VerticalStackLayout>
                     <!--Stackpanel vertical Values-->
                     <VerticalStackLayout 
@@ -215,8 +214,7 @@
                                Style="{StaticResource EditViewExpense}"
                                TextDecorations="Underline"/>
                         <Label Text="{Binding LblBillContent}"
-                               Style="{StaticResource EditViewExpense}"
-                                TextColor="{StaticResource Primary}"/>
+                               Style="{StaticResource EditViewExpense}"/>
                     </VerticalStackLayout>
                 </HorizontalStackLayout>
             </Border>
