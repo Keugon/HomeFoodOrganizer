@@ -58,6 +58,11 @@
                 HeightRequest="50"
                 Command="{Binding NewProjectCommand}"
                 Margin="5"/>
+            <Button
+                Text="TestButton"
+                HeightRequest="50"
+                Command="{Binding TestMethodeCommand}"
+                Margin="5"/>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

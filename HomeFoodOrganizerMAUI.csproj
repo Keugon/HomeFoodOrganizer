@@ -160,6 +160,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\DRAXNET.Core\DRAXNET.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Using Include="Essensausgleich" />
 	</ItemGroup>
 

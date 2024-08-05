@@ -42,7 +42,7 @@ namespace Essensausgleich
         /// <summary>
         /// Stellt den Context für die APPobjekte bereit glaub ich
         /// </summary>
-        public Essensausgleich.Infra.Infrastructur Context
+        public DRAXNET.Core.Infrastructur Context
         { get; set; } = null!;
         /// <summary>
         /// Overrides the Statup process and starts my infrastracture

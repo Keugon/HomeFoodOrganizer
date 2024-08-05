@@ -5,7 +5,7 @@ namespace Essensausgleich.Controller
     /// <summary>
     /// Generic JsonController for Save and Load of Obejcts
     /// </summary>
-    public abstract class JsonController<T> : Essensausgleich.Infra.AppObjekt
+    public abstract class JsonController<T> : DRAXNET.Core.AppObjekt
     {
 
         /// <summary>

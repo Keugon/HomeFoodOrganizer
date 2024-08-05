@@ -30,10 +30,10 @@ namespace Essensausgleich
                     fonts.AddFont("Segoe UI Symbol.ttf", "Segoe UI Symbol");
                 });
             // builder.Services.AddSingleton<Anwendung>();
-            builder.Services.AddSingleton<Infra.Infrastructur>();
+            builder.Services.AddSingleton<DRAXNET.Core.Infrastructur>();
             builder.Services.AddSingleton(provider =>
             {
-                var context = provider.GetRequiredService<Infra.Infrastructur>();
+                var context = provider.GetRequiredService<DRAXNET.Core.Infrastructur>();
                 ViewModel.Anwendung Anwendung = context.Fabricate<ViewModel.Anwendung>();
 
                 System.Diagnostics.Debug.WriteLine("Pre Initialze");

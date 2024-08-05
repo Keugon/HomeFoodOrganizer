@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using DRAXNET.Core;
 using Essensausgleich.Data;
 using Essensausgleich.Views;
 using LiveChartsCore;
@@ -15,7 +16,7 @@ namespace Essensausgleich.ViewModel
     /// blablablaAnwednung
     /// </summary>
 
-    public partial class Anwendung : Essensausgleich.Infra.ViewModel
+    public partial class Anwendung : DRAXNET.Core.ViewModel
     {
         /// <summary>
         /// Fixed Path
@@ -52,6 +53,22 @@ namespace Essensausgleich.ViewModel
                 return this._DataSharingController;
             }
             set => this._DataSharingController = value;
+        }
+
+        private InvoiceManager _InvoiceManager = null!;
+        /// <summary>
+        /// InvoiceManager Service
+        /// </summary>
+        public InvoiceManager InvoiceManager
+        {
+            get
+            {
+                if (this._InvoiceManager == null)
+                {
+                    this._InvoiceManager = new InvoiceManager();
+                }
+                return this._InvoiceManager;
+            }
         }
         #endregion Services
 
@@ -149,7 +166,7 @@ namespace Essensausgleich.ViewModel
                 foreach (string file in FileNames)
                 {
 
-                    Invoices i = Context.InvoiceManager.Load(file);
+                    Invoices i = this.InvoiceManager.Load(file);
                     if (i != null)
                     {
                         ObsListe.Add(i);
@@ -299,7 +316,6 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged();
             }
         }
-
         #endregion NewInvoice
 
         #region Charts
@@ -314,12 +330,13 @@ namespace Essensausgleich.ViewModel
                 if (this.CurrentInvoices.HasInvoices)
                 {
                     SKColor YAxisColorTheme = new SKColor();
-                    if (CurrentAppTheme == AppTheme.Light) 
+                    if (CurrentAppTheme == AppTheme.Light)
                     {
-                    YAxisColorTheme = SKColors.Black;
-                    }else if(CurrentAppTheme == AppTheme.Dark)
+                        YAxisColorTheme = SKColors.Black;
+                    }
+                    else if (CurrentAppTheme == AppTheme.Dark)
                     {
-                        YAxisColorTheme= SKColors.LightGray;
+                        YAxisColorTheme = SKColors.LightGray;
                     }
                     return new List<LiveChartsCore.SkiaSharpView.Axis>
                                 {
@@ -374,7 +391,7 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-                
+
                 //31.07.2024 On Enter a new/ empty Project
                 //"Exception has been thrown by the target of an invocation."
                 //happens due to the chart trys to access data that does not exist yet no Invoices!
@@ -422,7 +439,7 @@ namespace Essensausgleich.ViewModel
                         ScalesYAt = 0
                         },
                     };
-                    
+
                 }
                 return this._ProjectChart!;
             }
@@ -570,7 +587,7 @@ namespace Essensausgleich.ViewModel
             //maybe not necessari
             //this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
             this.CurrentInvoice.DateTimeChanged = DateTime.Now;
-            this.Context.InvoiceManager.Save(this.CurrentInvoices);
+            this.InvoiceManager.Save(this.CurrentInvoices);
             try
             {
                 await Shell.Current.GoToAsync($"..");
@@ -590,7 +607,7 @@ namespace Essensausgleich.ViewModel
         {
             //Delete the CurrentInvoices File and remove it from the
             //ListofInvoicesInStorage List to stay consistant
-            this.Context.InvoiceManager.Delete(this.CurrentInvoices);
+            this.InvoiceManager.Delete(this.CurrentInvoices);
             ListOfInvoicesInStorage.Remove(this.CurrentInvoices);
             try
             {
@@ -611,7 +628,7 @@ namespace Essensausgleich.ViewModel
         {
             //Delete the CurrentInvoice Item from the Invoices and save it
             this.CurrentInvoices.InvoiceList.Remove(this.CurrentInvoice);
-            this.Context.InvoiceManager.Save(this.CurrentInvoices);
+            this.InvoiceManager.Save(this.CurrentInvoices);
             try
             {
                 await Shell.Current.GoToAsync($"..");
@@ -643,7 +660,7 @@ namespace Essensausgleich.ViewModel
                 NewProject.PathAndFileName = Path.Combine(InvoicesFolderPath, NewProject.Guid!.Value.ToString());
 
                 System.Diagnostics.Debug.WriteLine($"Pre Save Count:{this.ListOfInvoicesInStorage.Count}");
-                this.Context.InvoiceManager.Save(NewProject);
+                this.InvoiceManager.Save(NewProject);
                 System.Diagnostics.Debug.WriteLine($"Aft Save Count:{this.ListOfInvoicesInStorage.Count}");
                 this.CurrentInvoices = NewProject;
                 try
@@ -691,7 +708,7 @@ namespace Essensausgleich.ViewModel
             //Save The New but not Edited Invoice to File in case of not directly
             //editing and Save via update there, also makes sure that the File
             //DateTime Changed gets updated.
-            this.Context.InvoiceManager.Save(this.CurrentInvoices);
+            this.InvoiceManager.Save(this.CurrentInvoices);
             //Switch to EditView
             await LoadSelectedInvoiceToCurrent(InvoiceToCreate);
             //After Switch Null InvoiceToCreate to be Ready for the next and vanish the Input View
@@ -791,8 +808,22 @@ namespace Essensausgleich.ViewModel
             OnPropertyChanged(nameof(this.ProjectChart));
             OnPropertyChanged(nameof(this.ProjectChartYaxis));
         }
+        /// <summary>
+        /// TestMethode
+        /// </summary>
+        [RelayCommand]
+        public void TestMethode()
+        {
+            try
+            {
+                this.Context.DatenManager.SqlMariaDBController.AddUser();
+            }
+            catch (Exception ex)
+            {
+                OnFehlerAufgetreten(new FehlerAufgetretenEventArgs(ex));
+            }
+        }
         #endregion Methods
-
         #region canExecute
         //new invoice can execute
         /// <summary>

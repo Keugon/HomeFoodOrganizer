@@ -3,7 +3,7 @@
     /// <summary>
     /// A Service that provides the capabiliti to share certain data to other apps
     /// </summary>
-    public class DataSharingController : Infra.AppObjekt, IShare
+    public class DataSharingController : DRAXNET.Core.AppObjekt, IShare
     {
         /// <summary>
         /// Starts the Sharing of a text

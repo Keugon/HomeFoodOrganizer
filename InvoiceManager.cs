@@ -1,6 +1,5 @@
 ﻿using Essensausgleich.Controller;
 using Essensausgleich.Data;
-using Essensausgleich.Infra;
 using System.ComponentModel;
 
 namespace Essensausgleich
@@ -8,7 +7,7 @@ namespace Essensausgleich
     /// <summary>
     /// Manages Invoices
     /// </summary>
-    public class InvoiceManager : AppObjekt, INotifyPropertyChanged
+    public class InvoiceManager : DRAXNET.Core.AppObjekt, INotifyPropertyChanged
     {
         #region Invoice and List
         /// <summary>
