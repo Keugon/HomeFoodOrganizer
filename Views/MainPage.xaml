@@ -58,11 +58,23 @@
                 HeightRequest="50"
                 Command="{Binding NewProjectCommand}"
                 Margin="5"/>
-            <Button
-                Text="TestButton"
-                HeightRequest="50"
-                Command="{Binding TestMethodeCommand}"
-                Margin="5"/>
+            <Border
+                Margin="5">
+                <VerticalStackLayout>
+                    <Entry
+                        Placeholder="Username"
+                        Text="{Binding LoginUser.Username}"/>
+                    <Entry
+                        Placeholder="password"
+                        Text="{Binding LoginUser.PasswordHash}"/>
+                    <Button
+                        Text="TestButton"
+                        HeightRequest="50"
+                        Command="{Binding TestMethodeCommand}"
+                        Margin="5"/>
+                </VerticalStackLayout>
+            </Border>
+
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

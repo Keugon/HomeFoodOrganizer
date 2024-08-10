@@ -54,7 +54,9 @@ namespace Essensausgleich.ViewModel
             }
             set => this._DataSharingController = value;
         }
-
+        /// <summary>
+        /// Internal Cache
+        /// </summary>
         private InvoiceManager _InvoiceManager = null!;
         /// <summary>
         /// InvoiceManager Service
@@ -68,6 +70,24 @@ namespace Essensausgleich.ViewModel
                     this._InvoiceManager = new InvoiceManager();
                 }
                 return this._InvoiceManager;
+            }
+        }
+        /// <summary>
+        /// Internal Cache
+        /// </summary>
+        private DRAXNET.Core.Services.UserManagement _UserManagement = null!;
+        /// <summary>
+        /// Provides a Service for Controlling User behaviour
+        /// </summary>
+        public DRAXNET.Core.Services.UserManagement UserManagement
+        {
+            get
+            {
+                if (this._UserManagement == null)
+                {
+                    this._UserManagement = this.Context.Fabricate<DRAXNET.Core.Services.UserManagement>();
+                }
+                return this._UserManagement;
             }
         }
         #endregion Services
@@ -317,7 +337,38 @@ namespace Essensausgleich.ViewModel
             }
         }
         #endregion NewInvoice
-
+        #region Login
+        private DRAXNET.Core.Models.User _LoginUser = null!;
+        /// <summary>
+        /// Gets the Object to provide Login information
+        /// </summary>
+        public DRAXNET.Core.Models.User LoginUser
+        {
+            get
+            {
+                if (this._LoginUser == null)
+                {
+                    this._LoginUser = new();
+                }
+                return this._LoginUser;
+            }
+        }
+        private DRAXNET.Core.Models.Session _Session = null!;
+        /// <summary>
+        /// Gets the user login session
+        /// </summary>
+        public DRAXNET.Core.Models.Session Session
+        {
+            get
+            {
+                if (this._Session == null)
+                {
+                    this._Session = new();
+                }
+                return this._Session;
+            }
+        }
+        #endregion Login
         #region Charts
 
         /// <summary>
@@ -814,14 +865,11 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public void TestMethode()
         {
-            try
+            if (UserManagement.Login(LoginUser))
             {
-                this.Context.DatenManager.SqlMariaDBController.AddUser();
+                //Login Successful creat a session and push to DB
             }
-            catch (Exception ex)
-            {
-                OnFehlerAufgetreten(new FehlerAufgetretenEventArgs(ex));
-            }
+            
         }
         #endregion Methods
         #region canExecute
