@@ -5,7 +5,7 @@
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel"
              xmlns:local="clr-namespace:Essensausgleich"
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
-             xmlns:data="clr-namespace:Essensausgleich.Data" 
+             xmlns:data="clr-namespace:DRAXNET.AusgabenBuddy.Models;assembly=DRAXNET.AusgabenBuddy.Models" 
              xmlns:views="clr-namespace:Essensausgleich.Views"
              x:DataType="viewmodel:Anwendung"
              Shell.NavBarIsVisible="True"
@@ -58,6 +58,7 @@
                 HeightRequest="50"
                 Command="{Binding NewProjectCommand}"
                 Margin="5"/>
+            <!--Testing Area-->
             <Border
                 Margin="5">
                 <VerticalStackLayout>
@@ -72,6 +73,12 @@
                         HeightRequest="50"
                         Command="{Binding TestMethodeCommand}"
                         Margin="5"/>
+                    <Button Text="Logout"
+                            HeightRequest="50"
+                            Command="{Binding LogoutCommand}"
+                            Margin="5"/>
+                    <Label Text="{Binding UserManagement.ActivUser.Username}"/>
+                    <Label Text="{Binding UserManagement.ActivSession.SessionToken}"/> 
                 </VerticalStackLayout>
             </Border>
 

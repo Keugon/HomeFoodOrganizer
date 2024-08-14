@@ -6,7 +6,7 @@
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
              xmlns:views="clr-namespace:Essensausgleich.Views"
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel"
-             xmlns:data="clr-namespace:Essensausgleich.Data" 
+             xmlns:data="clr-namespace:DRAXNET.AusgabenBuddy.Models;assembly=DRAXNET.AusgabenBuddy.Models"
              x:DataType="viewmodel:Anwendung"
              Title="EditView">
 

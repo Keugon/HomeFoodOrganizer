@@ -160,10 +160,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\DRAXNET.AusgabenBuddy.Models\DRAXNET.AusgabenBuddy.Models.csproj" />
 	  <ProjectReference Include="..\DRAXNET.Core\DRAXNET.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Using Include="DRAXNET.AusgabenBuddy.Models" />
 	  <Using Include="Essensausgleich" />
 	</ItemGroup>
 

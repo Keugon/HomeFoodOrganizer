@@ -6,6 +6,7 @@
              xmlns:viewmodel="clr-namespace:Essensausgleich.ViewModel" 
              xmlns:local="clr-namespace:Essensausgleich"
              xmlns:tools="clr-namespace:Essensausgleich.Tools"
+             xmlns:data="clr-namespace:DRAXNET.AusgabenBuddy.Models;assembly=DRAXNET.AusgabenBuddy.Models"
              x:DataType="viewmodel:Anwendung">
     <ScrollView
         Orientation="Both"
@@ -65,7 +66,7 @@
                         </DataTrigger>
                     </CollectionView.Triggers>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="local:Expense" >
+                        <DataTemplate x:DataType="data:Expense" >
                             <!--Todo Make the Selected State look nice-->
                             <Grid>
                                 <Border

@@ -162,39 +162,13 @@ namespace Essensausgleich.ViewModel
             {
                 if (this._ListOfInvoicesInStorage == null)
                 {
-                    this._ListOfInvoicesInStorage = ReadInvoiceFilesFromFolder(InvoicesFolderPath);
+                    this._ListOfInvoicesInStorage = this.UserManagement.LoadProjects();
                 }
                 return this._ListOfInvoicesInStorage;
             }
+            set => this._ListOfInvoicesInStorage = value;
         }
-        /// <summary>
-        /// Deserialize all Files that suits a Invoices Object to a ObsColletion
-        /// </summary>
-        /// <param name="folderToReadFrom"></param>
-        /// <returns>ObserveableCollection of Invoices</returns>
-        private ObservableCollection<Invoices> ReadInvoiceFilesFromFolder(string folderToReadFrom)
-        {
-            var ObsListe = new ObservableCollection<Invoices>();
-            if (!Directory.Exists(folderToReadFrom))
-            {
-                System.IO.Directory.CreateDirectory(folderToReadFrom);
-            }
-            else
-            {
-                string[] FileNames = Directory.GetFiles(folderToReadFrom);
-                //Load All Single Invoices to a ObsList
-                foreach (string file in FileNames)
-                {
-
-                    Invoices i = this.InvoiceManager.Load(file);
-                    if (i != null)
-                    {
-                        ObsListe.Add(i);
-                    }
-                }
-            }
-            return ObsListe;
-        }
+        
         private string _InhabitansSelected = null!;
         /// <summary>
         /// Gets or sets the SelectedInhabitant for adding Expenses
@@ -573,6 +547,17 @@ namespace Essensausgleich.ViewModel
             //set it to CurrentInvoices to work with
             if (parameter is Invoices SelectedInvoices && SelectedInvoices != null)
             {
+                //Load List of Invoices from ProjectID
+                
+                try
+                {
+                    var invoicesList = this.UserManagement.LoadInvoicesFromProjectID(SelectedInvoices);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
                 this.CurrentInvoices = SelectedInvoices;
             }
             else
@@ -868,8 +853,26 @@ namespace Essensausgleich.ViewModel
             if (UserManagement.Login(LoginUser))
             {
                 //Login Successful creat a session and push to DB
+                ListOfInvoicesInStorage = null!;
+                OnPropertyChanged(nameof(ListOfInvoicesInStorage));
             }
-            
+
+        }
+        /// <summary>
+        /// Logout
+        /// </summary>
+        [RelayCommand]
+        public void Logout()
+        {
+            if (this.UserManagement.Logout())
+            {
+                Log.WriteLine("Logout Successfull");
+
+            }
+            else
+            {
+                Log.WriteLine("Logout Failed");
+            }
         }
         #endregion Methods
         #region canExecute

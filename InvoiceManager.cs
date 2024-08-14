@@ -13,17 +13,17 @@ namespace Essensausgleich
         /// <summary>
         /// Field Cache
         /// </summary>
-        private Invoices _Invoices = null!;
+        private DRAXNET.AusgabenBuddy.Models.Invoices _Invoices = null!;
         /// <summary>
         /// Gets or Sets a List of Invoice
         /// </summary>
-        public Invoices Invoices
+        public DRAXNET.AusgabenBuddy.Models.Invoices Invoices
         {
             get
             {
                 if (this._Invoices == null)
                 {
-                    this._Invoices = new Invoices();
+                    this._Invoices = new DRAXNET.AusgabenBuddy.Models.Invoices();
                 }
                 return this._Invoices;
             }
@@ -38,17 +38,17 @@ namespace Essensausgleich
         /// <summary>
         /// Field Cache
         /// </summary>
-        private Invoice _Invoice = null!;
+        private DRAXNET.AusgabenBuddy.Models.Invoice _Invoice = null!;
         /// <summary>
         /// New Invoice Object
         /// </summary>
-        public Invoice Invoice
+        public DRAXNET.AusgabenBuddy.Models.Invoice Invoice
         {
             get
             {
                 if (this._Invoice == null)
                 {
-                    this._Invoice = new Invoice();
+                    this._Invoice = new DRAXNET.AusgabenBuddy.Models.Invoice();
                 }
                 return this._Invoice;
 
@@ -80,7 +80,7 @@ namespace Essensausgleich
         /// <summary>
         /// Method to save the Inhabits (List) to Jsonfile
         /// </summary>
-        public void Save(Invoices invoiceToSave)
+        public void Save(DRAXNET.AusgabenBuddy.Models.Invoices invoiceToSave)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace Essensausgleich
         /// Deletes the given InvoiceList
         /// </summary>
         /// <param name="invoiceToDelete">Invoices (Project) to delete</param>
-        public void Delete(Invoices invoiceToDelete)
+        public void Delete(DRAXNET.AusgabenBuddy.Models.Invoices invoiceToDelete)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace Essensausgleich
         /// <summary>
         /// Method to Load a Invoice from a give Path
         /// </summary>
-        public Invoices Load(string pathWithFileName)
+        public DRAXNET.AusgabenBuddy.Models.Invoices Load(string pathWithFileName)
         {
             try
             {
@@ -139,19 +139,19 @@ namespace Essensausgleich
                 return null!;
             }
         }
-        #region WPF über Änderungen Informieren
-        /// <summary>
-        /// Event PropertyChanged
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
-        /// <summary>
-        /// On PropertyChanged
-        /// </summary>
-        /// <param name="propertyName"></param>
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion WPF über Änderungen Informieren
+        //#region WPF über Änderungen Informieren
+        ///// <summary>
+        ///// Event PropertyChanged
+        ///// </summary>
+        //public event PropertyChangedEventHandler? PropertyChanged;
+        ///// <summary>
+        ///// On PropertyChanged
+        ///// </summary>
+        ///// <param name="propertyName"></param>
+        //protected virtual void OnPropertyChanged(string propertyName)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
+        //#endregion WPF über Änderungen Informieren
     }
 }
