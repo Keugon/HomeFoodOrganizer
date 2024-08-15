@@ -20,17 +20,17 @@
         <VerticalStackLayout
             Grid.Row="0">
             <CollectionView 
-                 ItemsSource="{Binding ListOfInvoicesInStorage}">
+                 ItemsSource="{Binding ListOfProjectsByUser}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate 
-                        x:DataType="data:Invoices">
+                        x:DataType="data:Project">
                         <Grid>
                             <Border
                                 Margin="5">
                                 <HorizontalStackLayout>
                                     <HorizontalStackLayout.GestureRecognizers>
                                         <TapGestureRecognizer
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=LoadSelectedInvoicesToCurrentCommand}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:Anwendung}},Path=LoadSelectedProjectToCurrentCommand}"
                                             CommandParameter="{Binding .}"/>
                                     </HorizontalStackLayout.GestureRecognizers>
                                     <VerticalStackLayout

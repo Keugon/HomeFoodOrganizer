@@ -24,7 +24,7 @@
             <VerticalStackLayout>
                 <!--Datatrigger to IsEnable when the New Invoice Formular appears-->
                 <CollectionView 
-                     ItemsSource="{Binding CurrentInvoices.InvoiceList}">
+                     ItemsSource="{Binding CurrentProject.InvoiceList}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate 
                             x:DataType="data:Invoice">

@@ -5,7 +5,7 @@ using System.ComponentModel;
 namespace Essensausgleich
 {
     /// <summary>
-    /// Manages Invoices
+    /// Manages Project
     /// </summary>
     public class InvoiceManager : DRAXNET.Core.AppObjekt, INotifyPropertyChanged
     {
@@ -13,17 +13,17 @@ namespace Essensausgleich
         /// <summary>
         /// Field Cache
         /// </summary>
-        private DRAXNET.AusgabenBuddy.Models.Invoices _Invoices = null!;
+        private DRAXNET.AusgabenBuddy.Models.Project _Invoices = null!;
         /// <summary>
         /// Gets or Sets a List of Invoice
         /// </summary>
-        public DRAXNET.AusgabenBuddy.Models.Invoices Invoices
+        public DRAXNET.AusgabenBuddy.Models.Project Invoices
         {
             get
             {
                 if (this._Invoices == null)
                 {
-                    this._Invoices = new DRAXNET.AusgabenBuddy.Models.Invoices();
+                    this._Invoices = new DRAXNET.AusgabenBuddy.Models.Project();
                 }
                 return this._Invoices;
             }
@@ -80,7 +80,7 @@ namespace Essensausgleich
         /// <summary>
         /// Method to save the Inhabits (List) to Jsonfile
         /// </summary>
-        public void Save(DRAXNET.AusgabenBuddy.Models.Invoices invoiceToSave)
+        public void Save(DRAXNET.AusgabenBuddy.Models.Project invoiceToSave)
         {
             try
             {
@@ -101,8 +101,8 @@ namespace Essensausgleich
         /// <summary>
         /// Deletes the given InvoiceList
         /// </summary>
-        /// <param name="invoiceToDelete">Invoices (Project) to delete</param>
-        public void Delete(DRAXNET.AusgabenBuddy.Models.Invoices invoiceToDelete)
+        /// <param name="invoiceToDelete">Project (Project) to delete</param>
+        public void Delete(DRAXNET.AusgabenBuddy.Models.Project invoiceToDelete)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace Essensausgleich
         /// <summary>
         /// Method to Load a Invoice from a give Path
         /// </summary>
-        public DRAXNET.AusgabenBuddy.Models.Invoices Load(string pathWithFileName)
+        public DRAXNET.AusgabenBuddy.Models.Project Load(string pathWithFileName)
         {
             try
             {

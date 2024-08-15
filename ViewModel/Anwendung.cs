@@ -21,7 +21,7 @@ namespace Essensausgleich.ViewModel
         /// <summary>
         /// Fixed Path
         /// </summary>
-        private readonly string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Invoices");
+        private readonly string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Project");
         /// <summary>
         /// inits the Viewmodel and pulls object referenzes
         /// </summary>
@@ -29,7 +29,7 @@ namespace Essensausgleich.ViewModel
         {
             System.Diagnostics.Debug.WriteLine("Initialize Start");
             App.Current!.BindingContext = this;
-            //Check on startup if first time then Create the "Invoices" Folder
+            //Check on startup if first time then Create the "Project" Folder
             if (!Directory.Exists(InvoicesFolderPath))
             {
                 System.IO.Directory.CreateDirectory(InvoicesFolderPath);
@@ -129,46 +129,46 @@ namespace Essensausgleich.ViewModel
         /// <summary>
         /// Internal Field
         /// </summary>
-        private Invoices _CurrentInvoices = null!;
+        private Project _CurrentProject = null!;
         /// <summary>
-        /// Gets or Sets the List of Invoices aka Projects that are saved on the Device 
+        /// Gets or Sets the List of Project aka Projects that are saved on the Device 
         /// </summary>
-        public Invoices CurrentInvoices
+        public Project CurrentProject
         {
             get
             {
-                if (this._CurrentInvoices == null)
+                if (this._CurrentProject == null)
                 {
-                    this._CurrentInvoices = new Invoices();
+                    this._CurrentProject = new Project();
 
                 }
-                return this._CurrentInvoices;
+                return this._CurrentProject;
             }
             set
             {
-                this._CurrentInvoices = value;
+                this._CurrentProject = value;
             }
         }
         /// <summary>
         /// Cache for the Propertie
         /// </summary>
-        private ObservableCollection<Invoices> _ListOfInvoicesInStorage = null!;
+        private ObservableCollection<Project> _ListOfProjectsByUser = null!;
         /// <summary>
         /// Gets the List of Files in Storage, on First Time Readout 
         /// </summary>
-        public ObservableCollection<Invoices> ListOfInvoicesInStorage
+        public ObservableCollection<Project> ListOfProjectsByUser
         {
             get
             {
-                if (this._ListOfInvoicesInStorage == null)
+                if (this._ListOfProjectsByUser == null)
                 {
-                    this._ListOfInvoicesInStorage = this.UserManagement.LoadProjects();
+                    this._ListOfProjectsByUser = this.UserManagement.LoadProjects();
                 }
-                return this._ListOfInvoicesInStorage;
+                return this._ListOfProjectsByUser;
             }
-            set => this._ListOfInvoicesInStorage = value;
+            set => this._ListOfProjectsByUser = value;
         }
-        
+
         private string _InhabitansSelected = null!;
         /// <summary>
         /// Gets or sets the SelectedInhabitant for adding Expenses
@@ -352,7 +352,7 @@ namespace Essensausgleich.ViewModel
         {
             get
             {
-                if (this.CurrentInvoices.HasInvoices)
+                if (this.CurrentProject.HasInvoices)
                 {
                     SKColor YAxisColorTheme = new SKColor();
                     if (CurrentAppTheme == AppTheme.Light)
@@ -419,16 +419,16 @@ namespace Essensausgleich.ViewModel
 
                 //31.07.2024 On Enter a new/ empty Project
                 //"Exception has been thrown by the target of an invocation."
-                //happens due to the chart trys to access data that does not exist yet no Invoices!
-                //Fix Interestingly the Yaxis info gets befor the ISeries info, Fixed by imple and check for the Invoices.HasInvoices bool else send null!
+                //happens due to the chart trys to access data that does not exist yet no Project!
+                //Fix Interestingly the Yaxis info gets befor the ISeries info, Fixed by imple and check for the Project.HasInvoices bool else send null!
 
                 //26.07.2024 Event for redraw the graph if the TotalExpense of any Inhabitant has changed
-                if (this._ProjectChart == null && this.CurrentInvoices.HasInvoices)
+                if (this._ProjectChart == null && this.CurrentProject.HasInvoices)
                 {
                     //Sub to Apptheme Changed for redraw
                     Application.Current!.RequestedThemeChanged += ExpenseDataChart_CollectionChanged!;
                     //Sub to event
-                    foreach (var invoice in CurrentInvoices.InvoiceList)
+                    foreach (var invoice in CurrentProject.InvoiceList)
                     {
                         foreach (var inhabitant in invoice.Inhabitants)
                         {
@@ -437,12 +437,12 @@ namespace Essensausgleich.ViewModel
                         }
                     }
                     //get data from invoices
-                    decimal[] user1Exp = new decimal[CurrentInvoices.InvoiceList.Count];
-                    decimal[] user2Exp = new decimal[CurrentInvoices.InvoiceList.Count];
-                    for (int i = 0; i < CurrentInvoices.InvoiceList.Count; i++)
+                    decimal[] user1Exp = new decimal[CurrentProject.InvoiceList.Count];
+                    decimal[] user2Exp = new decimal[CurrentProject.InvoiceList.Count];
+                    for (int i = 0; i < CurrentProject.InvoiceList.Count; i++)
                     {
-                        user1Exp[i] = CurrentInvoices.InvoiceList[i].Inhabitants[0].TotalExpense;
-                        user2Exp[i] = CurrentInvoices.InvoiceList[i].Inhabitants[1].TotalExpense;
+                        user1Exp[i] = CurrentProject.InvoiceList[i].Inhabitants[0].TotalExpense;
+                        user2Exp[i] = CurrentProject.InvoiceList[i].Inhabitants[1].TotalExpense;
                     }
                     //Generate Lines from CurrentInvoice(s)
                     this._ProjectChart = new ISeries[]
@@ -451,7 +451,7 @@ namespace Essensausgleich.ViewModel
                         {
                         Values = user1Exp,
                         Fill = null,
-                        Name = CurrentInvoices.InvoiceList[0].Inhabitants[0].Name,
+                        Name = CurrentProject.InvoiceList[0].Inhabitants[0].Name,
                         Stroke = new SolidColorPaint(SKColors.Blue, 2),
                         ScalesYAt = 0
                         },
@@ -459,7 +459,7 @@ namespace Essensausgleich.ViewModel
                         {
                         Values = user2Exp,
                         Fill = null,
-                        Name = CurrentInvoices.InvoiceList[0].Inhabitants[1].Name,
+                        Name = CurrentProject.InvoiceList[0].Inhabitants[1].Name,
                         Stroke = new SolidColorPaint(SKColors.SteelBlue, 2),
                         ScalesYAt = 0
                         },
@@ -538,34 +538,47 @@ namespace Essensausgleich.ViewModel
             }
         }
         /// <summary>
-        /// Sets the Clicked Item to the CurrentInvoices and switches to InvoiceViewPage
+        /// Sets the Clicked Item to the CurrentProject and switches to InvoiceViewPage
         /// </summary>
         [RelayCommand]
-        public async Task LoadSelectedInvoicesToCurrent(object parameter)
+        public async Task LoadSelectedProjectToCurrent(object parameter)
         {
+            Project projectToDisplay = new();
+            ObservableCollection<Invoice> invoicesList = new();
             //Take the (Selected) Clicked on Item and
-            //set it to CurrentInvoices to work with
-            if (parameter is Invoices SelectedInvoices && SelectedInvoices != null)
+            //set it to CurrentProject to work with
+            if (parameter is Project SelectedProjectWithoutInvoices && SelectedProjectWithoutInvoices != null)
             {
-                //Load List of Invoices from ProjectID
-                
+                //Load List of Project from ProjectID
+                projectToDisplay = SelectedProjectWithoutInvoices;
                 try
                 {
-                    var invoicesList = this.UserManagement.LoadInvoicesFromProjectID(SelectedInvoices);
+                    //Load all Single Project as well as there Inhabitants ans expenses before go to InvoiceViewPage
+                    projectToDisplay.InvoiceList = this.UserManagement.LoadInvoicesFromProjectID(SelectedProjectWithoutInvoices);
+                    //load invoice contet for each Item
+                    foreach (Invoice invoice in projectToDisplay.InvoiceList)
+                    {
+                        //load inhabitants and expenses for inhabitants for the current invoice item
+                        invoice.Inhabitants = this.UserManagement.LoadInhabitantsFromInvoiceID(invoice);
+                        //load expenses for the inhabitantsList
+                        foreach (Inhabitant inhab in invoice.Inhabitants)
+                        {
+                            inhab.ListOfExpenses = this.UserManagement.LoadExpensesFromInhabitantsID(inhab);
+                        }
+                    }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
-                    throw;
+                    OnFehlerAufgetreten(ex);
                 }
-                this.CurrentInvoices = SelectedInvoices;
+                this.CurrentProject = projectToDisplay;
             }
             else
             {
                 System.Diagnostics.Debug.WriteLine("Error on Casting CommandParams");
             }
 
-            //Move to new Page that Displays all the Single Invoices that are in there 
+            //Move to new Page that Displays all the Single Project that are in there 
             try
             {
                 await Shell.Current.GoToAsync($"{nameof(InvoiceViewPage)}");
@@ -586,10 +599,10 @@ namespace Essensausgleich.ViewModel
         public async Task LoadSelectedInvoiceToCurrent(object parameter)
         {
             //Take the (Selected) Clicked on Item and
-            //set it to CurrentInvoices to work with
+            //set it to CurrentProject to work with
             if (parameter is Invoice SelectedInvoice && SelectedInvoice != null)
             {
-                //find the Index of the given Item in the CurrentInvoices List
+                //find the Index of the given Item in the CurrentProject List
                 this.CurrentInvoice = SelectedInvoice;
                 try
                 {
@@ -610,20 +623,20 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine("Error on Casting CommandParams");
             }
 
-            //Move to new Page that Displays all the Single Invoices that are in there 
+            //Move to new Page that Displays all the Single Project that are in there 
 
         }
         /// <summary>
         /// Saves the Current activ Project (Invoces) to file, also changes 
-        /// the DateTime Changed for the Single Invoices as well of the Project
+        /// the DateTime Changed for the Single Project as well of the Project
         /// </summary>
         [RelayCommand]
         public async Task UpdateCurrentInvoice()
         {
             //maybe not necessari
-            //this.CurrentInvoices.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
+            //this.CurrentProject.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
             this.CurrentInvoice.DateTimeChanged = DateTime.Now;
-            this.InvoiceManager.Save(this.CurrentInvoices);
+            this.InvoiceManager.Save(this.CurrentProject);
             try
             {
                 await Shell.Current.GoToAsync($"..");
@@ -641,10 +654,10 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public async Task DeleteCurrentProject()
         {
-            //Delete the CurrentInvoices File and remove it from the
+            //Delete the CurrentProject File and remove it from the
             //ListofInvoicesInStorage List to stay consistant
-            this.InvoiceManager.Delete(this.CurrentInvoices);
-            ListOfInvoicesInStorage.Remove(this.CurrentInvoices);
+            this.InvoiceManager.Delete(this.CurrentProject);
+            ListOfProjectsByUser.Remove(this.CurrentProject);
             try
             {
                 await Shell.Current.GoToAsync($"..");
@@ -662,9 +675,9 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public async Task DeleteCurrentInvoiceInEdit()
         {
-            //Delete the CurrentInvoice Item from the Invoices and save it
-            this.CurrentInvoices.InvoiceList.Remove(this.CurrentInvoice);
-            this.InvoiceManager.Save(this.CurrentInvoices);
+            //Delete the CurrentInvoice Item from the Project and save it
+            this.CurrentProject.InvoiceList.Remove(this.CurrentInvoice);
+            this.InvoiceManager.Save(this.CurrentProject);
             try
             {
                 await Shell.Current.GoToAsync($"..");
@@ -676,7 +689,7 @@ namespace Essensausgleich.ViewModel
             }
         }
         /// <summary>
-        /// Creates a new File for Invoices
+        /// Creates a new File for Project
         /// </summary>
         [RelayCommand]
         public async Task NewProject()
@@ -688,17 +701,17 @@ namespace Essensausgleich.ViewModel
 
             if (!string.IsNullOrEmpty(NewInvoiceName))
             {
-                Invoices NewProject = new Invoices
+                Project NewProject = new Project
                 {
                     DateTimeCreation = DateTime.Now,
                     InvoicesProjectName = NewInvoiceName
                 };
                 NewProject.PathAndFileName = Path.Combine(InvoicesFolderPath, NewProject.Guid!.Value.ToString());
 
-                System.Diagnostics.Debug.WriteLine($"Pre Save Count:{this.ListOfInvoicesInStorage.Count}");
+                System.Diagnostics.Debug.WriteLine($"Pre Save Count:{this.ListOfProjectsByUser.Count}");
                 this.InvoiceManager.Save(NewProject);
-                System.Diagnostics.Debug.WriteLine($"Aft Save Count:{this.ListOfInvoicesInStorage.Count}");
-                this.CurrentInvoices = NewProject;
+                System.Diagnostics.Debug.WriteLine($"Aft Save Count:{this.ListOfProjectsByUser.Count}");
+                this.CurrentProject = NewProject;
                 try
                 {
                     await Shell.Current.GoToAsync(nameof(InvoiceViewPage));
@@ -709,9 +722,9 @@ namespace Essensausgleich.ViewModel
                     System.Diagnostics.Debug.WriteLine(ex.Message);
                     return;
                 }
-                //For some reasen on InvoiceManager.Save the ListOfInvoicesInStorage
+                //For some reasen on InvoiceManager.Save the ListOfProjectsByUser
                 //invokes a get renders the .add unnesesery
-                this.ListOfInvoicesInStorage.Add(NewProject);
+                this.ListOfProjectsByUser.Add(NewProject);
             }
 
 
@@ -733,18 +746,18 @@ namespace Essensausgleich.ViewModel
         }
         /// <summary>
         /// Starts a new Invoice gives it via Dialog a Name
-        /// then gets added CurrentInvoices List
+        /// then gets added CurrentProject List
         /// </summary>
         [RelayCommand(CanExecute = nameof(CanExecuteNewInvoice))]
         public async Task NewInvoice()
         {
             //Set Date of creation for the new Invoice
             InvoiceToCreate.DateTimeCreation = DateTime.Now;
-            this.CurrentInvoices.InvoiceList.Add(InvoiceToCreate);
+            this.CurrentProject.InvoiceList.Add(InvoiceToCreate);
             //Save The New but not Edited Invoice to File in case of not directly
             //editing and Save via update there, also makes sure that the File
             //DateTime Changed gets updated.
-            this.InvoiceManager.Save(this.CurrentInvoices);
+            this.InvoiceManager.Save(this.CurrentProject);
             //Switch to EditView
             await LoadSelectedInvoiceToCurrent(InvoiceToCreate);
             //After Switch Null InvoiceToCreate to be Ready for the next and vanish the Input View
@@ -853,8 +866,8 @@ namespace Essensausgleich.ViewModel
             if (UserManagement.Login(LoginUser))
             {
                 //Login Successful creat a session and push to DB
-                ListOfInvoicesInStorage = null!;
-                OnPropertyChanged(nameof(ListOfInvoicesInStorage));
+                ListOfProjectsByUser = null!;
+                OnPropertyChanged(nameof(ListOfProjectsByUser));
             }
 
         }
