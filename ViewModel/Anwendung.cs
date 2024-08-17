@@ -7,6 +7,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using Log = System.Diagnostics.Debug;
 
@@ -107,14 +108,43 @@ namespace Essensausgleich.ViewModel
                 if (this._CurrentInvoice == null)
                 {
                     this._CurrentInvoice = new Invoice();
+                    if (_CurrentInvoice?.Inhabitants != null)
+                    {
+                        foreach (var inhabitant in _CurrentInvoice.Inhabitants)
+                        {
+                            inhabitant.ListOfExpenses.CollectionChanged += (sender,e) => this.UserManagement.ExpenseListUpdate(sender,e,inhabitant);
+                        }
+                    }
                 }
-                return this._CurrentInvoice;
+                return this._CurrentInvoice!;
             }
             set
             {
-
+                // Unsubscribe from the old Invoice's event if it exists
+                if (this._CurrentInvoice != null)
+                {
+                    if (_CurrentInvoice?.Inhabitants != null)
+                    {
+                        foreach (var inhabitant in _CurrentInvoice.Inhabitants)
+                        {
+                            inhabitant.ListOfExpenses.CollectionChanged -= (sender, e) => this.UserManagement.ExpenseListUpdate(sender, e, inhabitant);
+                        }
+                    }
+                }
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice Beginn Set");
                 this._CurrentInvoice = value;
+
+                // Subscribe to the new Invoice's event
+                if (this._CurrentInvoice != null)
+                {
+                    if (_CurrentInvoice?.Inhabitants != null)
+                    {
+                        foreach (var inhabitant in _CurrentInvoice.Inhabitants)
+                        {
+                            inhabitant.ListOfExpenses.CollectionChanged += (sender, e) => this.UserManagement.ExpenseListUpdate(sender, e, inhabitant);
+                        }
+                    }
+                }
                 OnPropertyChanged();
                 if (this.CurrentInvoice.Inhabitants.Count == 2)
                 {
@@ -126,6 +156,8 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
+
+
         /// <summary>
         /// Internal Field
         /// </summary>
