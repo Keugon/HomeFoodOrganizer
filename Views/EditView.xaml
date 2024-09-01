@@ -15,8 +15,6 @@
     <!--´Do Not have a Entry Control inside a Frame this can lead to crash of Disposed Obeject in moved back to that page-->
     <ContentPage.ToolbarItems >
         <ToolbarItem 
-            Text="Save" Command="{Binding UpdateCurrentInvoiceCommand}"></ToolbarItem>
-        <ToolbarItem 
             Text="Delete" Command="{Binding DeleteCurrentInvoiceInEditCommand}"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <!--DefineMainGridStructur-->

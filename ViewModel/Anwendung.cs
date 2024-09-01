@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using DRAXNET.AusgabenBuddy.Models;
 using DRAXNET.Core;
 using Essensausgleich.Data;
 using Essensausgleich.Views;
@@ -172,7 +173,6 @@ namespace Essensausgleich.ViewModel
                 if (this._CurrentProject == null)
                 {
                     this._CurrentProject = new Project();
-
                 }
                 return this._CurrentProject;
             }
@@ -634,8 +634,18 @@ namespace Essensausgleich.ViewModel
             //set it to CurrentProject to work with
             if (parameter is Invoice SelectedInvoice && SelectedInvoice != null)
             {
-                //find the Index of the given Item in the CurrentProject List
+                //Load all content of the selected Invoice before move to Edit View
                 this.CurrentInvoice = SelectedInvoice;
+                /* Darf nicht notwendig sein muss vorher schon bereit stehen
+                //load inhabitants and expenses for inhabitants for the current invoice item
+                SelectedInvoice.Inhabitants = this.UserManagement.LoadInhabitantsFromInvoiceID(SelectedInvoice);
+                //load expenses for the inhabitantsList
+                foreach (Inhabitant inhab in SelectedInvoice.Inhabitants)
+                {
+                    inhab.ListOfExpenses = this.UserManagement.LoadExpensesFromInhabitantsID(inhab);
+                }
+                */
+                //Move to Edit view
                 try
                 {
                     await Shell.Current.GoToAsync($"{nameof(EditView)}");
@@ -785,6 +795,43 @@ namespace Essensausgleich.ViewModel
         {
             //Set Date of creation for the new Invoice
             InvoiceToCreate.DateTimeCreation = DateTime.Now;
+
+            //es muss eine neue Invoice und auch direkt die Inhabs auf der DB erstellt
+            //werden sonst gibt es ein problem mit dem chart da er auf die Inhabs zugreifen muss zum aktualiseren
+            int newInvoiceID = -1;
+            bool invoiceCreation = this.UserManagement.CreateInvoice(CurrentProject, InvoiceToCreate, out newInvoiceID);
+            bool inhab1Creation = this.UserManagement.CreateInhabitant(new Invoice { InvoiceID = newInvoiceID }, InvoiceToCreate.Inhabitants[0].Name);
+            bool inhab2Creation = this.UserManagement.CreateInhabitant(new Invoice { InvoiceID = newInvoiceID }, InvoiceToCreate.Inhabitants[1].Name);
+            if (invoiceCreation & inhab1Creation & inhab2Creation) 
+            {
+                //if Creation IO load Project again to display to DB and move to edit view
+                
+               CurrentProject.InvoiceList = this.UserManagement.LoadInvoicesFromProjectID(CurrentProject);
+                //load invoice contet for each Item
+                foreach (Invoice invoice in CurrentProject.InvoiceList)
+                {
+                    //load inhabitants and expenses for inhabitants for the current invoice item
+                    invoice.Inhabitants = this.UserManagement.LoadInhabitantsFromInvoiceID(invoice);
+                    //load expenses for the inhabitantsList
+                    foreach (Inhabitant inhab in invoice.Inhabitants)
+                    {
+                        inhab.ListOfExpenses = this.UserManagement.LoadExpensesFromInhabitantsID(inhab);
+                    }
+                }
+                //CurrentProject.InvoiceList.Add(InvoiceToCreate);
+                OnPropertyChanged(nameof(CurrentProject.InvoiceList));
+                //Switch to EditView
+                await LoadSelectedInvoiceToCurrent(CurrentProject.InvoiceList[CurrentProject.InvoiceList.Count-1]);
+                //After Switch Null InvoiceToCreate to be Ready for the next and vanish the Input View
+                InvoiceToCreate = null!;
+                IsInputFormularVisible = false;
+                //27.07.2024 After Creation of the new invoice rebuilt the chart
+                //Reset the chart 
+                ExpenseDataChart_CollectionChanged(this, EventArgs.Empty);
+            }
+            /* Depricated Json 01.09.2024
+            //Set Date of creation for the new Invoice
+            InvoiceToCreate.DateTimeCreation = DateTime.Now;
             this.CurrentProject.InvoiceList.Add(InvoiceToCreate);
             //Save The New but not Edited Invoice to File in case of not directly
             //editing and Save via update there, also makes sure that the File
@@ -798,6 +845,7 @@ namespace Essensausgleich.ViewModel
             //27.07.2024 After Creation of the new invoice rebuilt the chart
             //Reset the chart 
             ExpenseDataChart_CollectionChanged(this, EventArgs.Empty);
+            */
         }
         /// <summary>
         /// Ask via Dialog for Information
@@ -912,7 +960,8 @@ namespace Essensausgleich.ViewModel
             if (this.UserManagement.Logout())
             {
                 Log.WriteLine("Logout Successfull");
-
+                //Clears the Visible List of Projects dedicated to the Logged In User
+                this.ListOfProjectsByUser.Clear();
             }
             else
             {
