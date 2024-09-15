@@ -113,9 +113,10 @@ namespace Essensausgleich.ViewModel
                     {
                         foreach (var inhabitant in _CurrentInvoice.Inhabitants)
                         {
-                            inhabitant.ListOfExpenses.CollectionChanged += (sender,e) => this.UserManagement.ExpenseListUpdate(sender,e,inhabitant);
+                            inhabitant.ListOfExpenses.CollectionChanged += (sender, e) => this.UserManagement.ExpenseListUpdate(sender, e, inhabitant);
                         }
                     }
+
                 }
                 return this._CurrentInvoice!;
             }
@@ -157,8 +158,6 @@ namespace Essensausgleich.ViewModel
                 System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
             }
         }
-
-
         /// <summary>
         /// Internal Field
         /// </summary>
@@ -173,12 +172,29 @@ namespace Essensausgleich.ViewModel
                 if (this._CurrentProject == null)
                 {
                     this._CurrentProject = new Project();
+                    if (this._CurrentProject.InvoiceList != null)
+                    {
+
+                        this._CurrentProject.InvoiceList.CollectionChanged += (sender, e) => this.UserManagement.InvoiceListUpdate(sender, e, this._CurrentProject);
+                    }
                 }
                 return this._CurrentProject;
             }
             set
             {
+                //this._CurrentProject kann hier noch null sein und daher ein
+                //Null error wenn ich die eigenschaft.InvoiceList vom Null objekt abfragen versuche!
+                if (this._CurrentProject?.InvoiceList != null)
+                {
+                    this._CurrentProject.InvoiceList.CollectionChanged -= (sender, e) => this.UserManagement.InvoiceListUpdate(sender, e, this._CurrentProject);
+                }
+
                 this._CurrentProject = value;
+
+                if (this._CurrentProject.InvoiceList != null)
+                {
+                    this._CurrentProject.InvoiceList.CollectionChanged += (sender, e) => this.UserManagement.InvoiceListUpdate(sender, e, this._CurrentProject);
+                }
             }
         }
         /// <summary>
@@ -194,11 +210,32 @@ namespace Essensausgleich.ViewModel
             {
                 if (this._ListOfProjectsByUser == null)
                 {
-                    this._ListOfProjectsByUser = this.UserManagement.LoadProjects();
+                    if (this.UserManagement != null)//irgendwie unnötig
+                    {
+                        this._ListOfProjectsByUser = this.UserManagement.LoadProjects();
+                        if (this._ListOfProjectsByUser != null)
+                        {
+
+                            this._ListOfProjectsByUser.CollectionChanged += (sender, e) => this.UserManagement.ListOfProjectsUpdate(sender, e);
+                        }
+                    }
+                    else Log.WriteLine("Wie zum F kan UserManagement null sein??");
+
                 }
-                return this._ListOfProjectsByUser;
+                return this._ListOfProjectsByUser ?? new ObservableCollection<Project>();
             }
-            set => this._ListOfProjectsByUser = value;
+            set
+            {
+                if (this._ListOfProjectsByUser != null)
+                {
+                    this._ListOfProjectsByUser.CollectionChanged -= (sender, e) => this.UserManagement.ListOfProjectsUpdate(sender, e);
+                }
+                this._ListOfProjectsByUser = value;
+                if (this._ListOfProjectsByUser != null)
+                {
+                    this._ListOfProjectsByUser.CollectionChanged += (sender, e) => this.UserManagement.ListOfProjectsUpdate(sender, e);
+                }
+            }
         }
 
         private string _InhabitansSelected = null!;
@@ -583,45 +620,39 @@ namespace Essensausgleich.ViewModel
             {
                 //Load List of Project from ProjectID
                 projectToDisplay = SelectedProjectWithoutInvoices;
+
+                //Load all Single Project as well as there Inhabitants ans expenses before go to InvoiceViewPage
+                projectToDisplay.InvoiceList = this.UserManagement.LoadInvoicesFromProjectID(SelectedProjectWithoutInvoices);
+                //load invoice contet for each Item
+                foreach (Invoice invoice in projectToDisplay.InvoiceList)
+                {
+                    //load inhabitants and expenses for inhabitants for the current invoice item
+                    invoice.Inhabitants = this.UserManagement.LoadInhabitantsFromInvoiceID(invoice);
+                    //load expenses for the inhabitantsList
+                    foreach (Inhabitant inhab in invoice.Inhabitants)
+                    {
+                        inhab.ListOfExpenses = this.UserManagement.LoadExpensesFromInhabitantsID(inhab);
+                    }
+                }
+                this.CurrentProject = projectToDisplay;
+                //Move to new Page that Displays all the Single Project that are in there 
                 try
                 {
-                    //Load all Single Project as well as there Inhabitants ans expenses before go to InvoiceViewPage
-                    projectToDisplay.InvoiceList = this.UserManagement.LoadInvoicesFromProjectID(SelectedProjectWithoutInvoices);
-                    //load invoice contet for each Item
-                    foreach (Invoice invoice in projectToDisplay.InvoiceList)
-                    {
-                        //load inhabitants and expenses for inhabitants for the current invoice item
-                        invoice.Inhabitants = this.UserManagement.LoadInhabitantsFromInvoiceID(invoice);
-                        //load expenses for the inhabitantsList
-                        foreach (Inhabitant inhab in invoice.Inhabitants)
-                        {
-                            inhab.ListOfExpenses = this.UserManagement.LoadExpensesFromInhabitantsID(inhab);
-                        }
-                    }
+                    Log.WriteLine($"Move to {nameof(InvoiceViewPage)}");
+                    await Shell.Current.GoToAsync($"{nameof(InvoiceViewPage)}");
+                    //30.07.2024 Fixed Chart stuck on first loaded Project
+                    ExpenseDataChart_CollectionChanged(this, EventArgs.Empty);
                 }
                 catch (Exception ex)
                 {
-                    OnFehlerAufgetreten(ex);
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    LogToFile(ex.Message);
+                    return;
                 }
-                this.CurrentProject = projectToDisplay;
             }
             else
             {
                 System.Diagnostics.Debug.WriteLine("Error on Casting CommandParams");
-            }
-
-            //Move to new Page that Displays all the Single Project that are in there 
-            try
-            {
-                await Shell.Current.GoToAsync($"{nameof(InvoiceViewPage)}");
-                //30.07.2024 Fixed Chart stuck on first loaded Project
-                ExpenseDataChart_CollectionChanged(this, EventArgs.Empty);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                LogToFile(ex.Message);
-                return;
             }
         }
         /// <summary>
@@ -696,10 +727,8 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public async Task DeleteCurrentProject()
         {
-            //Delete the CurrentProject File and remove it from the
-            //ListofInvoicesInStorage List to stay consistant
-            this.InvoiceManager.Delete(this.CurrentProject);
-            ListOfProjectsByUser.Remove(this.CurrentProject);
+            //Removing it from the List will handle the removal in the DB as well
+            this.ListOfProjectsByUser.Remove(this.CurrentProject);
             try
             {
                 await Shell.Current.GoToAsync($"..");
@@ -719,7 +748,8 @@ namespace Essensausgleich.ViewModel
         {
             //Delete the CurrentInvoice Item from the Project and save it
             this.CurrentProject.InvoiceList.Remove(this.CurrentInvoice);
-            this.InvoiceManager.Save(this.CurrentProject);
+            ExpenseDataChart_CollectionChanged(this, EventArgs.Empty);
+            //this.InvoiceManager.Save(this.CurrentProject);
             try
             {
                 await Shell.Current.GoToAsync($"..");
@@ -746,13 +776,11 @@ namespace Essensausgleich.ViewModel
                 Project NewProject = new Project
                 {
                     DateTimeCreation = DateTime.Now,
+                    DateTimeChanged = DateTime.Now,
                     InvoicesProjectName = NewInvoiceName
                 };
-                NewProject.PathAndFileName = Path.Combine(InvoicesFolderPath, NewProject.Guid!.Value.ToString());
-
-                System.Diagnostics.Debug.WriteLine($"Pre Save Count:{this.ListOfProjectsByUser.Count}");
-                this.InvoiceManager.Save(NewProject);
-                System.Diagnostics.Debug.WriteLine($"Aft Save Count:{this.ListOfProjectsByUser.Count}");
+                //On Creation of the new Project is the AutoCrementing ID not knowen what issues that Invoices that trys to be createt with that Project Item are missing the ID to create and Fail!
+                this.ListOfProjectsByUser.Add(NewProject);
                 this.CurrentProject = NewProject;
                 try
                 {
@@ -766,10 +794,7 @@ namespace Essensausgleich.ViewModel
                 }
                 //For some reasen on InvoiceManager.Save the ListOfProjectsByUser
                 //invokes a get renders the .add unnesesery
-                this.ListOfProjectsByUser.Add(NewProject);
             }
-
-
         }
         /// <summary>
         /// Shows the Input Formular for a new Invoice
@@ -796,39 +821,44 @@ namespace Essensausgleich.ViewModel
             //Set Date of creation for the new Invoice
             InvoiceToCreate.DateTimeCreation = DateTime.Now;
 
+
+            //Remodel versuch InvoiceList mit Add/Remove wie ExpenseList zum DB updaten
+            //Add aufruf mit der Invoice die erzeugt werden soll 
+            this.CurrentProject.InvoiceList.Add(InvoiceToCreate);
             //es muss eine neue Invoice und auch direkt die Inhabs auf der DB erstellt
             //werden sonst gibt es ein problem mit dem chart da er auf die Inhabs zugreifen muss zum aktualiseren
+            /* Hier wird die Invoice und desen Inhabitants erstellt
             int newInvoiceID = -1;
             bool invoiceCreation = this.UserManagement.CreateInvoice(CurrentProject, InvoiceToCreate, out newInvoiceID);
             bool inhab1Creation = this.UserManagement.CreateInhabitant(new Invoice { InvoiceID = newInvoiceID }, InvoiceToCreate.Inhabitants[0].Name);
             bool inhab2Creation = this.UserManagement.CreateInhabitant(new Invoice { InvoiceID = newInvoiceID }, InvoiceToCreate.Inhabitants[1].Name);
-            if (invoiceCreation & inhab1Creation & inhab2Creation) 
+            */
+            //if Creation IO load Project again to display the DB and move to edit view
+            /* Sollte durch die InvoiceList.add methode reduntant sein
+           CurrentProject.InvoiceList = this.UserManagement.LoadInvoicesFromProjectID(CurrentProject);
+            //load invoice contet for each Item
+            foreach (Invoice invoice in CurrentProject.InvoiceList)
             {
-                //if Creation IO load Project again to display to DB and move to edit view
-                
-               CurrentProject.InvoiceList = this.UserManagement.LoadInvoicesFromProjectID(CurrentProject);
-                //load invoice contet for each Item
-                foreach (Invoice invoice in CurrentProject.InvoiceList)
+                //load inhabitants and expenses for inhabitants for the current invoice item
+                invoice.Inhabitants = this.UserManagement.LoadInhabitantsFromInvoiceID(invoice);
+                //load expenses for the inhabitantsList
+                foreach (Inhabitant inhab in invoice.Inhabitants)
                 {
-                    //load inhabitants and expenses for inhabitants for the current invoice item
-                    invoice.Inhabitants = this.UserManagement.LoadInhabitantsFromInvoiceID(invoice);
-                    //load expenses for the inhabitantsList
-                    foreach (Inhabitant inhab in invoice.Inhabitants)
-                    {
-                        inhab.ListOfExpenses = this.UserManagement.LoadExpensesFromInhabitantsID(inhab);
-                    }
+                    inhab.ListOfExpenses = this.UserManagement.LoadExpensesFromInhabitantsID(inhab);
                 }
-                //CurrentProject.InvoiceList.Add(InvoiceToCreate);
-                OnPropertyChanged(nameof(CurrentProject.InvoiceList));
-                //Switch to EditView
-                await LoadSelectedInvoiceToCurrent(CurrentProject.InvoiceList[CurrentProject.InvoiceList.Count-1]);
-                //After Switch Null InvoiceToCreate to be Ready for the next and vanish the Input View
-                InvoiceToCreate = null!;
-                IsInputFormularVisible = false;
-                //27.07.2024 After Creation of the new invoice rebuilt the chart
-                //Reset the chart 
-                ExpenseDataChart_CollectionChanged(this, EventArgs.Empty);
             }
+            */
+            //CurrentProject.InvoiceList.Add(InvoiceToCreate);
+            OnPropertyChanged(nameof(CurrentProject.InvoiceList));
+            //Switch to EditView
+            await LoadSelectedInvoiceToCurrent(CurrentProject.InvoiceList[CurrentProject.InvoiceList.Count - 1]);
+            //After Switch Null InvoiceToCreate to be Ready for the next and vanish the Input View
+            InvoiceToCreate = null!;
+            IsInputFormularVisible = false;
+            //27.07.2024 After Creation of the new invoice rebuilt the chart
+            //Reset the chart 
+            ExpenseDataChart_CollectionChanged(this, EventArgs.Empty);
+
             /* Depricated Json 01.09.2024
             //Set Date of creation for the new Invoice
             InvoiceToCreate.DateTimeCreation = DateTime.Now;
@@ -875,8 +905,7 @@ namespace Essensausgleich.ViewModel
         {
             if (selectedItem is Expense expenseItem)
             {
-
-
+                //Todo 14092024 This does not Trigger the Invoices DatimeTimeChanged!
                 // delet Entry and updates source
                 //ListOfExpensesInhabitant1.Remove(SelectedExpenseItem);
                 if (InhabitantsSelected == CurrentInvoice.Inhabitants[0].Name)
