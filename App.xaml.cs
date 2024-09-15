@@ -31,37 +31,7 @@ namespace Essensausgleich
                 appWindow.Resize(new SizeInt32(WindowWidth, WindowHeight));
 #endif
             });
-
             MainPage = new AppShell();
         }
-
-        /// <summary>
-        /// ViewModel
-        /// </summary>
-        public static Anwendung ViewModelAnwendung { get; set; } = null!;
-        /// <summary>
-        /// Stellt den Context für die APPobjekte bereit glaub ich
-        /// </summary>
-        public DRAXNET.Core.Infrastructur Context
-        { get; set; } = null!;
-        /// <summary>
-        /// Overrides the Statup process and starts my infrastracture
-        /// </summary>
-        protected override void OnStart()
-        {
-
-            base.OnStart();
-            /*
-            this.Context = new Essensausgleich.Infra.Infrastructur();
-
-            //Das View Model Initialisieren
-            ViewModelAnwendung = this.Context.Fabricate<ViewModel.Anwendung>();
-            ViewModelAnwendung.Initialize();
-           
-
-            //Log.WriteLine("FilesystemManager Init");
-            */
-        }
-
     }
 }

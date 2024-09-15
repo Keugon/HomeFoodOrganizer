@@ -7,7 +7,6 @@ namespace Essensausgleich.Tools
     /// </summary>
     public static class General : System.Object
     {
-
         /// <summary>
         /// Get the current Date 
         /// </summary>
@@ -18,11 +17,8 @@ namespace Essensausgleich.Tools
             string currentDay = DateTime.Today.Day.ToString();
             string currentMonth = DateTime.Today.Month.ToString();
             string currentYear = DateTime.Today.Year.ToString();
-
             return $"{currentDay}_{currentMonth}_{currentYear}"; ;
         }
-
-
     }
     /// <summary>
     /// Returns the Filename from a Fullpath

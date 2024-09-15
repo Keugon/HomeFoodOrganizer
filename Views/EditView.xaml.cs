@@ -5,7 +5,6 @@ using Essensausgleich.ViewModel;
 /// </summary>
 public partial class EditView : ContentPage
 {
-    private readonly Anwendung _ViewmodelAnwendung;
     /// <summary>
     /// EditView
     /// </summary>
@@ -13,7 +12,7 @@ public partial class EditView : ContentPage
     public EditView(Anwendung viewmodelAnwendung)
     {
         InitializeComponent();
-        BindingContext = _ViewmodelAnwendung = viewmodelAnwendung;
+        BindingContext = viewmodelAnwendung;
 
     }
 }

@@ -1,16 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using DRAXNET.AusgabenBuddy.Models;
 using DRAXNET.Core;
+using DRAXNET.Core.Services;
 using Essensausgleich.Data;
 using Essensausgleich.Views;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
+using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
-using Log = System.Diagnostics.Debug;
+using System.Windows.Input;
 
 namespace Essensausgleich.ViewModel
 {
@@ -24,77 +26,37 @@ namespace Essensausgleich.ViewModel
         /// Fixed Path
         /// </summary>
         private readonly string InvoicesFolderPath = Path.Combine(FileSystem.AppDataDirectory, "Project");
+        private readonly ILogger<Anwendung> _logger;
+        private readonly UserManagement _userManagement;
+        private readonly DataSharingController _dataSharingController;
+        /// <summary>
+        /// Constructor für DI
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="userManagement"></param>
+        /// <param name="dataSharingController"></param>
+        public Anwendung(ILogger<Anwendung> logger,UserManagement userManagement, DataSharingController dataSharingController)
+        {
+            _logger = logger;
+            _userManagement = userManagement;
+            _dataSharingController = dataSharingController;
+        }
         /// <summary>
         /// inits the Viewmodel and pulls object referenzes
         /// </summary>
         public void Initialize()
         {
-            System.Diagnostics.Debug.WriteLine("Initialize Start");
+            _logger.LogInformation("Initialize Start");
             App.Current!.BindingContext = this;
-            //Check on startup if first time then Create the "Project" Folder
-            if (!Directory.Exists(InvoicesFolderPath))
-            {
-                System.IO.Directory.CreateDirectory(InvoicesFolderPath);
-            }
-            System.Diagnostics.Debug.WriteLine("Initialize End");
-
         }
-        #region Services
-        private DataSharingController _DataSharingController = null!;
-        /// <summary>
-        /// Gets or sets the Service for Data sharing between Apps
-        /// </summary>
-        public DataSharingController DataSharingController
-        {
-            get
-            {
-                if (this._DataSharingController == null)
-                {
-                    this._DataSharingController = this.Context.Fabricate<DataSharingController>();
-                }
-                return this._DataSharingController;
-            }
-            set => this._DataSharingController = value;
-        }
-        /// <summary>
-        /// Internal Cache
-        /// </summary>
-        private InvoiceManager _InvoiceManager = null!;
-        /// <summary>
-        /// InvoiceManager Service
-        /// </summary>
-        public InvoiceManager InvoiceManager
-        {
-            get
-            {
-                if (this._InvoiceManager == null)
-                {
-                    this._InvoiceManager = new InvoiceManager();
-                }
-                return this._InvoiceManager;
-            }
-        }
-        /// <summary>
-        /// Internal Cache
-        /// </summary>
-        private DRAXNET.Core.Services.UserManagement _UserManagement = null!;
-        /// <summary>
-        /// Provides a Service for Controlling User behaviour
-        /// </summary>
-        public DRAXNET.Core.Services.UserManagement UserManagement
-        {
-            get
-            {
-                if (this._UserManagement == null)
-                {
-                    this._UserManagement = this.Context.Fabricate<DRAXNET.Core.Services.UserManagement>();
-                }
-                return this._UserManagement;
-            }
-        }
-        #endregion Services
-
         #region PropertieBinding
+        /// <summary>
+        /// UserManagement zwecks bindung von feldern
+        /// </summary>
+        public UserManagement UserManagement
+        {
+            get => _userManagement;
+        }
         /// <summary>
         /// Internal Field
         /// </summary>
@@ -113,7 +75,7 @@ namespace Essensausgleich.ViewModel
                     {
                         foreach (var inhabitant in _CurrentInvoice.Inhabitants)
                         {
-                            inhabitant.ListOfExpenses.CollectionChanged += (sender, e) => this.UserManagement.ExpenseListUpdate(sender, e, inhabitant);
+                            inhabitant.ListOfExpenses.CollectionChanged += (sender, e) => this._userManagement.ExpenseListUpdate(sender, e, inhabitant);
                         }
                     }
 
@@ -129,11 +91,11 @@ namespace Essensausgleich.ViewModel
                     {
                         foreach (var inhabitant in _CurrentInvoice.Inhabitants)
                         {
-                            inhabitant.ListOfExpenses.CollectionChanged -= (sender, e) => this.UserManagement.ExpenseListUpdate(sender, e, inhabitant);
+                            inhabitant.ListOfExpenses.CollectionChanged -= (sender, e) => this._userManagement.ExpenseListUpdate(sender, e, inhabitant);
                         }
                     }
                 }
-                System.Diagnostics.Debug.WriteLine("CurrentInvoice Beginn Set");
+                _logger.LogInformation("CurrentInvoice Beginn Set");
                 this._CurrentInvoice = value;
 
                 // Subscribe to the new Invoice's event
@@ -143,7 +105,7 @@ namespace Essensausgleich.ViewModel
                     {
                         foreach (var inhabitant in _CurrentInvoice.Inhabitants)
                         {
-                            inhabitant.ListOfExpenses.CollectionChanged += (sender, e) => this.UserManagement.ExpenseListUpdate(sender, e, inhabitant);
+                            inhabitant.ListOfExpenses.CollectionChanged += (sender, e) => this._userManagement.ExpenseListUpdate(sender, e, inhabitant);
                         }
                     }
                 }
@@ -155,7 +117,7 @@ namespace Essensausgleich.ViewModel
                 OnPropertyChanged(nameof(LblpayingInhabitantContent));
                 OnPropertyChanged(nameof(LblBillContent));
 
-                System.Diagnostics.Debug.WriteLine("CurrentInvoice End Set");
+                _logger.LogInformation("CurrentInvoice End Set");
             }
         }
         /// <summary>
@@ -175,7 +137,7 @@ namespace Essensausgleich.ViewModel
                     if (this._CurrentProject.InvoiceList != null)
                     {
 
-                        this._CurrentProject.InvoiceList.CollectionChanged += (sender, e) => this.UserManagement.InvoiceListUpdate(sender, e, this._CurrentProject);
+                        this._CurrentProject.InvoiceList.CollectionChanged += (sender, e) => this._userManagement.InvoiceListUpdate(sender, e, this._CurrentProject);
                     }
                 }
                 return this._CurrentProject;
@@ -186,14 +148,14 @@ namespace Essensausgleich.ViewModel
                 //Null error wenn ich die eigenschaft.InvoiceList vom Null objekt abfragen versuche!
                 if (this._CurrentProject?.InvoiceList != null)
                 {
-                    this._CurrentProject.InvoiceList.CollectionChanged -= (sender, e) => this.UserManagement.InvoiceListUpdate(sender, e, this._CurrentProject);
+                    this._CurrentProject.InvoiceList.CollectionChanged -= (sender, e) => this._userManagement.InvoiceListUpdate(sender, e, this._CurrentProject);
                 }
 
                 this._CurrentProject = value;
 
                 if (this._CurrentProject.InvoiceList != null)
                 {
-                    this._CurrentProject.InvoiceList.CollectionChanged += (sender, e) => this.UserManagement.InvoiceListUpdate(sender, e, this._CurrentProject);
+                    this._CurrentProject.InvoiceList.CollectionChanged += (sender, e) => this._userManagement.InvoiceListUpdate(sender, e, this._CurrentProject);
                 }
             }
         }
@@ -210,16 +172,16 @@ namespace Essensausgleich.ViewModel
             {
                 if (this._ListOfProjectsByUser == null)
                 {
-                    if (this.UserManagement != null)//irgendwie unnötig
+                    if (this._userManagement != null)//irgendwie unnötig
                     {
-                        this._ListOfProjectsByUser = this.UserManagement.LoadProjects();
+                        this._ListOfProjectsByUser = this._userManagement.LoadProjects();
                         if (this._ListOfProjectsByUser != null)
                         {
 
-                            this._ListOfProjectsByUser.CollectionChanged += (sender, e) => this.UserManagement.ListOfProjectsUpdate(sender, e);
+                            this._ListOfProjectsByUser.CollectionChanged += (sender, e) => this._userManagement.ListOfProjectsUpdate(sender, e);
                         }
                     }
-                    else Log.WriteLine("Wie zum F kan UserManagement null sein??");
+                    else _logger.LogInformation("Wie zum F kan UserManagement null sein??");
 
                 }
                 return this._ListOfProjectsByUser ?? new ObservableCollection<Project>();
@@ -228,16 +190,15 @@ namespace Essensausgleich.ViewModel
             {
                 if (this._ListOfProjectsByUser != null)
                 {
-                    this._ListOfProjectsByUser.CollectionChanged -= (sender, e) => this.UserManagement.ListOfProjectsUpdate(sender, e);
+                    this._ListOfProjectsByUser.CollectionChanged -= (sender, e) => this._userManagement.ListOfProjectsUpdate(sender, e);
                 }
                 this._ListOfProjectsByUser = value;
                 if (this._ListOfProjectsByUser != null)
                 {
-                    this._ListOfProjectsByUser.CollectionChanged += (sender, e) => this.UserManagement.ListOfProjectsUpdate(sender, e);
+                    this._ListOfProjectsByUser.CollectionChanged += (sender, e) => this._userManagement.ListOfProjectsUpdate(sender, e);
                 }
             }
         }
-
         private string _InhabitansSelected = null!;
         /// <summary>
         /// Gets or sets the SelectedInhabitant for adding Expenses
@@ -252,7 +213,7 @@ namespace Essensausgleich.ViewModel
             {
                 _InhabitansSelected = value;
                 OnPropertyChanged();
-                Log.WriteLine($"User:{_InhabitansSelected} Selected");
+                _logger.LogInformation($"User:{_InhabitansSelected} Selected");
             }
         }
         private string _lblBillContent = null!;
@@ -550,7 +511,7 @@ namespace Essensausgleich.ViewModel
             {
                 //Reakt to AppTheme
                 AppTheme currentTheme = Application.Current!.RequestedTheme;
-                Log.WriteLine(currentTheme.ToString());
+                _logger.LogInformation(currentTheme.ToString());
                 return currentTheme;
             }
         }
@@ -622,37 +583,37 @@ namespace Essensausgleich.ViewModel
                 projectToDisplay = SelectedProjectWithoutInvoices;
 
                 //Load all Single Project as well as there Inhabitants ans expenses before go to InvoiceViewPage
-                projectToDisplay.InvoiceList = this.UserManagement.LoadInvoicesFromProjectID(SelectedProjectWithoutInvoices);
+                projectToDisplay.InvoiceList = this._userManagement.LoadInvoicesFromProjectID(SelectedProjectWithoutInvoices);
                 //load invoice contet for each Item
                 foreach (Invoice invoice in projectToDisplay.InvoiceList)
                 {
                     //load inhabitants and expenses for inhabitants for the current invoice item
-                    invoice.Inhabitants = this.UserManagement.LoadInhabitantsFromInvoiceID(invoice);
+                    invoice.Inhabitants = this._userManagement.LoadInhabitantsFromInvoiceID(invoice);
                     //load expenses for the inhabitantsList
                     foreach (Inhabitant inhab in invoice.Inhabitants)
                     {
-                        inhab.ListOfExpenses = this.UserManagement.LoadExpensesFromInhabitantsID(inhab);
+                        inhab.ListOfExpenses = this._userManagement.LoadExpensesFromInhabitantsID(inhab);
                     }
                 }
                 this.CurrentProject = projectToDisplay;
                 //Move to new Page that Displays all the Single Project that are in there 
                 try
                 {
-                    Log.WriteLine($"Move to {nameof(InvoiceViewPage)}");
+                    _logger.LogInformation($"Move to {nameof(InvoiceViewPage)}");
                     await Shell.Current.GoToAsync($"{nameof(InvoiceViewPage)}");
                     //30.07.2024 Fixed Chart stuck on first loaded Project
                     ExpenseDataChart_CollectionChanged(this, EventArgs.Empty);
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    _logger.LogInformation(ex.Message);
                     LogToFile(ex.Message);
                     return;
                 }
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Error on Casting CommandParams");
+                _logger.LogInformation("Error on Casting CommandParams");
             }
         }
         /// <summary>
@@ -683,7 +644,7 @@ namespace Essensausgleich.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    _logger.LogInformation(ex.Message);
                     LogToFile(ex.Message);
                     return;
                 }
@@ -693,7 +654,7 @@ namespace Essensausgleich.ViewModel
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Error on Casting CommandParams");
+                _logger.LogInformation("Error on Casting CommandParams");
             }
 
             //Move to new Page that Displays all the Single Project that are in there 
@@ -709,14 +670,14 @@ namespace Essensausgleich.ViewModel
             //maybe not necessari
             //this.CurrentProject.InvoiceList[CurrentInvoicesIndex] = this.CurrentInvoice;
             this.CurrentInvoice.DateTimeChanged = DateTime.Now;
-            this.InvoiceManager.Save(this.CurrentProject);
+            //this.InvoiceManager.Save(this.CurrentProject);
             try
             {
                 await Shell.Current.GoToAsync($"..");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                _logger.LogInformation(ex.Message);
             }
 
         }
@@ -735,7 +696,7 @@ namespace Essensausgleich.ViewModel
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                _logger.LogInformation(ex.Message);
                 return;
             }
         }
@@ -756,7 +717,7 @@ namespace Essensausgleich.ViewModel
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                _logger.LogInformation(ex.Message);
                 return;
             }
         }
@@ -789,7 +750,7 @@ namespace Essensausgleich.ViewModel
                 catch (Exception ex)
                 {
 
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    _logger.LogInformation(ex.Message);
                     return;
                 }
                 //For some reasen on InvoiceManager.Save the ListOfProjectsByUser
@@ -820,8 +781,6 @@ namespace Essensausgleich.ViewModel
         {
             //Set Date of creation for the new Invoice
             InvoiceToCreate.DateTimeCreation = DateTime.Now;
-
-
             //Remodel versuch InvoiceList mit Add/Remove wie ExpenseList zum DB updaten
             //Add aufruf mit der Invoice die erzeugt werden soll 
             this.CurrentProject.InvoiceList.Add(InvoiceToCreate);
@@ -932,7 +891,7 @@ namespace Essensausgleich.ViewModel
 
             File.AppendAllText(Path.Combine(InvoicesFolderPath, LogName), $"\nProtocol LogTime {DateTime.Now}\nMessage:{message} ");
 
-            System.Diagnostics.Debug.WriteLine("Writen to LogFile");
+            _logger.LogInformation("Writen to LogFile");
         }
         /// <summary>
         /// Shares the invoice informations in string form
@@ -943,7 +902,7 @@ namespace Essensausgleich.ViewModel
         {
             if (invoiceToShare is Invoice invoice)
             {
-                await this.DataSharingController.RequestAsync(new ShareTextRequest
+                await this._dataSharingController.RequestAsync(new ShareTextRequest
                 {
                     Text = $"Invoice Name: {invoice.InvoiceName}\n" +
                     $"{invoice.Inhabitants[0].Name}:{invoice.Inhabitants[0].TotalExpense}\n" +
@@ -961,7 +920,7 @@ namespace Essensausgleich.ViewModel
         private void ExpenseDataChart_CollectionChanged(object sender, EventArgs e)
         {
             //Invalidate the cache to force re-creation
-            Log.WriteLine("Chart will redraw");
+            _logger.LogInformation("Chart will redraw");
             _ProjectChart = null!;
             OnPropertyChanged(nameof(this.ProjectChart));
             OnPropertyChanged(nameof(this.ProjectChartYaxis));
@@ -972,7 +931,7 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public void TestMethode()
         {
-            if (UserManagement.Login(LoginUser))
+            if (_userManagement.Login(LoginUser))
             {
                 //Login Successful creat a session and push to DB
                 ListOfProjectsByUser = null!;
@@ -986,15 +945,15 @@ namespace Essensausgleich.ViewModel
         [RelayCommand]
         public void Logout()
         {
-            if (this.UserManagement.Logout())
+            if (this._userManagement.Logout())
             {
-                Log.WriteLine("Logout Successfull");
+                _logger.LogInformation("Logout Successfull");
                 //Clears the Visible List of Projects dedicated to the Logged In User
                 this.ListOfProjectsByUser.Clear();
             }
             else
             {
-                Log.WriteLine("Logout Failed");
+                _logger.LogInformation("Logout Failed");
             }
         }
         #endregion Methods
@@ -1014,7 +973,7 @@ namespace Essensausgleich.ViewModel
             {
                 return true;
             }
-            Log.WriteLine("CanExecuteNewInvoice false");
+            _logger.LogInformation("CanExecuteNewInvoice false");
             return false;
         }
         /// <summary>

@@ -6,7 +6,6 @@ namespace Essensausgleich.Views;
 /// </summary>
 public partial class MainPage : ContentPage
 {
-    private readonly Anwendung _ViewmodelAnwendung;
     /// <summary>
     /// MainPage
     /// </summary>
@@ -14,6 +13,6 @@ public partial class MainPage : ContentPage
     public MainPage(Anwendung viewmodelAnwendung)
     {
         InitializeComponent();
-        BindingContext = _ViewmodelAnwendung = viewmodelAnwendung;
+        BindingContext =  viewmodelAnwendung;
     }
 }

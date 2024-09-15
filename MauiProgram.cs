@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Maui;
+using DRAXNET.Core.Models;
+using Essensausgleich.Data;
 using Essensausgleich.ViewModel;
 using Essensausgleich.Views;
 using Microsoft.Extensions.Logging;
@@ -29,19 +31,12 @@ namespace Essensausgleich
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("Segoe UI Symbol.ttf", "Segoe UI Symbol");
                 });
-            // builder.Services.AddSingleton<Anwendung>();
-            builder.Services.AddSingleton<DRAXNET.Core.Infrastructur>();
-            builder.Services.AddSingleton(provider =>
-            {
-                var context = provider.GetRequiredService<DRAXNET.Core.Infrastructur>();
-                ViewModel.Anwendung Anwendung = context.Fabricate<ViewModel.Anwendung>();
+            builder.Services.AddSingleton<Anwendung>();
+            builder.Services.AddSingleton<DRAXNET.Core.Services.SqlController>();
+            builder.Services.AddSingleton<DRAXNET.Core.Services.UserManagement>();
+            builder.Services.AddSingleton<DataSharingController>();
 
-                System.Diagnostics.Debug.WriteLine("Pre Initialze");
-                Anwendung.Initialize();
-                return Anwendung;
-            });
-
-
+            builder.Services.AddLogging();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<ContributionView>();
             builder.Services.AddSingleton<InvoiceViewPage>();

@@ -1,3 +1,5 @@
+using Essensausgleich.ViewModel;
+
 namespace Essensausgleich.Views;
 /// <summary>
 /// InvoiceViewPage
@@ -7,8 +9,9 @@ public partial class InvoiceViewPage : ContentPage
     /// <summary>
     /// InvoiceViewPage
     /// </summary>
-    public InvoiceViewPage()
+    public InvoiceViewPage(Anwendung viewmodel)
     {
         InitializeComponent();
+        BindingContext = viewmodel;
     }
 }
