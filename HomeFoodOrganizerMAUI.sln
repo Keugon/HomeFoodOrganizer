@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRAXNET.Core", "..\DRAXNET.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRAXNET.AusgabenBuddy.Models", "..\DRAXNET.AusgabenBuddy.Models\DRAXNET.AusgabenBuddy.Models.csproj", "{94B5573E-77AB-4BD8-9E1E-0659FD01C9F0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRAXNET.AusgabenBuddyGateway", "..\..\DRAXNET.AusgabenBuddyGateway\DRAXNET.AusgabenBuddyGateway\DRAXNET.AusgabenBuddyGateway.csproj", "{07317B29-6005-4801-B562-0E343423D656}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{94B5573E-77AB-4BD8-9E1E-0659FD01C9F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94B5573E-77AB-4BD8-9E1E-0659FD01C9F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94B5573E-77AB-4BD8-9E1E-0659FD01C9F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07317B29-6005-4801-B562-0E343423D656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07317B29-6005-4801-B562-0E343423D656}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07317B29-6005-4801-B562-0E343423D656}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07317B29-6005-4801-B562-0E343423D656}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
