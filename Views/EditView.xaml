@@ -200,7 +200,8 @@
                                Style="{StaticResource EditViewExpense}"
                                TextDecorations="Underline"/>
                         <Label Text="{Binding LblpayingInhabitantContent}"
-                               Style="{StaticResource EditViewExpense}"/>
+                               Style="{StaticResource EditViewExpense}"
+                               />
                     </VerticalStackLayout>
                     <!--Stackpanel vertical Values-->
                     <VerticalStackLayout 
